@@ -1,43 +1,49 @@
-# QTERM — BTC Trading Algo
+# QTERM — Live BTC Trading Signal Dashboard
 
-Gerçek Binance WebSocket verisiyle çalışan 1m BTC trading sinyal uygulaması.
+A real-time BTC/USDT trading signal application powered by live Binance WebSocket data, built with React and Recharts.
 
-## Kurulum (2 dakika)
+## Features
 
-Node.js yüklü olması gerekiyor. Yoksa: https://nodejs.org
+- **Live market data** via Binance WebSocket (1-minute candles)
+- **Multi-indicator confluence system** — 4 indicators, each scoring -2 to +2
+- **Real-time signal generation** with configurable thresholds
+- **Interactive dashboard** with live price chart, indicator panels, and trade log
+- **Risk management** built-in with ATR-based stop-loss and take-profit levels (1:3 R/R)
+
+## Signal Logic
+
+| Indicator | LONG Signal | SHORT Signal |
+|-----------|-------------|--------------|
+| EMA 9/21 | 9 crosses above 21 | 9 crosses below 21 |
+| RSI 14 | < 30 (oversold) | > 70 (overbought) |
+| MACD 12/26/9 | MACD crosses above signal | MACD crosses below signal |
+| Bollinger Bands 20 | Price below lower band | Price above upper band |
+
+**Score ≥ +4 → STRONG BUY**
+**Score ≥ +2 → BUY**
+**Score ≤ -4 → STRONG SELL**
+**Score ≤ -2 → SELL**
+
+## Tech Stack
+
+- **React** + Vite
+- **Recharts** for real-time data visualization
+- **Binance WebSocket API** for live market data
+- Custom indicator engine (EMA, RSI, MACD, Bollinger Bands)
+
+## Getting Started
+
+Node.js required. Download at [nodejs.org](https://nodejs.org)
 
 ```bash
-# 1. Klasöre gir
-cd btc-algo
-
-# 2. Paketleri yükle
 npm install
-
-# 3. Çalıştır
 npm run dev
 ```
 
-Sonra tarayıcıda aç: **http://localhost:5173**
+Open in browser: **http://localhost:5173**
 
-## Nasıl çalışıyor?
+> Note: Allow ~50 minutes on first launch for 50 candles to accumulate before signals activate.
 
-İlk açılışta ~50 dakika beklemen lazım (50 adet 1m mum birikmesi için).
-Sinyal hemen başlamaz, veri biriktikçe aktifleşir.
+## Disclaimer
 
-## Sinyal mantığı
-
-4 indikatör confluence sistemi — her biri -2 ile +2 arası puan üretir:
-
-| İndikatör | LONG | SHORT |
-|-----------|------|-------|
-| EMA 9/21 | 9 > 21 crossover | 9 < 21 crossover |
-| RSI 14 | < 30 oversold | > 70 overbought |
-| MACD 12/26/9 | MACD > Signal crossover | MACD < Signal crossover |
-| Bollinger 20 | Fiyat < lower band | Fiyat > upper band |
-
-**Toplam ≥ +4 → STRONG BUY**  
-**Toplam ≥ +2 → BUY**  
-**Toplam ≤ -4 → STRONG SELL**  
-**Toplam ≤ -2 → SELL**  
-
-⚠️ Bu eğitim amaçlı. Gerçek para için backtest ve risk yönetimi şart.
+This project is for educational purposes only. Past performance does not guarantee future results. Always backtest and apply proper risk management before trading with real capital.
