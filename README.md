@@ -1,11 +1,11 @@
-# QTERM — Live BTC Trading Signal Dashboard
+# QTERM - Live BTC Trading Signal Dashboard
 
 A real-time BTC/USDT trading signal application powered by live Binance WebSocket data, built with React and Recharts.
 
 ## Features
 
 - **Live market data** via Binance WebSocket (1-minute candles)
-- **Multi-indicator confluence system** — 4 indicators, each scoring -2 to +2
+- **Multi-indicator confluence system** - 4 indicators, each scoring -2 to +2
 - **Real-time signal generation** with configurable thresholds
 - **Interactive dashboard** with live price chart, indicator panels, and trade log
 - **Risk management** built-in with ATR-based stop-loss and take-profit levels (1:3 R/R)
