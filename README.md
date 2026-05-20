@@ -4,7 +4,7 @@ A real-time BTC/USDT trading signal application powered by live Binance WebSocke
 
 ## Features
 
-- **Live market data** via Binance WebSocket (1-minute candles)
+- **Live market data** via Binance WebSocket (15-minute candles)
 - **Multi-indicator confluence system** - 4 indicators, each scoring -2 to +2
 - **Real-time signal generation** with configurable thresholds
 - **Interactive dashboard** with live price chart, indicator panels, and trade log
