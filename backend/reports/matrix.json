@@ -1,0 +1,773 @@
+{
+  "window": {
+    "start": "2024-07-23",
+    "end": "2026-07-23"
+  },
+  "leverage": 1,
+  "cost_assumptions": {
+    "crypto": {
+      "fee_bps": 5.0,
+      "slippage_bps": 3.0
+    },
+    "fx": {
+      "fee_bps": 0.35,
+      "slippage_bps": 0.5
+    },
+    "index": {
+      "fee_bps": 0.1,
+      "slippage_bps": 0.3
+    }
+  },
+  "rows": [
+    {
+      "strategy": "powell_open",
+      "source": "dukascopy",
+      "symbol": "USATECHIDXUSD",
+      "market": "index",
+      "interval": "5m",
+      "max_hold_bars": 72,
+      "costs": {
+        "fee_bps": 0.1,
+        "slippage_bps": 0.3,
+        "roundtrip_bps": 0.8
+      },
+      "net": {
+        "n_trades": 348,
+        "win_rate": 0.3706896551724138,
+        "sharpe": -0.2427419013047029,
+        "sortino": -0.38619175743211753,
+        "max_drawdown": -0.15480513397802453,
+        "profit_factor": 0.9449743480040218,
+        "total_return": -0.03889575803558032,
+        "cagr": -0.019680771490616755,
+        "buy_hold_return": 0.46453297095977436,
+        "avg_win": 0.005022834412667422,
+        "avg_loss": -0.0031309377795947263,
+        "exit_reasons": {
+          "TP": 88,
+          "SL": 195,
+          "TIME": 65
+        }
+      },
+      "gross": {
+        "n_trades": 348,
+        "win_rate": 0.3764367816091954,
+        "sharpe": -0.03205498882703495,
+        "sortino": -0.05081601060065298,
+        "max_drawdown": -0.13547699864813367,
+        "profit_factor": 0.9902842605085306,
+        "total_return": -0.008428875927508073,
+        "cagr": -0.004232027952518758,
+        "buy_hold_return": 0.46453297095977436,
+        "avg_win": 0.005034499507387814,
+        "avg_loss": -0.0030690784378613477,
+        "exit_reasons": {
+          "TP": 91,
+          "SL": 194,
+          "TIME": 63
+        }
+      },
+      "group": "Powell 10:00, target market"
+    },
+    {
+      "strategy": "powell_open_cont",
+      "source": "dukascopy",
+      "symbol": "USATECHIDXUSD",
+      "market": "index",
+      "interval": "5m",
+      "max_hold_bars": 72,
+      "costs": {
+        "fee_bps": 0.1,
+        "slippage_bps": 0.3,
+        "roundtrip_bps": 0.8
+      },
+      "net": {
+        "n_trades": 363,
+        "win_rate": 0.3278236914600551,
+        "sharpe": -0.6157333962298792,
+        "sortino": -0.6022886052064921,
+        "max_drawdown": -0.1418503880058084,
+        "profit_factor": 0.8438824128506153,
+        "total_return": -0.088186846308006,
+        "cagr": -0.04520161142859069,
+        "buy_hold_return": 0.46453297095977436,
+        "avg_win": 0.004168835751363878,
+        "avg_loss": -0.0024092950243424305,
+        "exit_reasons": {
+          "TP": 97,
+          "SL": 234,
+          "TIME": 32
+        }
+      },
+      "gross": {
+        "n_trades": 363,
+        "win_rate": 0.3278236914600551,
+        "sharpe": -0.45612972577401134,
+        "sortino": -0.44767549399851503,
+        "max_drawdown": -0.12695898085603563,
+        "profit_factor": 0.8787257198581023,
+        "total_return": -0.06720668064352509,
+        "cagr": -0.03425686740326328,
+        "buy_hold_return": 0.46453297095977436,
+        "avg_win": 0.004196936653750161,
+        "avg_loss": -0.0023293578422133258,
+        "exit_reasons": {
+          "TP": 98,
+          "SL": 234,
+          "TIME": 31
+        }
+      },
+      "group": "Powell 10:00, target market"
+    },
+    {
+      "strategy": "powell_open",
+      "source": "dukascopy",
+      "symbol": "USA500IDXUSD",
+      "market": "index",
+      "interval": "5m",
+      "max_hold_bars": 72,
+      "costs": {
+        "fee_bps": 0.1,
+        "slippage_bps": 0.3,
+        "roundtrip_bps": 0.8
+      },
+      "net": {
+        "n_trades": 333,
+        "win_rate": 0.3633633633633634,
+        "sharpe": -0.46181341969635514,
+        "sortino": -0.7059112646327272,
+        "max_drawdown": -0.09727412937742463,
+        "profit_factor": 0.8954797292078338,
+        "total_return": -0.05280957991737234,
+        "cagr": -0.02681723948124315,
+        "buy_hold_return": 0.34764435516855485,
+        "avg_win": 0.003821860746074902,
+        "avg_loss": -0.002435951342412806,
+        "exit_reasons": {
+          "TP": 81,
+          "SL": 184,
+          "TIME": 68
+        }
+      },
+      "gross": {
+        "n_trades": 333,
+        "win_rate": 0.3663663663663664,
+        "sharpe": -0.2258354004626574,
+        "sortino": -0.3443197996505314,
+        "max_drawdown": -0.07536725777329945,
+        "profit_factor": 0.9454269307908716,
+        "total_return": -0.02718812857547881,
+        "cagr": -0.0137157114639197,
+        "buy_hold_return": 0.34764435516855485,
+        "avg_win": 0.0038652641990532324,
+        "avg_loss": -0.0023638972228826874,
+        "exit_reasons": {
+          "TP": 83,
+          "SL": 184,
+          "TIME": 66
+        }
+      },
+      "group": "Powell 10:00, target market"
+    },
+    {
+      "strategy": "powell_open_cont",
+      "source": "dukascopy",
+      "symbol": "USA500IDXUSD",
+      "market": "index",
+      "interval": "5m",
+      "max_hold_bars": 72,
+      "costs": {
+        "fee_bps": 0.1,
+        "slippage_bps": 0.3,
+        "roundtrip_bps": 0.8
+      },
+      "net": {
+        "n_trades": 333,
+        "win_rate": 0.37237237237237236,
+        "sharpe": -0.7434474347322444,
+        "sortino": -0.5662285985614931,
+        "max_drawdown": -0.1043711922548134,
+        "profit_factor": 0.7953139670198521,
+        "total_return": -0.07674027562941654,
+        "cagr": -0.03921487576058613,
+        "buy_hold_return": 0.34764435516855485,
+        "avg_win": 0.002462800965610359,
+        "avg_loss": -0.0018372408993304603,
+        "exit_reasons": {
+          "TP": 110,
+          "SL": 203,
+          "TIME": 20
+        }
+      },
+      "gross": {
+        "n_trades": 333,
+        "win_rate": 0.3843843843843844,
+        "sharpe": -0.5386815485872276,
+        "sortino": -0.40450131066105477,
+        "max_drawdown": -0.09393984512414089,
+        "profit_factor": 0.844978314085403,
+        "total_return": -0.056331618006841166,
+        "cagr": -0.028631991581164362,
+        "buy_hold_return": 0.34764435516855485,
+        "avg_win": 0.0024136062414841456,
+        "avg_loss": -0.0017835158189070603,
+        "exit_reasons": {
+          "TP": 113,
+          "SL": 200,
+          "TIME": 20
+        }
+      },
+      "group": "Powell 10:00, target market"
+    },
+    {
+      "strategy": "powell_open",
+      "source": "binance",
+      "symbol": "BTCUSDT",
+      "market": "crypto",
+      "interval": "5m",
+      "max_hold_bars": 72,
+      "costs": {
+        "fee_bps": 5.0,
+        "slippage_bps": 3.0,
+        "roundtrip_bps": 16.0
+      },
+      "net": {
+        "n_trades": 395,
+        "win_rate": 0.36455696202531646,
+        "sharpe": -1.5696525178576435,
+        "sortino": -2.855590681737741,
+        "max_drawdown": -0.40280854198967553,
+        "profit_factor": 0.7312224139237942,
+        "total_return": -0.37801514026707594,
+        "cagr": -0.21146807109609023,
+        "buy_hold_return": -0.020726106676817818,
+        "avg_win": 0.00868907763218771,
+        "avg_loss": -0.006817308586080255,
+        "exit_reasons": {
+          "TP": 96,
+          "SL": 223,
+          "TIME": 76
+        }
+      },
+      "gross": {
+        "n_trades": 395,
+        "win_rate": 0.389873417721519,
+        "sharpe": 0.6726477128265771,
+        "sortino": 1.2371210799679182,
+        "max_drawdown": -0.09103552530123715,
+        "profit_factor": 1.1509642536311322,
+        "total_return": 0.19883154213923127,
+        "cagr": 0.0949796614018199,
+        "buy_hold_return": -0.020726106676817818,
+        "avg_win": 0.0096998943071899,
+        "avg_loss": -0.0053852868942399846,
+        "exit_reasons": {
+          "TP": 110,
+          "SL": 218,
+          "TIME": 67
+        }
+      },
+      "group": "Powell 10:00, other markets"
+    },
+    {
+      "strategy": "powell_open",
+      "source": "dukascopy",
+      "symbol": "EURUSD",
+      "market": "fx",
+      "interval": "5m",
+      "max_hold_bars": 72,
+      "costs": {
+        "fee_bps": 0.35,
+        "slippage_bps": 0.5,
+        "roundtrip_bps": 1.7
+      },
+      "net": {
+        "n_trades": 256,
+        "win_rate": 0.41015625,
+        "sharpe": -0.5527068906292596,
+        "sortino": -0.9349179512563026,
+        "max_drawdown": -0.04114490922044256,
+        "profit_factor": 0.8721055237910349,
+        "total_return": -0.025305295909983094,
+        "cagr": -0.012759754989502214,
+        "buy_hold_return": 0.047783011505018035,
+        "avg_win": 0.0016410907806715127,
+        "avg_loss": -0.0013085066081266203,
+        "exit_reasons": {
+          "TP": 39,
+          "SL": 111,
+          "TIME": 106
+        }
+      },
+      "gross": {
+        "n_trades": 256,
+        "win_rate": 0.4375,
+        "sharpe": 0.45490942344945107,
+        "sortino": 0.8083076813617642,
+        "max_drawdown": -0.022828636034967098,
+        "profit_factor": 1.1205828922413232,
+        "total_return": 0.02036329114094282,
+        "cagr": 0.010151283490155594,
+        "buy_hold_return": 0.047783011505018035,
+        "avg_win": 0.0017017522004073298,
+        "avg_loss": -0.0011811576403008442,
+        "exit_reasons": {
+          "TP": 43,
+          "SL": 109,
+          "TIME": 104
+        }
+      },
+      "group": "Powell 10:00, other markets"
+    },
+    {
+      "strategy": "powell_1000",
+      "source": "binance",
+      "symbol": "BTCUSDT",
+      "market": "crypto",
+      "interval": "5m",
+      "max_hold_bars": 72,
+      "costs": {
+        "fee_bps": 5.0,
+        "slippage_bps": 3.0,
+        "roundtrip_bps": 16.0
+      },
+      "net": {
+        "n_trades": 290,
+        "win_rate": 0.3758620689655172,
+        "sharpe": -1.0909774696120909,
+        "sortino": -1.7817745388171364,
+        "max_drawdown": -0.32309437028331844,
+        "profit_factor": 0.7753450368366206,
+        "total_return": -0.26161420341792163,
+        "cagr": -0.14079546899589102,
+        "buy_hold_return": -0.020726106676817818,
+        "avg_win": 0.009213816811098861,
+        "avg_loss": -0.007156365036396556,
+        "exit_reasons": {
+          "TP": 85,
+          "SL": 160,
+          "TIME": 45
+        }
+      },
+      "gross": {
+        "n_trades": 290,
+        "win_rate": 0.4068965517241379,
+        "sharpe": 0.5842922623208099,
+        "sortino": 0.9832866753345677,
+        "max_drawdown": -0.15861811243065604,
+        "profit_factor": 1.152329341213638,
+        "total_return": 0.15137677294155916,
+        "cagr": 0.07307406087539192,
+        "buy_hold_return": -0.020726106676817818,
+        "avg_win": 0.009788098540137305,
+        "avg_loss": -0.0058274059496385335,
+        "exit_reasons": {
+          "TP": 91,
+          "SL": 158,
+          "TIME": 41
+        }
+      },
+      "group": "Mislabelled reconstruction"
+    },
+    {
+      "strategy": "powell_1000",
+      "source": "binance",
+      "symbol": "ETHUSDT",
+      "market": "crypto",
+      "interval": "5m",
+      "max_hold_bars": 72,
+      "costs": {
+        "fee_bps": 5.0,
+        "slippage_bps": 3.0,
+        "roundtrip_bps": 16.0
+      },
+      "net": {
+        "n_trades": 288,
+        "win_rate": 0.4097222222222222,
+        "sharpe": -0.07270797438067733,
+        "sortino": -0.14988339156619157,
+        "max_drawdown": -0.23570958380470564,
+        "profit_factor": 0.9827031974727413,
+        "total_return": -0.04828732051466633,
+        "cagr": -0.024458910033620884,
+        "buy_hold_return": -0.43752851898892375,
+        "avg_win": 0.01281353522970087,
+        "avg_loss": -0.009050648198783354,
+        "exit_reasons": {
+          "TP": 97,
+          "SL": 158,
+          "TIME": 33
+        }
+      },
+      "gross": {
+        "n_trades": 288,
+        "win_rate": 0.4305555555555556,
+        "sharpe": 1.1799721493738131,
+        "sortino": 2.4239271004643625,
+        "max_drawdown": -0.12411336296733089,
+        "profit_factor": 1.3408211422453329,
+        "total_return": 0.49552392258665656,
+        "cagr": 0.22308472676787416,
+        "buy_hold_return": -0.43752851898892375,
+        "avg_win": 0.013473017596565008,
+        "avg_loss": -0.007597520223081591,
+        "exit_reasons": {
+          "TP": 102,
+          "SL": 155,
+          "TIME": 31
+        }
+      },
+      "group": "Mislabelled reconstruction"
+    },
+    {
+      "strategy": "powell_1000",
+      "source": "binance",
+      "symbol": "SOLUSDT",
+      "market": "crypto",
+      "interval": "5m",
+      "max_hold_bars": 72,
+      "costs": {
+        "fee_bps": 5.0,
+        "slippage_bps": 3.0,
+        "roundtrip_bps": 16.0
+      },
+      "net": {
+        "n_trades": 303,
+        "win_rate": 0.38283828382838286,
+        "sharpe": -0.5264998081405319,
+        "sortino": -0.9326636339246898,
+        "max_drawdown": -0.27964443784469983,
+        "profit_factor": 0.8878838847700693,
+        "total_return": -0.21441514329284694,
+        "cagr": -0.11374099931858905,
+        "buy_hold_return": -0.5628076062639821,
+        "avg_win": 0.014553378898842418,
+        "avg_loss": -0.010167730944859642,
+        "exit_reasons": {
+          "TP": 84,
+          "SL": 170,
+          "TIME": 49
+        }
+      },
+      "gross": {
+        "n_trades": 303,
+        "win_rate": 0.41254125412541254,
+        "sharpe": 0.6963517375993611,
+        "sortino": 1.2510531204453148,
+        "max_drawdown": -0.192800468517907,
+        "profit_factor": 1.1750793598259932,
+        "total_return": 0.2843066467752742,
+        "cagr": 0.13336965452754446,
+        "buy_hold_return": -0.5628076062639821,
+        "avg_win": 0.014896103643717405,
+        "avg_loss": -0.008902162099385203,
+        "exit_reasons": {
+          "TP": 91,
+          "SL": 166,
+          "TIME": 46
+        }
+      },
+      "group": "Mislabelled reconstruction"
+    },
+    {
+      "strategy": "powell_1000",
+      "source": "binance",
+      "symbol": "XRPUSDT",
+      "market": "crypto",
+      "interval": "5m",
+      "max_hold_bars": 72,
+      "costs": {
+        "fee_bps": 5.0,
+        "slippage_bps": 3.0,
+        "roundtrip_bps": 16.0
+      },
+      "net": {
+        "n_trades": 299,
+        "win_rate": 0.34448160535117056,
+        "sharpe": -0.6265567177554581,
+        "sortino": -1.0022183981610604,
+        "max_drawdown": -0.361202986504341,
+        "profit_factor": 0.857184587924571,
+        "total_return": -0.2594762346310858,
+        "cagr": -0.13955161864104293,
+        "buy_hold_return": 0.8844884488448844,
+        "avg_win": 0.01566841456302862,
+        "avg_loss": -0.00960576269177783,
+        "exit_reasons": {
+          "TP": 84,
+          "SL": 185,
+          "TIME": 30
+        }
+      },
+      "gross": {
+        "n_trades": 299,
+        "win_rate": 0.3612040133779264,
+        "sharpe": 0.418979100768634,
+        "sortino": 0.6654824844006453,
+        "max_drawdown": -0.22918447196638947,
+        "profit_factor": 1.113333111867587,
+        "total_return": 0.15788494598245872,
+        "cagr": 0.07610464742344414,
+        "buy_hold_return": 0.8844884488448844,
+        "avg_win": 0.01610298710791792,
+        "avg_loss": -0.008178463273679895,
+        "exit_reasons": {
+          "TP": 90,
+          "SL": 183,
+          "TIME": 26
+        }
+      },
+      "group": "Mislabelled reconstruction"
+    },
+    {
+      "strategy": "powell_1000",
+      "source": "dukascopy",
+      "symbol": "EURUSD",
+      "market": "fx",
+      "interval": "5m",
+      "max_hold_bars": 72,
+      "costs": {
+        "fee_bps": 0.35,
+        "slippage_bps": 0.5,
+        "roundtrip_bps": 1.7
+      },
+      "net": {
+        "n_trades": 306,
+        "win_rate": 0.3790849673202614,
+        "sharpe": -1.4528086887790002,
+        "sortino": -2.22125352823169,
+        "max_drawdown": -0.07553517672390997,
+        "profit_factor": 0.7214912894378694,
+        "total_return": -0.05901441850457423,
+        "cagr": -0.030016589994015797,
+        "buy_hold_return": 0.047783011505018035,
+        "avg_win": 0.001351674207041344,
+        "avg_loss": -0.001143787438397999,
+        "exit_reasons": {
+          "TP": 63,
+          "SL": 165,
+          "TIME": 78
+        }
+      },
+      "gross": {
+        "n_trades": 306,
+        "win_rate": 0.4117647058823529,
+        "sharpe": -0.14269908181583088,
+        "sortino": -0.2214222336255295,
+        "max_drawdown": -0.03620878357187163,
+        "profit_factor": 0.9680978280825311,
+        "total_return": -0.006095488085474332,
+        "cagr": -0.003058673672411527,
+        "buy_hold_return": 0.047783011505018035,
+        "avg_win": 0.0014032489394209403,
+        "avg_loss": -0.0010146435918983573,
+        "exit_reasons": {
+          "TP": 70,
+          "SL": 161,
+          "TIME": 75
+        }
+      },
+      "group": "Mislabelled reconstruction"
+    },
+    {
+      "strategy": "powell_1000",
+      "source": "dukascopy",
+      "symbol": "GBPUSD",
+      "market": "fx",
+      "interval": "5m",
+      "max_hold_bars": 72,
+      "costs": {
+        "fee_bps": 0.35,
+        "slippage_bps": 0.5,
+        "roundtrip_bps": 1.7
+      },
+      "net": {
+        "n_trades": 304,
+        "win_rate": 0.3782894736842105,
+        "sharpe": -0.8050056864427225,
+        "sortino": -1.6529272350959459,
+        "max_drawdown": -0.050769044748422254,
+        "profit_factor": 0.8365997704361896,
+        "total_return": -0.03265838237294816,
+        "cagr": -0.0164983319763079,
+        "buy_hold_return": 0.03420145064258207,
+        "avg_win": 0.0014653908488049226,
+        "avg_loss": -0.001065790316907612,
+        "exit_reasons": {
+          "TP": 68,
+          "SL": 168,
+          "TIME": 68
+        }
+      },
+      "gross": {
+        "n_trades": 304,
+        "win_rate": 0.40789473684210525,
+        "sharpe": 0.6251164757524866,
+        "sortino": 1.3056237283051013,
+        "max_drawdown": -0.016869326943377505,
+        "profit_factor": 1.1525058041368645,
+        "total_return": 0.02531138212382733,
+        "cagr": 0.012602645731718543,
+        "buy_hold_return": 0.03420145064258207,
+        "avg_win": 0.0015406068933037276,
+        "avg_loss": -0.00092086908988489,
+        "exit_reasons": {
+          "TP": 81,
+          "SL": 162,
+          "TIME": 61
+        }
+      },
+      "group": "Mislabelled reconstruction"
+    },
+    {
+      "strategy": "powell_1000",
+      "source": "dukascopy",
+      "symbol": "USDJPY",
+      "market": "fx",
+      "interval": "5m",
+      "max_hold_bars": 72,
+      "costs": {
+        "fee_bps": 0.35,
+        "slippage_bps": 0.5,
+        "roundtrip_bps": 1.7
+      },
+      "net": {
+        "n_trades": 297,
+        "win_rate": 0.31986531986531985,
+        "sharpe": -1.6142299403423641,
+        "sortino": -1.8218387771491245,
+        "max_drawdown": -0.08614045380706714,
+        "profit_factor": 0.6549602508480313,
+        "total_return": -0.07899743073662913,
+        "cagr": -0.040392458995669456,
+        "buy_hold_return": 0.04040114064802605,
+        "avg_win": 0.001652053950797497,
+        "avg_loss": -0.0011862644564508006,
+        "exit_reasons": {
+          "TP": 49,
+          "SL": 166,
+          "TIME": 82
+        }
+      },
+      "gross": {
+        "n_trades": 297,
+        "win_rate": 0.36363636363636365,
+        "sharpe": -0.5202052250027325,
+        "sortino": -0.5777091347150258,
+        "max_drawdown": -0.03449451314661722,
+        "profit_factor": 0.8686697074629623,
+        "total_return": -0.02608262848158316,
+        "cagr": -0.01315431243530929,
+        "buy_hold_return": 0.04040114064802605,
+        "avg_win": 0.0016329948547472192,
+        "avg_loss": -0.0010742171725128303,
+        "exit_reasons": {
+          "TP": 58,
+          "SL": 162,
+          "TIME": 77
+        }
+      },
+      "group": "Mislabelled reconstruction"
+    },
+    {
+      "strategy": "powell_or",
+      "source": "binance",
+      "symbol": "BTCUSDT",
+      "market": "crypto",
+      "interval": "5m",
+      "max_hold_bars": 72,
+      "costs": {
+        "fee_bps": 5.0,
+        "slippage_bps": 3.0,
+        "roundtrip_bps": 16.0
+      },
+      "net": {
+        "n_trades": 299,
+        "win_rate": 0.4080267558528428,
+        "sharpe": -1.3126810905920219,
+        "sortino": -1.5964854560231938,
+        "max_drawdown": -0.44032169765482143,
+        "profit_factor": 0.7158526705117431,
+        "total_return": -0.39245037212655887,
+        "cagr": -0.2206783097934264,
+        "buy_hold_return": -0.020726106676817818,
+        "avg_win": 0.010159635570253936,
+        "avg_loss": -0.00978230151636761,
+        "exit_reasons": {
+          "TP": 35,
+          "SL": 104,
+          "TIME": 160
+        }
+      },
+      "gross": {
+        "n_trades": 299,
+        "win_rate": 0.45819397993311034,
+        "sharpe": 0.015601534253458955,
+        "sortino": 0.0198695319885023,
+        "max_drawdown": -0.21651619204258543,
+        "profit_factor": 0.9936757955110939,
+        "total_return": -0.01647620052312837,
+        "cagr": -0.008277958319945489,
+        "buy_hold_return": -0.020726106676817818,
+        "avg_win": 0.010589786924476256,
+        "avg_loss": -0.009012557805774072,
+        "exit_reasons": {
+          "TP": 39,
+          "SL": 104,
+          "TIME": 156
+        }
+      },
+      "group": "Mislabelled reconstruction"
+    },
+    {
+      "strategy": "confluence",
+      "source": "binance",
+      "symbol": "BTCUSDT",
+      "market": "crypto",
+      "interval": "15m",
+      "max_hold_bars": 96,
+      "costs": {
+        "fee_bps": 5.0,
+        "slippage_bps": 3.0,
+        "roundtrip_bps": 16.0
+      },
+      "net": {
+        "n_trades": 264,
+        "win_rate": 0.23484848484848486,
+        "sharpe": -1.87337170952642,
+        "sortino": -4.149383512846039,
+        "max_drawdown": -0.38747167392567716,
+        "profit_factor": 0.6448347156189418,
+        "total_return": -0.3600945210981983,
+        "cagr": -0.2001813703914681,
+        "buy_hold_return": -0.021828448452824424,
+        "avg_win": 0.01298602736192047,
+        "avg_loss": -0.006181134920109676,
+        "exit_reasons": {
+          "TP": 57,
+          "SL": 197,
+          "TIME": 10
+        }
+      },
+      "gross": {
+        "n_trades": 262,
+        "win_rate": 0.27099236641221375,
+        "sharpe": 0.05511955641297225,
+        "sortino": 0.16530438622619523,
+        "max_drawdown": -0.13572225962803008,
+        "profit_factor": 1.0082405095652465,
+        "total_return": 0.0034779868404966052,
+        "cagr": 0.0017386750864256673,
+        "buy_hold_return": -0.021828448452824424,
+        "avg_win": 0.013511144399368917,
+        "avg_loss": -0.004981417868226157,
+        "exit_reasons": {
+          "TP": 62,
+          "SL": 190,
+          "TIME": 10
+        }
+      },
+      "group": "TA confluence baseline"
+    }
+  ]
+}
