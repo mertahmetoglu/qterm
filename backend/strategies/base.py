@@ -58,6 +58,21 @@ class Strategy:
     default_interval = "15m"
     default_max_hold_bars = 96
 
+    # Two execution shapes are supported, because they are genuinely different
+    # kinds of strategy and forcing one into the other would misreport it:
+    #
+    #   False  entry/stop/target. A trade is opened, then closed by TP, SL or
+    #          the hold limit. Between trades the account is flat.
+    #   True   always in the market. There is no stop and no target; the
+    #          position is held until the opposite signal flips it. This is
+    #          what a TradingView `strategy.entry` in both directions does.
+    always_in_market = False
+
+    # Only meaningful when always_in_market is True: on a short signal, exit to
+    # flat instead of reversing. Needed for venues where retail short selling
+    # is unavailable or restricted, which includes Borsa Istanbul equities.
+    long_only = False
+
     def generate(self, candles):
         """Return EntrySignals in chronological order.
 

@@ -1,8 +1,12 @@
-# QTERM — BTC/USDT Signal Engine, Live Dashboard & Backtester
+# QTERM — Strategy Backtesting Engine & Live Signal Dashboard
 
-A small trading-systems project: a Python service ingests live Binance market data, computes a technical-indicator confluence signal, and streams it to a React dashboard — plus a backtesting engine that runs the *exact same signal code* against two years of historical data to report realistic, cost-adjusted performance.
+A trading-systems project with two halves.
 
-This is a systems/infrastructure project, not an alpha-discovery claim. The backtest section below is intentionally blunt about the result.
+**A backtesting engine** that evaluates trading strategies under identical, cost-aware, no-lookahead execution rules. Strategies are plugins; markets are plugins. It currently covers crypto (Binance), FX majors and US index CFDs (Dukascopy), and equities including Borsa Istanbul (Yahoo). Five strategies have been run across 13 instruments.
+
+**A live dashboard** where a Python service ingests Binance market data, computes signals server-side, and streams them to a React front end — sharing the exact signal code the backtester runs, so a live result and a backtest result can never describe different strategies.
+
+This is a systems and research-methodology project, not an alpha-discovery claim. **No strategy tested here has a demonstrated edge**, and the write-up is deliberately blunt about that. The interesting content is in *how* that conclusion was reached: the cost modelling, the bugs the backtests caught, and the several times a result looked good until it was checked properly.
 
 ## Architecture
 
@@ -176,6 +180,43 @@ No strategy tested in this repo has a demonstrated edge. That is the finding, an
 
 **A note on leverage.** This ran at 10x through most of this project's development, which produced Sharpe -1.86 and Profit Factor 0.64 — both essentially unchanged from the 1x numbers above — but a **-99.7% max drawdown and -99.5% total return**: an account wipeout rather than a slow bleed. Putting the two runs side by side is itself the useful part: leverage doesn't change whether an edge is positive or negative (the scale-invariant ratios barely moved), it changes how violently a *given* edge compounds once you're re-risking the full account every trade. A negative edge at 10x is close to guaranteed ruin over 264 trades; the same edge at 1x is something a trader could stay solvent under, while still losing to buy-and-hold. Leverage was removed here because it was obscuring the actual result behind a scarier-looking but less informative one.
 
+### Case study: a TradingView strategy that reported +135% on Borsa Istanbul
+
+A published Pine strategy, "Flow Buy/Sell", whose TradingView tester showed **+135.73%** over 8 months on ASTOR (Borsa Istanbul, 15m): 254 trades, 35.83% win rate, profit factor 1.482.
+
+**First, what it actually trades.** The script draws a Kalman-smoothed support/resistance cloud, ATR volatility bands and RSI-weighted bar colouring. None of it reaches the order logic:
+
+```
+signalFilter  = input.bool(false, ...)          // default false
+buyCondition  = cross_UP and (not signalFilter or close > smoothedSupportZoneEnd)
+```
+
+With `signalFilter` false, `not signalFilter` is true and the `or` short-circuits. Both conditions collapse to a bare MACD(20,50,12) cross. Everything else is decoration. So the thing being evaluated is a MACD crossover system that reverses on every cross — implemented here as `strategies/macd_flip.py`.
+
+**Reproduction check.** Trade cadence 1.4/day vs the original's 1.5/day; profit factor 1.56 vs 1.482; win rate 40.0% vs 35.83%. Different sample periods, same mechanism — close enough to trust the comparison.
+
+**Three things the +135.73% doesn't show:**
+
+| | |
+|---|---|
+| ASTOR buy-and-hold, same window | **+226.3%** |
+| The strategy | +135.73% |
+
+The stock nearly tripled. Holding it beat the strategy by ~90 points; the strategy spent the rally flipping in and out of a trend it should have sat in. TradingView draws a buy-and-hold line — it was toggled off in the original screenshot.
+
+Second, commission. The Pine header sets `commission_value=0.05` (0.05%). Real BIST retail cost is roughly 0.2% per side once commission, BSMV and exchange fees are counted. Over 254 trades:
+
+| Assumption | Arithmetic | Capital consumed |
+|---|---|---|
+| Pine header, 0.05% | 254 × 2 × 0.05% | 25.4% |
+| Realistic BIST, 0.2% | 254 × 2 × 0.20% | **101.6%** |
+
+Measured on 15m data, that is the whole result: **+19.7% at the script's assumption, +0.4% at realistic cost** (profit factor 1.56 → 1.07).
+
+Third, half the trades are shorts. Retail short selling of BIST equities is restricted and has been suspended outright for long stretches, and the index cannot be shorted without derivatives. `macd_flip_long` reports the version a Turkish retail account could actually run.
+
+Across 6 BIST symbols × 4 windows × 3 cost assumptions (144 runs, `run_bist.py` → `reports/bist_matrix.json`), only 14 of 48 realistic-cost runs were profitable and only 18 of 48 beat buy-and-hold. The same strategy on the BIST 100 index gives +7.9% over 3 months, -6.8% over 6, and -32.2% over 12 — which is its own lesson about judging a system on a short window.
+
 ### On not tuning until it looks good
 
 Every number above comes from the first run of each strategy's stated rules over the full window. No parameter was adjusted after seeing a result. That matters more than the results themselves: with a handful of thresholds and two years of data, it is trivially easy to search until something shows a positive Sharpe and to have found nothing but an overfit.
@@ -223,6 +264,8 @@ qterm/
 │   ├── signal_engine.py   # indicator math + confluence scoring — the single source of truth
 │   ├── market_data.py     # Binance: REST pagination + live WS, reconnect/backfill/latency
 │   ├── fx_data.py          # Dukascopy: FX majors + US index CFDs, per-day cache, loud gaps
+│   ├── yahoo_data.py       # Yahoo: equities incl. Borsa Istanbul (.IS)
+│   ├── run_bist.py         # BIST study: 6 symbols x 4 windows x 3 cost assumptions
 │   ├── main.py             # FastAPI app, /health, /api/config, /api/backtest, WS /ws/signals
 │   ├── backtest.py         # strategy-agnostic executor (no-lookahead, costs modeled)
 │   ├── run_matrix.py       # runs every strategy x market combination -> reports/matrix.json
@@ -230,7 +273,8 @@ qterm/
 │   │   ├── base.py         #   EntrySignal + Strategy interface
 │   │   ├── confluence.py   #   EMA/RSI/MACD/Bollinger confluence
 │   │   ├── powell_open.py  #   Powell 10:00 ET (faithful) -- fade + continuation readings
-│   │   └── powell_1000.py  #   earlier mislabelled reconstruction, kept for the comparison
+│   │   ├── powell_1000.py  #   earlier mislabelled reconstruction, kept for the comparison
+│   │   └── macd_flip.py    #   TradingView "Flow Buy/Sell" == MACD(20/50/12) reversal
 │   ├── metrics.py          # Sharpe / Sortino / Max Drawdown / Profit Factor
 │   ├── report.py           # equity curve + drawdown chart generation
 │   ├── scripts/            # parity check (vs the original JS), gap-backfill test

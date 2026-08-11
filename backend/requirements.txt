@@ -6,3 +6,4 @@ pandas>=2.2.3
 numpy>=2.0
 matplotlib>=3.9
 pyarrow>=17.0
+yfinance>=1.5          # equities incl. Borsa Istanbul (yahoo_data.py)

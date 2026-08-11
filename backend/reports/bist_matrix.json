@@ -1,0 +1,3894 @@
+{
+  "interval": "1h",
+  "end": "2026-08-05",
+  "rows": [
+    {
+      "symbol": "XU100.IS",
+      "window": "1mo",
+      "days": 30,
+      "strategy": "macd_flip",
+      "cost_label": "pine 5bp",
+      "fee_bps": 5.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 12,
+        "win_rate": 0.25,
+        "sharpe": -0.7267625323628681,
+        "sortino": -1.688859780631915,
+        "max_drawdown": -0.07068641679360255,
+        "profit_factor": 0.8367347679684841,
+        "total_return": -0.015194240198413533,
+        "cagr": -0.1753841061707001,
+        "buy_hold_return": -0.06164816334890125,
+        "avg_win": 0.02359450380946167,
+        "avg_loss": -0.009399435644641602,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "XU100.IS",
+      "window": "1mo",
+      "days": 30,
+      "strategy": "macd_flip",
+      "cost_label": "real 20bp",
+      "fee_bps": 20.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 12,
+        "win_rate": 0.25,
+        "sharpe": -2.5740056252139856,
+        "sortino": -6.09094145521392,
+        "max_drawdown": -0.09839286448546436,
+        "profit_factor": 0.5536408913998048,
+        "total_return": -0.050116092743825225,
+        "cagr": -0.4766838046055444,
+        "buy_hold_return": -0.06164816334890125,
+        "avg_win": 0.02059450380946167,
+        "avg_loss": -0.012399435644641603,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "XU100.IS",
+      "window": "1mo",
+      "days": 30,
+      "strategy": "macd_flip",
+      "cost_label": "gross 0bp",
+      "fee_bps": 0.0,
+      "slippage_bps": 0.0,
+      "stats": {
+        "n_trades": 12,
+        "win_rate": 0.25,
+        "sharpe": 0.533888270668964,
+        "sortino": 1.2382763942489616,
+        "max_drawdown": -0.05441759157558912,
+        "profit_factor": 1.1521443389441939,
+        "total_return": 0.008683764279449946,
+        "cagr": 0.11504902367323866,
+        "buy_hold_return": -0.06164816334890125,
+        "avg_win": 0.025583341922063935,
+        "avg_loss": -0.0074016599764771636,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "XU100.IS",
+      "window": "1mo",
+      "days": 30,
+      "strategy": "macd_flip_long",
+      "cost_label": "pine 5bp",
+      "fee_bps": 5.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 6,
+        "win_rate": 0.16666666666666666,
+        "sharpe": -3.0961323861156362,
+        "sortino": -3.832962329005353,
+        "max_drawdown": -0.051970611090082164,
+        "profit_factor": 0.3653923168771128,
+        "total_return": -0.03359769921632172,
+        "cagr": -0.3497699966182225,
+        "buy_hold_return": -0.06164816334890125,
+        "avg_win": 0.019380107925648173,
+        "avg_loss": -0.010607835485586308,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "XU100.IS",
+      "window": "1mo",
+      "days": 30,
+      "strategy": "macd_flip_long",
+      "cost_label": "real 20bp",
+      "fee_bps": 20.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 6,
+        "win_rate": 0.16666666666666666,
+        "sharpe": -4.329328669548627,
+        "sortino": -5.882731468268588,
+        "max_drawdown": -0.0662568883322715,
+        "profit_factor": 0.24074523744791465,
+        "total_return": -0.050962075388323425,
+        "cagr": -0.4825237153462515,
+        "buy_hold_return": -0.06164816334890125,
+        "avg_win": 0.016380107925648174,
+        "avg_loss": -0.01360783548558631,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "XU100.IS",
+      "window": "1mo",
+      "days": 30,
+      "strategy": "macd_flip_long",
+      "cost_label": "gross 0bp",
+      "fee_bps": 0.0,
+      "slippage_bps": 0.0,
+      "stats": {
+        "n_trades": 6,
+        "win_rate": 0.16666666666666666,
+        "sharpe": -2.0870495118800925,
+        "sortino": -2.466791026957757,
+        "max_drawdown": -0.04239377551592405,
+        "profit_factor": 0.4967187636194881,
+        "total_return": -0.02190004616240293,
+        "cagr": -0.24337873018982326,
+        "buy_hold_return": -0.06164816334890125,
+        "avg_win": 0.02140099847885024,
+        "avg_loss": -0.008616947877267831,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "XU100.IS",
+      "window": "3mo",
+      "days": 91,
+      "strategy": "macd_flip",
+      "cost_label": "pine 5bp",
+      "fee_bps": 5.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 24,
+        "win_rate": 0.375,
+        "sharpe": 1.0865095804352254,
+        "sortino": 1.6848583202997645,
+        "max_drawdown": -0.0764220076061326,
+        "profit_factor": 1.4577009781686912,
+        "total_return": 0.07860224938209881,
+        "cagr": 0.35944673831294716,
+        "buy_hold_return": -0.07306531083096245,
+        "avg_win": 0.029548256487342255,
+        "avg_loss": -0.01216227069743633,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "XU100.IS",
+      "window": "3mo",
+      "days": 91,
+      "strategy": "macd_flip",
+      "cost_label": "real 20bp",
+      "fee_bps": 20.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 24,
+        "win_rate": 0.3333333333333333,
+        "sharpe": 0.15277286166795373,
+        "sortino": 0.2022096718893389,
+        "max_drawdown": -0.13050143215104004,
+        "profit_factor": 1.0501066506431251,
+        "total_return": 0.003769666030359886,
+        "cagr": 0.015386977379308941,
+        "buy_hold_return": -0.07306531083096245,
+        "avg_win": 0.030126955889577738,
+        "avg_loss": -0.014344712449505415,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "XU100.IS",
+      "window": "3mo",
+      "days": 91,
+      "strategy": "macd_flip",
+      "cost_label": "gross 0bp",
+      "fee_bps": 0.0,
+      "slippage_bps": 0.0,
+      "stats": {
+        "n_trades": 24,
+        "win_rate": 0.375,
+        "sharpe": 1.6977782045057113,
+        "sortino": 2.776036043068891,
+        "max_drawdown": -0.0645070371919022,
+        "profit_factor": 1.8621029534478006,
+        "total_return": 0.1313420105177776,
+        "cagr": 0.6500684808354495,
+        "buy_hold_return": -0.07306531083096245,
+        "avg_win": 0.031538891444894274,
+        "avg_loss": -0.01016234619675503,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "XU100.IS",
+      "window": "3mo",
+      "days": 91,
+      "strategy": "macd_flip_long",
+      "cost_label": "pine 5bp",
+      "fee_bps": 5.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 12,
+        "win_rate": 0.4166666666666667,
+        "sharpe": -0.026114452011925186,
+        "sortino": -0.028508687390913605,
+        "max_drawdown": -0.05197061109008205,
+        "profit_factor": 0.9891346239792785,
+        "total_return": -0.002948014166266888,
+        "cagr": -0.011910199282524458,
+        "buy_hold_return": -0.07306531083096245,
+        "avg_win": 0.01800092302726719,
+        "avg_loss": -0.012999041637635631,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "XU100.IS",
+      "window": "3mo",
+      "days": 91,
+      "strategy": "macd_flip_long",
+      "cost_label": "real 20bp",
+      "fee_bps": 20.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 12,
+        "win_rate": 0.3333333333333333,
+        "sharpe": -0.9650706648571438,
+        "sortino": -0.869624874427556,
+        "max_drawdown": -0.0662568883322715,
+        "profit_factor": 0.6757501973557845,
+        "total_return": -0.03826970566760712,
+        "cagr": -0.14645852680950966,
+        "buy_hold_return": -0.07306531083096245,
+        "avg_win": 0.0192714884667194,
+        "avg_loss": -0.014259328774248885,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "XU100.IS",
+      "window": "3mo",
+      "days": 91,
+      "strategy": "macd_flip_long",
+      "cost_label": "gross 0bp",
+      "fee_bps": 0.0,
+      "slippage_bps": 0.0,
+      "stats": {
+        "n_trades": 12,
+        "win_rate": 0.4166666666666667,
+        "sharpe": 0.6047524728319654,
+        "sortino": 0.6633633762781408,
+        "max_drawdown": -0.04239377551592416,
+        "profit_factor": 1.2987829331163108,
+        "total_return": 0.021269566511326055,
+        "cagr": 0.08916769236099209,
+        "buy_hold_return": -0.07306531083096245,
+        "avg_win": 0.020020433705633493,
+        "avg_loss": -0.0110105464316704,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "XU100.IS",
+      "window": "6mo",
+      "days": 182,
+      "strategy": "macd_flip",
+      "cost_label": "pine 5bp",
+      "fee_bps": 5.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 55,
+        "win_rate": 0.3090909090909091,
+        "sharpe": -0.38261936244644135,
+        "sortino": -0.48196128134608107,
+        "max_drawdown": -0.1864374250778008,
+        "profit_factor": 0.8877652072691189,
+        "total_return": -0.06811896254312189,
+        "cagr": -0.13269711349009716,
+        "buy_hold_return": -0.019067329794066338,
+        "avg_win": 0.026322791256974773,
+        "avg_loss": -0.013264752285748254,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "XU100.IS",
+      "window": "6mo",
+      "days": 182,
+      "strategy": "macd_flip",
+      "cost_label": "real 20bp",
+      "fee_bps": 20.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 55,
+        "win_rate": 0.2727272727272727,
+        "sharpe": -1.4740683467606022,
+        "sortino": -1.6967396436333926,
+        "max_drawdown": -0.2622217711747977,
+        "profit_factor": 0.6429659433191988,
+        "total_return": -0.21026025261005798,
+        "cagr": -0.37894904204503377,
+        "buy_hold_return": -0.019067329794066338,
+        "avg_win": 0.02660138015942813,
+        "avg_loss": -0.015514845947032114,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "XU100.IS",
+      "window": "6mo",
+      "days": 182,
+      "strategy": "macd_flip",
+      "cost_label": "gross 0bp",
+      "fee_bps": 0.0,
+      "slippage_bps": 0.0,
+      "stats": {
+        "n_trades": 55,
+        "win_rate": 0.32727272727272727,
+        "sharpe": 0.3705954435207426,
+        "sortino": 0.4872512840987579,
+        "max_drawdown": -0.14096668819319302,
+        "profit_factor": 1.1242833493824402,
+        "total_return": 0.040312497836036076,
+        "cagr": 0.08301836701813903,
+        "buy_hold_return": -0.019067329794066338,
+        "avg_win": 0.026854233357894598,
+        "avg_loss": -0.011620043684491476,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "XU100.IS",
+      "window": "6mo",
+      "days": 182,
+      "strategy": "macd_flip_long",
+      "cost_label": "pine 5bp",
+      "fee_bps": 5.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 28,
+        "win_rate": 0.35714285714285715,
+        "sharpe": -0.2781859081614622,
+        "sortino": -0.2930011846342427,
+        "max_drawdown": -0.11838577028415975,
+        "profit_factor": 0.8974502649021824,
+        "total_return": -0.030335851664903712,
+        "cagr": -0.06027138239940322,
+        "buy_hold_return": -0.019067329794066338,
+        "avg_win": 0.02203878161897778,
+        "avg_loss": -0.013642836873454234,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "XU100.IS",
+      "window": "6mo",
+      "days": 182,
+      "strategy": "macd_flip_long",
+      "cost_label": "real 20bp",
+      "fee_bps": 20.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 28,
+        "win_rate": 0.2857142857142857,
+        "sharpe": -1.188377590133692,
+        "sortino": -1.118394257196868,
+        "max_drawdown": -0.1445662532219073,
+        "profit_factor": 0.6385909031966394,
+        "total_return": -0.10867064263466508,
+        "cagr": -0.20717138225749532,
+        "buy_hold_return": -0.019067329794066338,
+        "avg_win": 0.024115133401578573,
+        "avg_loss": -0.015105215737251348,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "XU100.IS",
+      "window": "6mo",
+      "days": 182,
+      "strategy": "macd_flip_long",
+      "cost_label": "gross 0bp",
+      "fee_bps": 0.0,
+      "slippage_bps": 0.0,
+      "stats": {
+        "n_trades": 28,
+        "win_rate": 0.39285714285714285,
+        "sharpe": 0.3401193374977173,
+        "sortino": 0.38889483802772484,
+        "max_drawdown": -0.10405609964187279,
+        "profit_factor": 1.1456609475944612,
+        "total_return": 0.02553747534711892,
+        "cagr": 0.05220343120324111,
+        "buy_hold_return": -0.019067329794066338,
+        "avg_win": 0.022046731468912884,
+        "avg_loss": -0.012451792266199612,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "XU100.IS",
+      "window": "1yr",
+      "days": 365,
+      "strategy": "macd_flip",
+      "cost_label": "pine 5bp",
+      "fee_bps": 5.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 110,
+        "win_rate": 0.2909090909090909,
+        "sharpe": -1.2248761021653327,
+        "sortino": -1.497666187570634,
+        "max_drawdown": -0.4359290653337007,
+        "profit_factor": 0.6905181617503212,
+        "total_return": -0.32183425080147854,
+        "cagr": -0.32273809458900593,
+        "buy_hold_return": 0.2566318085381458,
+        "avg_win": 0.025063301126396924,
+        "avg_loss": -0.014890817532195438,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "XU100.IS",
+      "window": "1yr",
+      "days": 365,
+      "strategy": "macd_flip",
+      "cost_label": "real 20bp",
+      "fee_bps": 20.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 110,
+        "win_rate": 0.2727272727272727,
+        "sharpe": -2.289148859168883,
+        "sortino": -2.7315306848939898,
+        "max_drawdown": -0.5590014849508669,
+        "profit_factor": 0.5068313744925074,
+        "total_return": -0.5133034092191973,
+        "cagr": -0.5145054841273913,
+        "buy_hold_return": 0.2566318085381458,
+        "avg_win": 0.023618629568918414,
+        "avg_loss": -0.017475212731676185,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "XU100.IS",
+      "window": "1yr",
+      "days": 365,
+      "strategy": "macd_flip",
+      "cost_label": "gross 0bp",
+      "fee_bps": 0.0,
+      "slippage_bps": 0.0,
+      "stats": {
+        "n_trades": 110,
+        "win_rate": 0.3181818181818182,
+        "sharpe": -0.4786230407151825,
+        "sortino": -0.6105527283255808,
+        "max_drawdown": -0.3424593264450566,
+        "profit_factor": 0.8622837274056527,
+        "total_return": -0.15421354571505352,
+        "cagr": -0.1546998735413172,
+        "buy_hold_return": 0.2566318085381458,
+        "avg_win": 0.024901736520844573,
+        "avg_loss": -0.013476782649439053,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "XU100.IS",
+      "window": "1yr",
+      "days": 365,
+      "strategy": "macd_flip_long",
+      "cost_label": "pine 5bp",
+      "fee_bps": 5.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 55,
+        "win_rate": 0.34545454545454546,
+        "sharpe": -0.2485135410954911,
+        "sortino": -0.2479203616907384,
+        "max_drawdown": -0.15303409800460466,
+        "profit_factor": 0.9028508409458036,
+        "total_return": -0.06118373415053924,
+        "cagr": -0.06138725818537394,
+        "buy_hold_return": 0.2566318085381458,
+        "avg_win": 0.024248562192585626,
+        "avg_loss": -0.0141749353136808,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "XU100.IS",
+      "window": "1yr",
+      "days": 365,
+      "strategy": "macd_flip_long",
+      "cost_label": "real 20bp",
+      "fee_bps": 20.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 55,
+        "win_rate": 0.3090909090909091,
+        "sharpe": -1.0627074679104802,
+        "sortino": -1.0153960144301333,
+        "max_drawdown": -0.23776048352867996,
+        "profit_factor": 0.6543745133809789,
+        "total_return": -0.20436431130434973,
+        "cagr": -0.20498869996136482,
+        "buy_hold_return": 0.2566318085381458,
+        "avg_win": 0.023897407804822222,
+        "avg_loss": -0.0163376558504042,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "XU100.IS",
+      "window": "1yr",
+      "days": 365,
+      "strategy": "macd_flip_long",
+      "cost_label": "gross 0bp",
+      "fee_bps": 0.0,
+      "slippage_bps": 0.0,
+      "stats": {
+        "n_trades": 55,
+        "win_rate": 0.38181818181818183,
+        "sharpe": 0.3026644558349062,
+        "sortino": 0.3193904758130256,
+        "max_drawdown": -0.10957854443464543,
+        "profit_factor": 1.1366333716799681,
+        "total_return": 0.048031319937355654,
+        "cagr": 0.04820017552634215,
+        "buy_hold_return": 0.2566318085381458,
+        "avg_win": 0.023949571800593296,
+        "avg_loss": -0.013014207528374724,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "THYAO.IS",
+      "window": "1mo",
+      "days": 30,
+      "strategy": "macd_flip",
+      "cost_label": "pine 5bp",
+      "fee_bps": 5.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 11,
+        "win_rate": 0.36363636363636365,
+        "sharpe": -1.8193354720143966,
+        "sortino": -1.6662157999754248,
+        "max_drawdown": -0.07821669503776318,
+        "profit_factor": 0.6202337849529325,
+        "total_return": -0.037856166159310534,
+        "cagr": -0.3849496059159945,
+        "buy_hold_return": -0.07311827956989247,
+        "avg_win": 0.015122957415867803,
+        "avg_loss": -0.013932955865311736,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "THYAO.IS",
+      "window": "1mo",
+      "days": 30,
+      "strategy": "macd_flip",
+      "cost_label": "real 20bp",
+      "fee_bps": 20.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 11,
+        "win_rate": 0.2727272727272727,
+        "sharpe": -3.26327604547035,
+        "sortino": -2.7609382115929053,
+        "max_drawdown": -0.09762492226441488,
+        "profit_factor": 0.41016254902756,
+        "total_return": -0.06924737819252724,
+        "cagr": -0.5949832523213733,
+        "buy_hold_return": -0.07311827956989247,
+        "avg_win": 0.01623459586075843,
+        "avg_loss": -0.014842831121998277,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "THYAO.IS",
+      "window": "1mo",
+      "days": 30,
+      "strategy": "macd_flip",
+      "cost_label": "gross 0bp",
+      "fee_bps": 0.0,
+      "slippage_bps": 0.0,
+      "stats": {
+        "n_trades": 11,
+        "win_rate": 0.45454545454545453,
+        "sharpe": -0.7584547579750642,
+        "sortino": -0.821456814134767,
+        "max_drawdown": -0.06516267660061703,
+        "profit_factor": 0.8223174093890065,
+        "total_return": -0.0164724617521248,
+        "cagr": -0.18876343207152246,
+        "buy_hold_return": -0.07311827956989247,
+        "avg_win": 0.013989351862512192,
+        "avg_loss": -0.014176755940777254,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "THYAO.IS",
+      "window": "1mo",
+      "days": 30,
+      "strategy": "macd_flip_long",
+      "cost_label": "pine 5bp",
+      "fee_bps": 5.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 6,
+        "win_rate": 0.3333333333333333,
+        "sharpe": -3.398722238446896,
+        "sortino": -9.586166389921543,
+        "max_drawdown": -0.0818645720643989,
+        "profit_factor": 0.32864815446923124,
+        "total_return": -0.0563066634621463,
+        "cagr": -0.5180528904229083,
+        "buy_hold_return": -0.07311827956989247,
+        "avg_win": 0.013883554867806737,
+        "avg_loss": -0.021122216387048882,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "THYAO.IS",
+      "window": "1mo",
+      "days": 30,
+      "strategy": "macd_flip_long",
+      "cost_label": "real 20bp",
+      "fee_bps": 20.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 6,
+        "win_rate": 0.16666666666666666,
+        "sharpe": -4.2047360415196255,
+        "sortino": -3.699976872004042,
+        "max_drawdown": -0.09326062225595277,
+        "profit_factor": 0.22728935355879562,
+        "total_return": -0.0733313361275918,
+        "cagr": -0.6168053004367545,
+        "buy_hold_return": -0.07311827956989247,
+        "avg_win": 0.021979067654417556,
+        "avg_loss": -0.01934016469339992,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "THYAO.IS",
+      "window": "1mo",
+      "days": 30,
+      "strategy": "macd_flip_long",
+      "cost_label": "gross 0bp",
+      "fee_bps": 0.0,
+      "slippage_bps": 0.0,
+      "stats": {
+        "n_trades": 6,
+        "win_rate": 0.3333333333333333,
+        "sharpe": -2.777169858071875,
+        "sortino": -7.558633022795913,
+        "max_drawdown": -0.07441204300249771,
+        "profit_factor": 0.415292864354285,
+        "total_return": -0.044860507652001225,
+        "cagr": -0.4390233150158007,
+        "buy_hold_return": -0.07311827956989247,
+        "avg_win": 0.01589894611829968,
+        "avg_loss": -0.019141848419452184,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "THYAO.IS",
+      "window": "3mo",
+      "days": 91,
+      "strategy": "macd_flip",
+      "cost_label": "pine 5bp",
+      "fee_bps": 5.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 26,
+        "win_rate": 0.3076923076923077,
+        "sharpe": -2.181839689002976,
+        "sortino": -1.6552585168482052,
+        "max_drawdown": -0.17664529482446123,
+        "profit_factor": 0.4718920100821139,
+        "total_return": -0.13952292544426248,
+        "cagr": -0.4565615758775644,
+        "buy_hold_return": 0.05121951219512195,
+        "avg_win": 0.016140049875465974,
+        "avg_loss": -0.015201265007557264,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "THYAO.IS",
+      "window": "3mo",
+      "days": 91,
+      "strategy": "macd_flip",
+      "cost_label": "real 20bp",
+      "fee_bps": 20.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 26,
+        "win_rate": 0.23076923076923078,
+        "sharpe": -3.177946051306177,
+        "sortino": -2.375345380177124,
+        "max_drawdown": -0.228808474794281,
+        "profit_factor": 0.32490726623068417,
+        "total_return": -0.20455634058274164,
+        "cagr": -0.6049610539497703,
+        "buy_hold_return": 0.05121951219512195,
+        "avg_win": 0.017847581899551938,
+        "avg_loss": -0.01647939312648073,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "THYAO.IS",
+      "window": "3mo",
+      "days": 91,
+      "strategy": "macd_flip",
+      "cost_label": "gross 0bp",
+      "fee_bps": 0.0,
+      "slippage_bps": 0.0,
+      "stats": {
+        "n_trades": 26,
+        "win_rate": 0.38461538461538464,
+        "sharpe": -1.4358858745376333,
+        "sortino": -1.1346656983606886,
+        "max_drawdown": -0.14307518530602137,
+        "profit_factor": 0.614506714941763,
+        "total_return": -0.09331037055093594,
+        "cagr": -0.32802515674056587,
+        "buy_hold_return": 0.05121951219512195,
+        "avg_win": 0.014737167600961467,
+        "avg_loss": -0.014988818716934313,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "THYAO.IS",
+      "window": "3mo",
+      "days": 91,
+      "strategy": "macd_flip_long",
+      "cost_label": "pine 5bp",
+      "fee_bps": 5.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 13,
+        "win_rate": 0.3076923076923077,
+        "sharpe": -1.0228311986421963,
+        "sortino": -1.2233312719100455,
+        "max_drawdown": -0.08276910995785602,
+        "profit_factor": 0.6427335811148321,
+        "total_return": -0.047285817087823645,
+        "cagr": -0.17847016080636646,
+        "buy_hold_return": 0.05121951219512195,
+        "avg_win": 0.02057686531088105,
+        "avg_loss": -0.014228715816653081,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "THYAO.IS",
+      "window": "3mo",
+      "days": 91,
+      "strategy": "macd_flip_long",
+      "cost_label": "real 20bp",
+      "fee_bps": 20.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 13,
+        "win_rate": 0.23076923076923078,
+        "sharpe": -1.8234987035492762,
+        "sortino": -1.681666624491538,
+        "max_drawdown": -0.10362259682098174,
+        "profit_factor": 0.4541716839803376,
+        "total_return": -0.08392105723261889,
+        "cagr": -0.2993340367287939,
+        "buy_hold_return": 0.05121951219512195,
+        "avg_win": 0.023506473054109425,
+        "avg_loss": -0.01552704002686818,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "THYAO.IS",
+      "window": "3mo",
+      "days": 91,
+      "strategy": "macd_flip_long",
+      "cost_label": "gross 0bp",
+      "fee_bps": 0.0,
+      "slippage_bps": 0.0,
+      "stats": {
+        "n_trades": 13,
+        "win_rate": 0.3076923076923077,
+        "sharpe": -0.4482214201728835,
+        "sortino": -0.5211641848487557,
+        "max_drawdown": -0.07441204300249771,
+        "profit_factor": 0.820489277863668,
+        "total_return": -0.02214685771051883,
+        "cagr": -0.08688143753833222,
+        "buy_hold_return": 0.05121951219512195,
+        "avg_win": 0.022598953220146448,
+        "avg_loss": -0.012241450900011488,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "THYAO.IS",
+      "window": "6mo",
+      "days": 182,
+      "strategy": "macd_flip",
+      "cost_label": "pine 5bp",
+      "fee_bps": 5.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 54,
+        "win_rate": 0.2962962962962963,
+        "sharpe": -1.9787731516555347,
+        "sortino": -1.7577734509888603,
+        "max_drawdown": -0.35629975082434107,
+        "profit_factor": 0.5200874048857385,
+        "total_return": -0.3061427843738923,
+        "cagr": -0.5217113272423026,
+        "buy_hold_return": 0.02132701421800948,
+        "avg_win": 0.02336028586129526,
+        "avg_loss": -0.018912032369820152,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "THYAO.IS",
+      "window": "6mo",
+      "days": 182,
+      "strategy": "macd_flip",
+      "cost_label": "real 20bp",
+      "fee_bps": 20.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 54,
+        "win_rate": 0.25925925925925924,
+        "sharpe": -2.8206606071785942,
+        "sortino": -2.501292998710342,
+        "max_drawdown": -0.43847422506000167,
+        "profit_factor": 0.3926682253280108,
+        "total_return": -0.4107440228087962,
+        "cagr": -0.6560592631698678,
+        "buy_hold_return": 0.02132701421800948,
+        "avg_win": 0.023409261869593433,
+        "avg_loss": -0.02086555806116874,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "THYAO.IS",
+      "window": "6mo",
+      "days": 182,
+      "strategy": "macd_flip",
+      "cost_label": "gross 0bp",
+      "fee_bps": 0.0,
+      "slippage_bps": 0.0,
+      "stats": {
+        "n_trades": 54,
+        "win_rate": 0.3333333333333333,
+        "sharpe": -1.380260690844265,
+        "sortino": -1.2322078538623153,
+        "max_drawdown": -0.2950890497185168,
+        "profit_factor": 0.6326640341412495,
+        "total_return": -0.22646520985721097,
+        "cagr": -0.4043964623964257,
+        "buy_hold_return": 0.02132701421800948,
+        "avg_win": 0.022663734031435675,
+        "avg_loss": -0.017911350107168995,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "THYAO.IS",
+      "window": "6mo",
+      "days": 182,
+      "strategy": "macd_flip_long",
+      "cost_label": "pine 5bp",
+      "fee_bps": 5.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 27,
+        "win_rate": 0.3333333333333333,
+        "sharpe": -1.505465498758053,
+        "sortino": -0.886968695390545,
+        "max_drawdown": -0.19142178731828696,
+        "profit_factor": 0.5184310790824237,
+        "total_return": -0.15155326275227698,
+        "cagr": -0.28225931468012766,
+        "buy_hold_return": 0.02132701421800948,
+        "avg_win": 0.01874958730935282,
+        "avg_loss": -0.0180830085867324,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "THYAO.IS",
+      "window": "6mo",
+      "days": 182,
+      "strategy": "macd_flip_long",
+      "cost_label": "real 20bp",
+      "fee_bps": 20.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 27,
+        "win_rate": 0.2962962962962963,
+        "sharpe": -2.2030248152549112,
+        "sortino": -1.3127723300396394,
+        "max_drawdown": -0.24606928677624273,
+        "profit_factor": 0.3738634671319955,
+        "total_return": -0.21806797313026627,
+        "cagr": -0.39127692207457543,
+        "buy_hold_return": 0.02132701421800948,
+        "avg_win": 0.017744780462872436,
+        "avg_loss": -0.019984532235788804,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "THYAO.IS",
+      "window": "6mo",
+      "days": 182,
+      "strategy": "macd_flip_long",
+      "cost_label": "gross 0bp",
+      "fee_bps": 0.0,
+      "slippage_bps": 0.0,
+      "stats": {
+        "n_trades": 27,
+        "win_rate": 0.3333333333333333,
+        "sharpe": -1.0036179063313668,
+        "sortino": -0.5799477429034131,
+        "max_drawdown": -0.15318231012362782,
+        "profit_factor": 0.6450423354361845,
+        "total_return": -0.10433569412945809,
+        "cagr": -0.19937109757562554,
+        "buy_hold_return": 0.02132701421800948,
+        "avg_win": 0.020769847026520617,
+        "avg_loss": -0.016099599890971362,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "THYAO.IS",
+      "window": "1yr",
+      "days": 365,
+      "strategy": "macd_flip",
+      "cost_label": "pine 5bp",
+      "fee_bps": 5.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 112,
+        "win_rate": 0.24107142857142858,
+        "sharpe": -2.21393063269359,
+        "sortino": -2.0799568578532455,
+        "max_drawdown": -0.5452067717566669,
+        "profit_factor": 0.49232189370184637,
+        "total_return": -0.5252935284559632,
+        "cagr": -0.5265065506738629,
+        "buy_hold_return": 0.08838383838383838,
+        "avg_win": 0.025498303576803945,
+        "avg_loss": -0.016451555861674405,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "THYAO.IS",
+      "window": "1yr",
+      "days": 365,
+      "strategy": "macd_flip",
+      "cost_label": "real 20bp",
+      "fee_bps": 20.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 112,
+        "win_rate": 0.21428571428571427,
+        "sharpe": -3.1441233423804587,
+        "sortino": -2.9661477777072998,
+        "max_drawdown": -0.6720436223355544,
+        "profit_factor": 0.3690769322497895,
+        "total_return": -0.661730176418826,
+        "cagr": -0.6629869517671378,
+        "buy_hold_return": 0.08838383838383838,
+        "avg_win": 0.025493593989225582,
+        "avg_loss": -0.01883834440238672,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "THYAO.IS",
+      "window": "1yr",
+      "days": 365,
+      "strategy": "macd_flip",
+      "cost_label": "gross 0bp",
+      "fee_bps": 0.0,
+      "slippage_bps": 0.0,
+      "stats": {
+        "n_trades": 112,
+        "win_rate": 0.30357142857142855,
+        "sharpe": -1.5442022669305209,
+        "sortino": -1.487155427490069,
+        "max_drawdown": -0.4347030752767974,
+        "profit_factor": 0.6074201289604109,
+        "total_return": -0.4052600609372794,
+        "cagr": -0.4063203966623157,
+        "buy_hold_return": 0.08838383838383838,
+        "avg_win": 0.022109858422922915,
+        "avg_loss": -0.01586649854870971,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "THYAO.IS",
+      "window": "1yr",
+      "days": 365,
+      "strategy": "macd_flip_long",
+      "cost_label": "pine 5bp",
+      "fee_bps": 5.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 56,
+        "win_rate": 0.23214285714285715,
+        "sharpe": -1.6400452787297641,
+        "sortino": -1.111659299326239,
+        "max_drawdown": -0.3035036061815831,
+        "profit_factor": 0.4749162732980843,
+        "total_return": -0.28079591719881347,
+        "cagr": -0.2816095258223952,
+        "buy_hold_return": 0.08838383838383838,
+        "avg_win": 0.022030717907183656,
+        "avg_loss": -0.01402447120540287,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "THYAO.IS",
+      "window": "1yr",
+      "days": 365,
+      "strategy": "macd_flip_long",
+      "cost_label": "real 20bp",
+      "fee_bps": 20.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 56,
+        "win_rate": 0.19642857142857142,
+        "sharpe": -2.4118127196299293,
+        "sortino": -1.676248211278726,
+        "max_drawdown": -0.4058566239286453,
+        "profit_factor": 0.34033109702714726,
+        "total_return": -0.39279790646954893,
+        "cagr": -0.3938372948462796,
+        "buy_hold_return": 0.08838383838383838,
+        "avg_win": 0.022730750680574105,
+        "avg_loss": -0.016326470811672242,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "THYAO.IS",
+      "window": "1yr",
+      "days": 365,
+      "strategy": "macd_flip_long",
+      "cost_label": "gross 0bp",
+      "fee_bps": 0.0,
+      "slippage_bps": 0.0,
+      "stats": {
+        "n_trades": 56,
+        "win_rate": 0.30357142857142855,
+        "sharpe": -1.0798890691257077,
+        "sortino": -0.7390312029042247,
+        "max_drawdown": -0.22844266071701103,
+        "profit_factor": 0.608187610137283,
+        "total_return": -0.19530814263404117,
+        "cagr": -0.1959083864060569,
+        "buy_hold_return": 0.08838383838383838,
+        "avg_win": 0.018707774503425527,
+        "avg_loss": -0.013408150382330057,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "GARAN.IS",
+      "window": "1mo",
+      "days": 30,
+      "strategy": "macd_flip",
+      "cost_label": "pine 5bp",
+      "fee_bps": 5.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 9,
+        "win_rate": 0.3333333333333333,
+        "sharpe": -3.8862113206209186,
+        "sortino": -3.5972793079596563,
+        "max_drawdown": -0.11350899173719886,
+        "profit_factor": 0.2736733042399848,
+        "total_return": -0.08669109181283707,
+        "cagr": -0.680856030990133,
+        "buy_hold_return": -0.02888884367766204,
+        "avg_win": 0.011115355099272113,
+        "avg_loss": -0.02030770799903273,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "GARAN.IS",
+      "window": "1mo",
+      "days": 30,
+      "strategy": "macd_flip",
+      "cost_label": "real 20bp",
+      "fee_bps": 20.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 9,
+        "win_rate": 0.1111111111111111,
+        "sharpe": -4.7500935027734394,
+        "sortino": -3.6904083069489677,
+        "max_drawdown": -0.13488104050803562,
+        "profit_factor": 0.19090281607806975,
+        "total_return": -0.1113050392316347,
+        "cagr": -0.7737704594741521,
+        "buy_hold_return": -0.02888884367766204,
+        "avg_win": 0.02725174499729569,
+        "avg_loss": -0.017843990961709466,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "GARAN.IS",
+      "window": "1mo",
+      "days": 30,
+      "strategy": "macd_flip",
+      "cost_label": "gross 0bp",
+      "fee_bps": 0.0,
+      "slippage_bps": 0.0,
+      "stats": {
+        "n_trades": 9,
+        "win_rate": 0.3333333333333333,
+        "sharpe": -3.217035741193484,
+        "sortino": -2.8876106234520624,
+        "max_drawdown": -0.09906635896279747,
+        "profit_factor": 0.35827545833133445,
+        "total_return": -0.06998105638708818,
+        "cagr": -0.5989859507037522,
+        "buy_hold_return": -0.02888884367766204,
+        "avg_win": 0.01312623638809065,
+        "avg_loss": -0.018318637354099006,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "GARAN.IS",
+      "window": "1mo",
+      "days": 30,
+      "strategy": "macd_flip_long",
+      "cost_label": "pine 5bp",
+      "fee_bps": 5.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 5,
+        "win_rate": 0.4,
+        "sharpe": -2.84948822179627,
+        "sortino": -3.4772313173661202,
+        "max_drawdown": -0.09087846677041411,
+        "profit_factor": 0.34409135912304856,
+        "total_return": -0.06151792107630638,
+        "cagr": -0.5505203639938439,
+        "buy_hold_return": -0.02888884367766204,
+        "avg_win": 0.01611775014004646,
+        "avg_loss": -0.031227656478837806,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "GARAN.IS",
+      "window": "1mo",
+      "days": 30,
+      "strategy": "macd_flip_long",
+      "cost_label": "real 20bp",
+      "fee_bps": 20.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 5,
+        "win_rate": 0.2,
+        "sharpe": -3.399080723137547,
+        "sortino": -2.2757422224173243,
+        "max_drawdown": -0.10021406778607833,
+        "profit_factor": 0.2627960608929946,
+        "total_return": -0.07569333100923048,
+        "cagr": -0.6289268732487454,
+        "buy_hold_return": -0.02888884367766204,
+        "avg_win": 0.02725174499729569,
+        "avg_loss": -0.025924803538429044,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "GARAN.IS",
+      "window": "1mo",
+      "days": 30,
+      "strategy": "macd_flip_long",
+      "cost_label": "gross 0bp",
+      "fee_bps": 0.0,
+      "slippage_bps": 0.0,
+      "stats": {
+        "n_trades": 5,
+        "win_rate": 0.4,
+        "sharpe": -2.445134926879358,
+        "sortino": -2.9114858942106467,
+        "max_drawdown": -0.08532016567988998,
+        "profit_factor": 0.4132373876750304,
+        "total_return": -0.05202629941902537,
+        "cagr": -0.4897849555959518,
+        "buy_hold_return": -0.02888884367766204,
+        "avg_win": 0.01813537670346813,
+        "avg_loss": -0.029257399006580656,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "GARAN.IS",
+      "window": "3mo",
+      "days": 91,
+      "strategy": "macd_flip",
+      "cost_label": "pine 5bp",
+      "fee_bps": 5.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 23,
+        "win_rate": 0.34782608695652173,
+        "sharpe": -2.553583651526314,
+        "sortino": -1.7767048745128355,
+        "max_drawdown": -0.30286266621040947,
+        "profit_factor": 0.42422414601209696,
+        "total_return": -0.21512030299151363,
+        "cagr": -0.6258240292208019,
+        "buy_hold_return": -0.006818135579427083,
+        "avg_win": 0.02119686215464832,
+        "avg_loss": -0.0266486319918796,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "GARAN.IS",
+      "window": "3mo",
+      "days": 91,
+      "strategy": "macd_flip",
+      "cost_label": "real 20bp",
+      "fee_bps": 20.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 23,
+        "win_rate": 0.2608695652173913,
+        "sharpe": -3.214450389073469,
+        "sortino": -2.249472121452852,
+        "max_drawdown": -0.3442519194305752,
+        "profit_factor": 0.33169998772382325,
+        "total_return": -0.2680878312365014,
+        "cagr": -0.7182075772621359,
+        "buy_hold_return": -0.006818135579427083,
+        "avg_win": 0.024746762822777654,
+        "avg_loss": -0.02633147997515726,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "GARAN.IS",
+      "window": "3mo",
+      "days": 91,
+      "strategy": "macd_flip",
+      "cost_label": "gross 0bp",
+      "fee_bps": 0.0,
+      "slippage_bps": 0.0,
+      "stats": {
+        "n_trades": 23,
+        "win_rate": 0.391304347826087,
+        "sharpe": -2.0800137978140087,
+        "sortino": -1.443969311401429,
+        "max_drawdown": -0.27391152958155185,
+        "profit_factor": 0.5039453547823063,
+        "total_return": -0.17778912411006687,
+        "cagr": -0.5481715677641489,
+        "buy_hold_return": -0.006818135579427083,
+        "avg_win": 0.020786634365572133,
+        "avg_loss": -0.026516439235044164,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "GARAN.IS",
+      "window": "3mo",
+      "days": 91,
+      "strategy": "macd_flip_long",
+      "cost_label": "pine 5bp",
+      "fee_bps": 5.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 12,
+        "win_rate": 0.4166666666666667,
+        "sharpe": -1.7580119751525987,
+        "sortino": -0.9883161936280837,
+        "max_drawdown": -0.17092102075078064,
+        "profit_factor": 0.467491960206343,
+        "total_return": -0.11282267664417656,
+        "cagr": -0.3848103711376638,
+        "buy_hold_return": -0.006818135579427083,
+        "avg_win": 0.01996481984313294,
+        "avg_loss": -0.030504451019742546,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "GARAN.IS",
+      "window": "3mo",
+      "days": 91,
+      "strategy": "macd_flip_long",
+      "cost_label": "real 20bp",
+      "fee_bps": 20.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 12,
+        "win_rate": 0.3333333333333333,
+        "sharpe": -2.249069862360319,
+        "sortino": -1.1991304350364616,
+        "max_drawdown": -0.19432635163911127,
+        "profit_factor": 0.36442916906196127,
+        "total_return": -0.14456339536524065,
+        "cagr": -0.4693653444001201,
+        "buy_hold_return": -0.006818135579427083,
+        "avg_win": 0.02146008598321687,
+        "avg_loss": -0.029443425231925065,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "GARAN.IS",
+      "window": "3mo",
+      "days": 91,
+      "strategy": "macd_flip_long",
+      "cost_label": "gross 0bp",
+      "fee_bps": 0.0,
+      "slippage_bps": 0.0,
+      "stats": {
+        "n_trades": 12,
+        "win_rate": 0.4166666666666667,
+        "sharpe": -1.4086429270740302,
+        "sortino": -0.7797657118318354,
+        "max_drawdown": -0.15570391974054354,
+        "profit_factor": 0.5503886041795515,
+        "total_return": -0.09116404418290858,
+        "cagr": -0.3215461320430274,
+        "buy_hold_return": -0.006818135579427083,
+        "avg_win": 0.021986295400754814,
+        "avg_loss": -0.02853346998024261,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "GARAN.IS",
+      "window": "6mo",
+      "days": 182,
+      "strategy": "macd_flip",
+      "cost_label": "pine 5bp",
+      "fee_bps": 5.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 54,
+        "win_rate": 0.3148148148148148,
+        "sharpe": -1.6127688727530218,
+        "sortino": -1.2036741234505814,
+        "max_drawdown": -0.41198708531902417,
+        "profit_factor": 0.5501881424695947,
+        "total_return": -0.3307908684455584,
+        "cagr": -0.5553773935635453,
+        "buy_hold_return": -0.2064164132848636,
+        "avg_win": 0.02976845462893854,
+        "avg_loss": -0.024859492629853257,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "GARAN.IS",
+      "window": "6mo",
+      "days": 182,
+      "strategy": "macd_flip",
+      "cost_label": "real 20bp",
+      "fee_bps": 20.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 54,
+        "win_rate": 0.2777777777777778,
+        "sharpe": -2.245070503712506,
+        "sortino": -1.6823210279294616,
+        "max_drawdown": -0.4825637778551223,
+        "profit_factor": 0.44303603399415054,
+        "total_return": -0.42833363157973914,
+        "cagr": -0.6764625279936467,
+        "buy_hold_return": -0.2064164132848636,
+        "avg_win": 0.030531293892762306,
+        "avg_loss": -0.026505305307796146,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "GARAN.IS",
+      "window": "6mo",
+      "days": 182,
+      "strategy": "macd_flip",
+      "cost_label": "gross 0bp",
+      "fee_bps": 0.0,
+      "slippage_bps": 0.0,
+      "stats": {
+        "n_trades": 54,
+        "win_rate": 0.3333333333333333,
+        "sharpe": -1.1719374689344229,
+        "sortino": -0.8746859410297204,
+        "max_drawdown": -0.3598502753641689,
+        "profit_factor": 0.6389312294273262,
+        "total_return": -0.25700875269851864,
+        "cagr": -0.4509008085207,
+        "buy_hold_return": -0.2064164132848636,
+        "avg_win": 0.03007433915782086,
+        "avg_loss": -0.023534879633897745,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "GARAN.IS",
+      "window": "6mo",
+      "days": 182,
+      "strategy": "macd_flip_long",
+      "cost_label": "pine 5bp",
+      "fee_bps": 5.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 27,
+        "win_rate": 0.2962962962962963,
+        "sharpe": -2.2877450018380143,
+        "sortino": -1.2268058295564317,
+        "max_drawdown": -0.2775313298637987,
+        "profit_factor": 0.34307811469420096,
+        "total_return": -0.2541988340128415,
+        "cagr": -0.44670217760797115,
+        "buy_hold_return": -0.2064164132848636,
+        "avg_win": 0.01937663680861159,
+        "avg_loss": -0.023780543176551712,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "GARAN.IS",
+      "window": "6mo",
+      "days": 182,
+      "strategy": "macd_flip_long",
+      "cost_label": "real 20bp",
+      "fee_bps": 20.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 27,
+        "win_rate": 0.25925925925925924,
+        "sharpe": -2.811954081372453,
+        "sortino": -1.5401197015645867,
+        "max_drawdown": -0.32915517205710665,
+        "profit_factor": 0.2589589657577313,
+        "total_return": -0.3108734798732521,
+        "cagr": -0.5282689584006379,
+        "buy_hold_return": -0.2064164132848636,
+        "avg_win": 0.018861334169442214,
+        "avg_loss": -0.025492328253584266,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "GARAN.IS",
+      "window": "6mo",
+      "days": 182,
+      "strategy": "macd_flip_long",
+      "cost_label": "gross 0bp",
+      "fee_bps": 0.0,
+      "slippage_bps": 0.0,
+      "stats": {
+        "n_trades": 27,
+        "win_rate": 0.2962962962962963,
+        "sharpe": -1.9064615264238138,
+        "sortino": -1.0101033139881597,
+        "max_drawdown": -0.24304562116047146,
+        "profit_factor": 0.4132253350662344,
+        "total_return": -0.2141621985969986,
+        "cagr": -0.38512554500638585,
+        "buy_hold_return": -0.2064164132848636,
+        "avg_win": 0.021397523888960275,
+        "avg_loss": -0.02180283486557285,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "GARAN.IS",
+      "window": "1yr",
+      "days": 365,
+      "strategy": "macd_flip",
+      "cost_label": "pine 5bp",
+      "fee_bps": 5.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 108,
+        "win_rate": 0.35185185185185186,
+        "sharpe": -1.2615122738826345,
+        "sortino": -1.0331419408559606,
+        "max_drawdown": -0.4931308568607631,
+        "profit_factor": 0.6699972107798866,
+        "total_return": -0.43429223080044865,
+        "cagr": -0.43539784907952006,
+        "buy_hold_return": -0.1346534250593028,
+        "avg_win": 0.02755682178844331,
+        "avg_loss": -0.02232758181916133,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "GARAN.IS",
+      "window": "1yr",
+      "days": 365,
+      "strategy": "macd_flip",
+      "cost_label": "real 20bp",
+      "fee_bps": 20.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 108,
+        "win_rate": 0.3148148148148148,
+        "sharpe": -2.004164000412785,
+        "sortino": -1.6282558466475703,
+        "max_drawdown": -0.6277405908332239,
+        "profit_factor": 0.5273337608713583,
+        "total_return": -0.591817919434894,
+        "cagr": -0.5930719926468058,
+        "buy_hold_return": -0.1346534250593028,
+        "avg_win": 0.02755581164026913,
+        "avg_loss": -0.024009041826345914,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "GARAN.IS",
+      "window": "1yr",
+      "days": 365,
+      "strategy": "macd_flip",
+      "cost_label": "gross 0bp",
+      "fee_bps": 0.0,
+      "slippage_bps": 0.0,
+      "stats": {
+        "n_trades": 108,
+        "win_rate": 0.3611111111111111,
+        "sharpe": -0.7416020035937065,
+        "sortino": -0.6107003172314545,
+        "max_drawdown": -0.41320703804562553,
+        "profit_factor": 0.7894787217525642,
+        "total_return": -0.29722208014103735,
+        "cagr": -0.29807280057243213,
+        "buy_hold_return": -0.1346534250593028,
+        "avg_win": 0.02883328116139731,
+        "avg_loss": -0.02064282609746835,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "GARAN.IS",
+      "window": "1yr",
+      "days": 365,
+      "strategy": "macd_flip_long",
+      "cost_label": "pine 5bp",
+      "fee_bps": 5.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 54,
+        "win_rate": 0.35185185185185186,
+        "sharpe": -1.1981390859293952,
+        "sortino": -0.7498274598746602,
+        "max_drawdown": -0.31851497269590157,
+        "profit_factor": 0.6031688354343111,
+        "total_return": -0.27566463448968903,
+        "cagr": -0.27646638385580036,
+        "buy_hold_return": -0.1346534250593028,
+        "avg_win": 0.02404464629470376,
+        "avg_loss": -0.02164038859725704,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "GARAN.IS",
+      "window": "1yr",
+      "days": 365,
+      "strategy": "macd_flip_long",
+      "cost_label": "real 20bp",
+      "fee_bps": 20.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 54,
+        "win_rate": 0.3148148148148148,
+        "sharpe": -1.7980762462447495,
+        "sortino": -1.125126096442074,
+        "max_drawdown": -0.41445513074765694,
+        "profit_factor": 0.4642990835343031,
+        "total_return": -0.3847838743925974,
+        "cagr": -0.3858093261851945,
+        "buy_hold_return": -0.1346534250593028,
+        "avg_win": 0.023583029058719875,
+        "avg_loss": -0.023337211224401695,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "GARAN.IS",
+      "window": "1yr",
+      "days": 365,
+      "strategy": "macd_flip_long",
+      "cost_label": "gross 0bp",
+      "fee_bps": 0.0,
+      "slippage_bps": 0.0,
+      "stats": {
+        "n_trades": 54,
+        "win_rate": 0.35185185185185186,
+        "sharpe": -0.7767334820913616,
+        "sortino": -0.48277850643365994,
+        "max_drawdown": -0.27465036639859186,
+        "profit_factor": 0.7198376535360331,
+        "total_return": -0.19279969952029563,
+        "cagr": -0.19339319323324433,
+        "buy_hold_return": -0.1346534250593028,
+        "avg_win": 0.026070203719710843,
+        "avg_loss": -0.0196605390610863,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "AKBNK.IS",
+      "window": "1mo",
+      "days": 30,
+      "strategy": "macd_flip",
+      "cost_label": "pine 5bp",
+      "fee_bps": 5.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 5,
+        "win_rate": 0.6,
+        "sharpe": 2.4574063114880773,
+        "sortino": 3.6446935328246695,
+        "max_drawdown": -0.04613199303161142,
+        "profit_factor": 2.31168838931143,
+        "total_return": 0.09246124774190334,
+        "cagr": 2.045912740860014,
+        "buy_hold_return": -0.08797845118673213,
+        "avg_win": 0.055603775723911154,
+        "avg_loss": -0.03607997685653054,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "AKBNK.IS",
+      "window": "1mo",
+      "days": 30,
+      "strategy": "macd_flip",
+      "cost_label": "real 20bp",
+      "fee_bps": 20.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 5,
+        "win_rate": 0.6,
+        "sharpe": 2.1048802830694022,
+        "sortino": 3.067095966147613,
+        "max_drawdown": -0.04913199303161142,
+        "profit_factor": 2.0190816354764816,
+        "total_return": 0.07643904516122202,
+        "cagr": 1.528724467773006,
+        "buy_hold_return": -0.08797845118673213,
+        "avg_win": 0.052603775723911166,
+        "avg_loss": -0.03907997685653054,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "AKBNK.IS",
+      "window": "1mo",
+      "days": 30,
+      "strategy": "macd_flip",
+      "cost_label": "gross 0bp",
+      "fee_bps": 0.0,
+      "slippage_bps": 0.0,
+      "stats": {
+        "n_trades": 5,
+        "win_rate": 0.6,
+        "sharpe": 2.6786352735723264,
+        "sortino": 4.0222905712443495,
+        "max_drawdown": -0.04417664735180338,
+        "profit_factor": 2.5325113150175427,
+        "total_return": 0.10314577718956919,
+        "cagr": 2.4431354784962656,
+        "buy_hold_return": -0.08797845118673213,
+        "avg_win": 0.057597029997571915,
+        "avg_loss": -0.03411457413202492,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "AKBNK.IS",
+      "window": "1mo",
+      "days": 30,
+      "strategy": "macd_flip_long",
+      "cost_label": "pine 5bp",
+      "fee_bps": 5.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 3,
+        "win_rate": 0.3333333333333333,
+        "sharpe": 0.05838728943352151,
+        "sortino": 0.07063229095369836,
+        "max_drawdown": -0.07095923201227738,
+        "profit_factor": 1.0254198480942303,
+        "total_return": -0.0022155583037382076,
+        "cagr": -0.02754894390937923,
+        "buy_hold_return": -0.08797845118673213,
+        "avg_win": 0.07399424877493378,
+        "avg_loss": -0.03607997685653054,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "AKBNK.IS",
+      "window": "1mo",
+      "days": 30,
+      "strategy": "macd_flip_long",
+      "cost_label": "real 20bp",
+      "fee_bps": 20.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 3,
+        "win_rate": 0.3333333333333333,
+        "sharpe": -0.227893704634443,
+        "sortino": -0.27592624905253693,
+        "max_drawdown": -0.0767337521511382,
+        "profit_factor": 0.9083199951162475,
+        "total_return": -0.011187158465856495,
+        "cagr": -0.13211355533862412,
+        "buy_hold_return": -0.08797845118673213,
+        "avg_win": 0.07099424877493378,
+        "avg_loss": -0.03907997685653054,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "AKBNK.IS",
+      "window": "1mo",
+      "days": 30,
+      "strategy": "macd_flip_long",
+      "cost_label": "gross 0bp",
+      "fee_bps": 0.0,
+      "slippage_bps": 0.0,
+      "stats": {
+        "n_trades": 3,
+        "win_rate": 0.3333333333333333,
+        "sharpe": 0.24906456914016917,
+        "sortino": 0.30161358673328026,
+        "max_drawdown": -0.06716658941332065,
+        "profit_factor": 1.114916171829123,
+        "total_return": 0.0037938436433313516,
+        "cagr": 0.04884797474104419,
+        "buy_hold_return": -0.08797845118673213,
+        "avg_win": 0.0760697807897161,
+        "avg_loss": -0.03411457413202492,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "AKBNK.IS",
+      "window": "3mo",
+      "days": 91,
+      "strategy": "macd_flip",
+      "cost_label": "pine 5bp",
+      "fee_bps": 5.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 20,
+        "win_rate": 0.5,
+        "sharpe": 1.8169376481433437,
+        "sortino": 3.6600099197478877,
+        "max_drawdown": -0.08201225083967845,
+        "profit_factor": 1.8902577785632442,
+        "total_return": 0.22633361651851835,
+        "cagr": 1.2887764201036656,
+        "buy_hold_return": -0.06986299279617937,
+        "avg_win": 0.0478421528459283,
+        "avg_loss": -0.025309856353186062,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "AKBNK.IS",
+      "window": "3mo",
+      "days": 91,
+      "strategy": "macd_flip",
+      "cost_label": "real 20bp",
+      "fee_bps": 20.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 20,
+        "win_rate": 0.45,
+        "sharpe": 1.354975672403508,
+        "sortino": 1.9643213389401586,
+        "max_drawdown": -0.0915344992381576,
+        "profit_factor": 1.5816114741627685,
+        "total_return": 0.15545125000746873,
+        "cagr": 0.797492216878924,
+        "buy_hold_return": -0.06986299279617937,
+        "avg_win": 0.04995253320349041,
+        "avg_loss": -0.025840893991271933,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "AKBNK.IS",
+      "window": "3mo",
+      "days": 91,
+      "strategy": "macd_flip",
+      "cost_label": "gross 0bp",
+      "fee_bps": 0.0,
+      "slippage_bps": 0.0,
+      "stats": {
+        "n_trades": 20,
+        "win_rate": 0.5,
+        "sharpe": 2.109305658380159,
+        "sortino": 4.318509104661547,
+        "max_drawdown": -0.07628323352568844,
+        "profit_factor": 2.1378540536062114,
+        "total_return": 0.2757600370333204,
+        "cagr": 1.6868649206659367,
+        "buy_hold_return": -0.06986299279617937,
+        "avg_win": 0.049836102075126246,
+        "avg_loss": -0.023311274214935708,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "AKBNK.IS",
+      "window": "3mo",
+      "days": 91,
+      "strategy": "macd_flip_long",
+      "cost_label": "pine 5bp",
+      "fee_bps": 5.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 10,
+        "win_rate": 0.4,
+        "sharpe": 0.7788831933178563,
+        "sortino": 0.9319984150158928,
+        "max_drawdown": -0.09269207926028,
+        "profit_factor": 1.5571144485061514,
+        "total_return": 0.06504128458515601,
+        "cagr": 0.2914040590005482,
+        "buy_hold_return": -0.06986299279617937,
+        "avg_win": 0.052583390600331015,
+        "avg_loss": -0.022513177350056243,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "AKBNK.IS",
+      "window": "3mo",
+      "days": 91,
+      "strategy": "macd_flip_long",
+      "cost_label": "real 20bp",
+      "fee_bps": 20.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 10,
+        "win_rate": 0.3,
+        "sharpe": 0.47132258700053004,
+        "sortino": 0.5010236981290097,
+        "max_drawdown": -0.10110131605755979,
+        "profit_factor": 1.2934215143588697,
+        "total_return": 0.03367778721762282,
+        "cagr": 0.14387843063498917,
+        "buy_hold_return": -0.06986299279617937,
+        "avg_win": 0.06649494425781825,
+        "avg_loss": -0.02203290492463831,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "AKBNK.IS",
+      "window": "3mo",
+      "days": 91,
+      "strategy": "macd_flip_long",
+      "cost_label": "gross 0bp",
+      "fee_bps": 0.0,
+      "slippage_bps": 0.0,
+      "stats": {
+        "n_trades": 10,
+        "win_rate": 0.4,
+        "sharpe": 0.9801025947485231,
+        "sortino": 1.1796289362179575,
+        "max_drawdown": -0.0871429228318269,
+        "profit_factor": 1.773869878248971,
+        "total_return": 0.08649528799507022,
+        "cagr": 0.40027396171032215,
+        "buy_hold_return": -0.06986299279617937,
+        "avg_win": 0.05463750104615411,
+        "avg_loss": -0.02053420103925101,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "AKBNK.IS",
+      "window": "6mo",
+      "days": 182,
+      "strategy": "macd_flip",
+      "cost_label": "pine 5bp",
+      "fee_bps": 5.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 49,
+        "win_rate": 0.3673469387755102,
+        "sharpe": -0.38554814910328666,
+        "sortino": -0.37117160440328467,
+        "max_drawdown": -0.4386943543156234,
+        "profit_factor": 0.883868592708006,
+        "total_return": -0.16177532147191942,
+        "cagr": -0.29960221941517573,
+        "buy_hold_return": -0.22621080882189282,
+        "avg_win": 0.049422376434034174,
+        "avg_loss": -0.032467341834117064,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "AKBNK.IS",
+      "window": "6mo",
+      "days": 182,
+      "strategy": "macd_flip",
+      "cost_label": "real 20bp",
+      "fee_bps": 20.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 49,
+        "win_rate": 0.32653061224489793,
+        "sharpe": -0.8751947945173795,
+        "sortino": -0.8153146425671728,
+        "max_drawdown": -0.4750810764115341,
+        "profit_factor": 0.7607573582928232,
+        "total_return": -0.27703780180907256,
+        "cagr": -0.48036130064098737,
+        "buy_hold_return": -0.22621080882189282,
+        "avg_win": 0.05244474759998356,
+        "avg_loss": -0.03342426614075002,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "AKBNK.IS",
+      "window": "6mo",
+      "days": 182,
+      "strategy": "macd_flip",
+      "cost_label": "gross 0bp",
+      "fee_bps": 0.0,
+      "slippage_bps": 0.0,
+      "stats": {
+        "n_trades": 49,
+        "win_rate": 0.3673469387755102,
+        "sharpe": -0.058016699122860366,
+        "sortino": -0.056991225583915804,
+        "max_drawdown": -0.4185793334390199,
+        "profit_factor": 0.9798251556233917,
+        "total_return": -0.07526007309968619,
+        "cagr": -0.14605662526095076,
+        "buy_hold_return": -0.22621080882189282,
+        "avg_win": 0.05141107005347756,
+        "avg_loss": -0.03046624072875241,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "AKBNK.IS",
+      "window": "6mo",
+      "days": 182,
+      "strategy": "macd_flip_long",
+      "cost_label": "pine 5bp",
+      "fee_bps": 5.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 25,
+        "win_rate": 0.32,
+        "sharpe": -0.7697683117251323,
+        "sortino": -0.6263963387120597,
+        "max_drawdown": -0.2650298489056122,
+        "profit_factor": 0.7052933988944606,
+        "total_return": -0.15434624162774324,
+        "cagr": -0.28701917304086844,
+        "buy_hold_return": -0.22621080882189282,
+        "avg_win": 0.043039354705371444,
+        "avg_loss": -0.028716863096614753,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "AKBNK.IS",
+      "window": "6mo",
+      "days": 182,
+      "strategy": "macd_flip_long",
+      "cost_label": "real 20bp",
+      "fee_bps": 20.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 25,
+        "win_rate": 0.24,
+        "sharpe": -1.1598545809472436,
+        "sortino": -0.9049341866317189,
+        "max_drawdown": -0.29274054822321494,
+        "profit_factor": 0.596698190353623,
+        "total_return": -0.21598963721509745,
+        "cagr": -0.38800754283939,
+        "buy_hold_return": -0.22621080882189282,
+        "avg_win": 0.0539713372383489,
+        "avg_loss": -0.028563150443661714,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "AKBNK.IS",
+      "window": "6mo",
+      "days": 182,
+      "strategy": "macd_flip_long",
+      "cost_label": "gross 0bp",
+      "fee_bps": 0.0,
+      "slippage_bps": 0.0,
+      "stats": {
+        "n_trades": 25,
+        "win_rate": 0.32,
+        "sharpe": -0.5044576526231793,
+        "sortino": -0.42113990462620743,
+        "max_drawdown": -0.2469431118272144,
+        "profit_factor": 0.7932951839085955,
+        "total_return": -0.11083009203305128,
+        "cagr": -0.21104270991851137,
+        "buy_hold_return": -0.22621080882189282,
+        "avg_win": 0.04508391634089449,
+        "avg_loss": -0.026744093574950657,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "AKBNK.IS",
+      "window": "1yr",
+      "days": 365,
+      "strategy": "macd_flip",
+      "cost_label": "pine 5bp",
+      "fee_bps": 5.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 112,
+        "win_rate": 0.35714285714285715,
+        "sharpe": -0.5108219197468861,
+        "sortino": -0.5137125095868292,
+        "max_drawdown": -0.5423988905978167,
+        "profit_factor": 0.8546049115205934,
+        "total_return": -0.30718427038108465,
+        "cagr": -0.30805685670930516,
+        "buy_hold_return": 0.017991073951141218,
+        "avg_win": 0.04019958167759715,
+        "avg_loss": -0.02613266157371044,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "AKBNK.IS",
+      "window": "1yr",
+      "days": 365,
+      "strategy": "macd_flip",
+      "cost_label": "real 20bp",
+      "fee_bps": 20.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 112,
+        "win_rate": 0.32142857142857145,
+        "sharpe": -1.1333614710287412,
+        "sortino": -1.097233861836585,
+        "max_drawdown": -0.6432306617964842,
+        "profit_factor": 0.7098972918497446,
+        "total_return": -0.5058315868378456,
+        "cagr": -0.5070263246336632,
+        "buy_hold_return": 0.017991073951141218,
+        "avg_win": 0.04143464827835728,
+        "avg_loss": -0.02764757505558062,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "AKBNK.IS",
+      "window": "1yr",
+      "days": 365,
+      "strategy": "macd_flip",
+      "cost_label": "gross 0bp",
+      "fee_bps": 0.0,
+      "slippage_bps": 0.0,
+      "stats": {
+        "n_trades": 112,
+        "win_rate": 0.35714285714285715,
+        "sharpe": -0.08917779609900325,
+        "sortino": -0.0906755048608571,
+        "max_drawdown": -0.45991156431303837,
+        "profit_factor": 0.9715337858261708,
+        "total_return": -0.13253332169541931,
+        "cagr": -0.1329567582632768,
+        "buy_hold_return": 0.017991073951141218,
+        "avg_win": 0.04219885048178244,
+        "avg_loss": -0.024130715951660272,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "AKBNK.IS",
+      "window": "1yr",
+      "days": 365,
+      "strategy": "macd_flip_long",
+      "cost_label": "pine 5bp",
+      "fee_bps": 5.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 56,
+        "win_rate": 0.35714285714285715,
+        "sharpe": -0.225488981729121,
+        "sortino": -0.1860475909024223,
+        "max_drawdown": -0.26502984890561243,
+        "profit_factor": 0.9065376800328229,
+        "total_return": -0.11804408846480785,
+        "cagr": -0.11842445049493111,
+        "buy_hold_return": 0.017991073951141218,
+        "avg_win": 0.03944753625498133,
+        "avg_loss": -0.024174723679042873,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "AKBNK.IS",
+      "window": "1yr",
+      "days": 365,
+      "strategy": "macd_flip_long",
+      "cost_label": "real 20bp",
+      "fee_bps": 20.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 56,
+        "win_rate": 0.30357142857142855,
+        "sharpe": -0.6873614563328052,
+        "sortino": -0.5527627248124024,
+        "max_drawdown": -0.3360941186213011,
+        "profit_factor": 0.7460720903421996,
+        "total_return": -0.2550027514545129,
+        "cagr": -0.2557554903601372,
+        "buy_hold_return": 0.017991073951141218,
+        "avg_win": 0.04309354465955644,
+        "avg_loss": -0.025177681706625026,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "AKBNK.IS",
+      "window": "1yr",
+      "days": 365,
+      "strategy": "macd_flip_long",
+      "cost_label": "gross 0bp",
+      "fee_bps": 0.0,
+      "slippage_bps": 0.0,
+      "stats": {
+        "n_trades": 56,
+        "win_rate": 0.35714285714285715,
+        "sharpe": 0.08439661308033354,
+        "sortino": 0.07009535281558006,
+        "max_drawdown": -0.24694311182721462,
+        "profit_factor": 1.0383720130323313,
+        "total_return": -0.013382011712660846,
+        "cagr": -0.013427656503256613,
+        "buy_hold_return": 0.017991073951141218,
+        "avg_win": 0.04148850427524632,
+        "avg_loss": -0.02219740974575539,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "ASELS.IS",
+      "window": "1mo",
+      "days": 30,
+      "strategy": "macd_flip",
+      "cost_label": "pine 5bp",
+      "fee_bps": 5.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 4,
+        "win_rate": 1.0,
+        "sharpe": 4.699468999133104,
+        "sortino": 0.0,
+        "max_drawdown": 0.0,
+        "profit_factor": Infinity,
+        "total_return": 0.2171271579001246,
+        "cagr": 10.87932091785893,
+        "buy_hold_return": -0.12989434431323804,
+        "avg_win": 0.05085592888146495,
+        "avg_loss": 0.0,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "ASELS.IS",
+      "window": "1mo",
+      "days": 30,
+      "strategy": "macd_flip",
+      "cost_label": "real 20bp",
+      "fee_bps": 20.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 4,
+        "win_rate": 1.0,
+        "sharpe": 4.654747506313721,
+        "sortino": 0.0,
+        "max_drawdown": 0.0,
+        "profit_factor": Infinity,
+        "total_return": 0.20327459877281995,
+        "cagr": 9.284428310900942,
+        "buy_hold_return": -0.12989434431323804,
+        "avg_win": 0.047855928881464956,
+        "avg_loss": 0.0,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "ASELS.IS",
+      "window": "1mo",
+      "days": 30,
+      "strategy": "macd_flip",
+      "cost_label": "gross 0bp",
+      "fee_bps": 0.0,
+      "slippage_bps": 0.0,
+      "stats": {
+        "n_trades": 4,
+        "win_rate": 1.0,
+        "sharpe": 4.725909787713837,
+        "sortino": 0.0,
+        "max_drawdown": 0.0,
+        "profit_factor": Infinity,
+        "total_return": 0.22629042489669682,
+        "cagr": 12.056230467974434,
+        "buy_hold_return": -0.12989434431323804,
+        "avg_win": 0.05282471658778279,
+        "avg_loss": 0.0,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "ASELS.IS",
+      "window": "1mo",
+      "days": 30,
+      "strategy": "macd_flip_long",
+      "cost_label": "pine 5bp",
+      "fee_bps": 5.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 2,
+        "win_rate": 1.0,
+        "sharpe": 4.2364261430353265,
+        "sortino": 0.0,
+        "max_drawdown": 0.0,
+        "profit_factor": Infinity,
+        "total_return": 0.03961826407813773,
+        "cagr": 0.6312625611224507,
+        "buy_hold_return": -0.12989434431323804,
+        "avg_win": 0.019617465038112056,
+        "avg_loss": 0.0,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "ASELS.IS",
+      "window": "1mo",
+      "days": 30,
+      "strategy": "macd_flip_long",
+      "cost_label": "real 20bp",
+      "fee_bps": 20.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 2,
+        "win_rate": 1.0,
+        "sharpe": 4.232928972743184,
+        "sortino": 0.0,
+        "max_drawdown": 0.0,
+        "profit_factor": Infinity,
+        "total_return": 0.033509559287908885,
+        "cagr": 0.514567499758048,
+        "buy_hold_return": -0.12989434431323804,
+        "avg_win": 0.016617465038112057,
+        "avg_loss": 0.0,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "ASELS.IS",
+      "window": "1mo",
+      "days": 30,
+      "strategy": "macd_flip_long",
+      "cost_label": "gross 0bp",
+      "fee_bps": 0.0,
+      "slippage_bps": 0.0,
+      "stats": {
+        "n_trades": 2,
+        "win_rate": 1.0,
+        "sharpe": 4.237996394072732,
+        "sortino": 0.0,
+        "max_drawdown": 0.0,
+        "profit_factor": Infinity,
+        "total_return": 0.04374390088675817,
+        "cagr": 0.7146978496808025,
+        "buy_hold_return": -0.12989434431323804,
+        "avg_win": 0.021638593067164494,
+        "avg_loss": 0.0,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "ASELS.IS",
+      "window": "3mo",
+      "days": 91,
+      "strategy": "macd_flip",
+      "cost_label": "pine 5bp",
+      "fee_bps": 5.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 19,
+        "win_rate": 0.5263157894736842,
+        "sharpe": 2.8098340156778074,
+        "sortino": 5.958312452001126,
+        "max_drawdown": -0.13125666173866835,
+        "profit_factor": 2.95310548614777,
+        "total_return": 0.40062037317821986,
+        "cagr": 2.924796249657809,
+        "buy_hold_return": -0.19678714859437751,
+        "avg_win": 0.054166138768361925,
+        "avg_loss": -0.0203801045759534,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "ASELS.IS",
+      "window": "3mo",
+      "days": 91,
+      "strategy": "macd_flip",
+      "cost_label": "real 20bp",
+      "fee_bps": 20.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 19,
+        "win_rate": 0.5263157894736842,
+        "sharpe": 2.418771151769568,
+        "sortino": 4.351385403635362,
+        "max_drawdown": -0.15986230028611614,
+        "profit_factor": 2.4316086830788533,
+        "total_return": 0.324164705560942,
+        "cagr": 2.1252251863632803,
+        "buy_hold_return": -0.19678714859437751,
+        "avg_win": 0.05116613876836192,
+        "avg_loss": -0.023380104575953402,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "ASELS.IS",
+      "window": "3mo",
+      "days": 91,
+      "strategy": "macd_flip",
+      "cost_label": "gross 0bp",
+      "fee_bps": 0.0,
+      "slippage_bps": 0.0,
+      "stats": {
+        "n_trades": 19,
+        "win_rate": 0.5263157894736842,
+        "sharpe": 3.052539956393869,
+        "sortino": 6.577470202190959,
+        "max_drawdown": -0.1118372556587729,
+        "profit_factor": 3.3924499946521283,
+        "total_return": 0.4535739416126823,
+        "cagr": 3.5627220569099025,
+        "buy_hold_return": -0.19678714859437751,
+        "avg_win": 0.05615438178684144,
+        "avg_loss": -0.018391946127221538,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "ASELS.IS",
+      "window": "3mo",
+      "days": 91,
+      "strategy": "macd_flip_long",
+      "cost_label": "pine 5bp",
+      "fee_bps": 5.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 10,
+        "win_rate": 0.4,
+        "sharpe": 0.7733091472286122,
+        "sortino": 1.0435674760653042,
+        "max_drawdown": -0.1387500088111281,
+        "profit_factor": 1.4497245124386464,
+        "total_return": 0.05803697834557897,
+        "cagr": 0.25728172271286254,
+        "buy_hold_return": -0.19678714859437751,
+        "avg_win": 0.05335165889737732,
+        "avg_loss": -0.024534159623486942,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "ASELS.IS",
+      "window": "3mo",
+      "days": 91,
+      "strategy": "macd_flip_long",
+      "cost_label": "real 20bp",
+      "fee_bps": 20.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 10,
+        "win_rate": 0.4,
+        "sharpe": 0.4257501630857803,
+        "sortino": 0.5706636872283687,
+        "max_drawdown": -0.1545224486384078,
+        "profit_factor": 1.219131909499713,
+        "total_return": 0.02686604698814654,
+        "cagr": 0.11359382771766113,
+        "buy_hold_return": -0.19678714859437751,
+        "avg_win": 0.05035165889737732,
+        "avg_loss": -0.02753415962348694,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "ASELS.IS",
+      "window": "3mo",
+      "days": 91,
+      "strategy": "macd_flip_long",
+      "cost_label": "gross 0bp",
+      "fee_bps": 0.0,
+      "slippage_bps": 0.0,
+      "stats": {
+        "n_trades": 10,
+        "win_rate": 0.4,
+        "sharpe": 1.0002197171021716,
+        "sortino": 1.3587578907140543,
+        "max_drawdown": -0.12822335951938957,
+        "profit_factor": 1.6375118945904943,
+        "total_return": 0.0793546765641242,
+        "cagr": 0.36329953702650886,
+        "buy_hold_return": -0.19678714859437751,
+        "avg_win": 0.05540653799582371,
+        "avg_loss": -0.02255720530595175,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "ASELS.IS",
+      "window": "6mo",
+      "days": 182,
+      "strategy": "macd_flip",
+      "cost_label": "pine 5bp",
+      "fee_bps": 5.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 41,
+        "win_rate": 0.5121951219512195,
+        "sharpe": 2.173895318037138,
+        "sortino": 4.4915463924930625,
+        "max_drawdown": -0.21706789357941603,
+        "profit_factor": 2.608063308205783,
+        "total_return": 0.868583759858119,
+        "cagr": 2.5310215307440265,
+        "buy_hold_return": 0.16569525395503748,
+        "avg_win": 0.05315754070097568,
+        "avg_loss": -0.021401097726581896,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "ASELS.IS",
+      "window": "6mo",
+      "days": 182,
+      "strategy": "macd_flip",
+      "cost_label": "real 20bp",
+      "fee_bps": 20.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 41,
+        "win_rate": 0.5121951219512195,
+        "sharpe": 1.8064156119051842,
+        "sortino": 3.561425060223438,
+        "max_drawdown": -0.2498812066502546,
+        "profit_factor": 2.1583216593838794,
+        "total_return": 0.6548388850031257,
+        "cagr": 1.763372101567151,
+        "buy_hold_return": 0.16569525395503748,
+        "avg_win": 0.05015754070097568,
+        "avg_loss": -0.0244010977265819,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "ASELS.IS",
+      "window": "6mo",
+      "days": 182,
+      "strategy": "macd_flip",
+      "cost_label": "gross 0bp",
+      "fee_bps": 0.0,
+      "slippage_bps": 0.0,
+      "stats": {
+        "n_trades": 41,
+        "win_rate": 0.5365853658536586,
+        "sharpe": 2.4103976339464177,
+        "sortino": 5.9914920513954035,
+        "max_drawdown": -0.19453328152097038,
+        "profit_factor": 2.9763445626842566,
+        "total_return": 1.0261343445152833,
+        "cagr": 3.1576023602274867,
+        "buy_hold_return": 0.16569525395503748,
+        "avg_win": 0.05274396327129764,
+        "avg_loss": -0.02051911537317113,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "ASELS.IS",
+      "window": "6mo",
+      "days": 182,
+      "strategy": "macd_flip_long",
+      "cost_label": "pine 5bp",
+      "fee_bps": 5.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 21,
+        "win_rate": 0.5238095238095238,
+        "sharpe": 1.6624631996613157,
+        "sortino": 4.355156684433017,
+        "max_drawdown": -0.15610663459691165,
+        "profit_factor": 3.004998651981374,
+        "total_return": 0.5010308323368216,
+        "cagr": 1.269584950273511,
+        "buy_hold_return": 0.16569525395503748,
+        "avg_win": 0.06158590092086242,
+        "avg_loss": -0.02254393391101214,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "ASELS.IS",
+      "window": "6mo",
+      "days": 182,
+      "strategy": "macd_flip_long",
+      "cost_label": "real 20bp",
+      "fee_bps": 20.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 21,
+        "win_rate": 0.5238095238095238,
+        "sharpe": 1.4465988370284542,
+        "sortino": 3.7481401149236757,
+        "max_drawdown": -0.17409764775913372,
+        "profit_factor": 2.5228882613561043,
+        "total_return": 0.4107989996936374,
+        "cagr": 1.0026914905899806,
+        "buy_hold_return": 0.16569525395503748,
+        "avg_win": 0.05858590092086242,
+        "avg_loss": -0.02554393391101214,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "ASELS.IS",
+      "window": "6mo",
+      "days": 182,
+      "strategy": "macd_flip_long",
+      "cost_label": "gross 0bp",
+      "fee_bps": 0.0,
+      "slippage_bps": 0.0,
+      "stats": {
+        "n_trades": 21,
+        "win_rate": 0.5238095238095238,
+        "sharpe": 1.802238009461228,
+        "sortino": 4.759733278570379,
+        "max_drawdown": -0.1440648430488498,
+        "profit_factor": 3.404520292039998,
+        "total_return": 0.5648291529459326,
+        "cagr": 1.468457569152918,
+        "buy_hold_return": 0.16569525395503748,
+        "avg_win": 0.06364901838051296,
+        "avg_loss": -0.020564988372153807,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "ASELS.IS",
+      "window": "1yr",
+      "days": 365,
+      "strategy": "macd_flip",
+      "cost_label": "pine 5bp",
+      "fee_bps": 5.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 95,
+        "win_rate": 0.4,
+        "sharpe": 1.2161333199329891,
+        "sortino": 1.7975282892644078,
+        "max_drawdown": -0.21706789357941614,
+        "profit_factor": 1.5323012519106851,
+        "total_return": 0.8091829036167055,
+        "cagr": 0.8128701032276942,
+        "buy_hold_return": 0.8746652689931675,
+        "avg_win": 0.051838510039413185,
+        "avg_loss": -0.022553663419545712,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "ASELS.IS",
+      "window": "1yr",
+      "days": 365,
+      "strategy": "macd_flip",
+      "cost_label": "real 20bp",
+      "fee_bps": 20.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 95,
+        "win_rate": 0.37894736842105264,
+        "sharpe": 0.7299966883204514,
+        "sortino": 1.0212308538009893,
+        "max_drawdown": -0.2911934484322304,
+        "profit_factor": 1.273657159366381,
+        "total_return": 0.36605586982345684,
+        "cagr": 0.3675199457639744,
+        "buy_hold_return": 0.8746652689931675,
+        "avg_win": 0.05162350678069359,
+        "avg_loss": -0.024731214873243628,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "ASELS.IS",
+      "window": "1yr",
+      "days": 365,
+      "strategy": "macd_flip",
+      "cost_label": "gross 0bp",
+      "fee_bps": 0.0,
+      "slippage_bps": 0.0,
+      "stats": {
+        "n_trades": 95,
+        "win_rate": 0.4421052631578947,
+        "sharpe": 1.5360081532613776,
+        "sortino": 2.538547317516172,
+        "max_drawdown": -0.1945332815209707,
+        "profit_factor": 1.7444162901139442,
+        "total_return": 1.182316297675925,
+        "cagr": 1.1881725303353905,
+        "buy_hold_return": 0.8746652689931675,
+        "avg_win": 0.04882140549491448,
+        "avg_loss": -0.022178571237549616,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "ASELS.IS",
+      "window": "1yr",
+      "days": 365,
+      "strategy": "macd_flip_long",
+      "cost_label": "pine 5bp",
+      "fee_bps": 5.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 48,
+        "win_rate": 0.4166666666666667,
+        "sharpe": 1.5286814940696132,
+        "sortino": 2.6634781811396007,
+        "max_drawdown": -0.15610663459691165,
+        "profit_factor": 2.3118215305227445,
+        "total_return": 0.9191600968058524,
+        "cagr": 0.9234611893168201,
+        "buy_hold_return": 0.8746652689931675,
+        "avg_win": 0.062234683682912795,
+        "avg_loss": -0.019228709872661814,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "ASELS.IS",
+      "window": "1yr",
+      "days": 365,
+      "strategy": "macd_flip_long",
+      "cost_label": "real 20bp",
+      "fee_bps": 20.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 48,
+        "win_rate": 0.4166666666666667,
+        "sharpe": 1.2437616764721688,
+        "sortino": 2.1337029285856426,
+        "max_drawdown": -0.1740976477591336,
+        "profit_factor": 1.903416284045061,
+        "total_return": 0.6693578955442689,
+        "cagr": 0.6722981335739981,
+        "buy_hold_return": 0.8746652689931675,
+        "avg_win": 0.05923468368291278,
+        "avg_loss": -0.022228709872661814,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "ASELS.IS",
+      "window": "1yr",
+      "days": 365,
+      "strategy": "macd_flip_long",
+      "cost_label": "gross 0bp",
+      "fee_bps": 0.0,
+      "slippage_bps": 0.0,
+      "stats": {
+        "n_trades": 48,
+        "win_rate": 0.4583333333333333,
+        "sharpe": 1.7130314165711784,
+        "sortino": 3.3185052067368326,
+        "max_drawdown": -0.14406484304884992,
+        "profit_factor": 2.6569927884489095,
+        "total_return": 1.1070281320529896,
+        "cagr": 1.112427630486716,
+        "buy_hold_return": 0.8746652689931675,
+        "avg_win": 0.05853284788495745,
+        "avg_loss": -0.01864054527340586,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "KCHOL.IS",
+      "window": "1mo",
+      "days": 30,
+      "strategy": "macd_flip",
+      "cost_label": "pine 5bp",
+      "fee_bps": 5.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 7,
+        "win_rate": 0.42857142857142855,
+        "sharpe": 1.7283551715266303,
+        "sortino": 2.6472257421260723,
+        "max_drawdown": -0.034151965152327324,
+        "profit_factor": 1.7679041619741338,
+        "total_return": 0.042521303269241084,
+        "cagr": 0.6895719057091891,
+        "buy_hold_return": 0.027404359974254146,
+        "avg_win": 0.03405693418616283,
+        "avg_loss": -0.014448012052361375,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "KCHOL.IS",
+      "window": "1mo",
+      "days": 30,
+      "strategy": "macd_flip",
+      "cost_label": "real 20bp",
+      "fee_bps": 20.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 7,
+        "win_rate": 0.42857142857142855,
+        "sharpe": 0.9234615017098731,
+        "sortino": 1.3945601051545342,
+        "max_drawdown": -0.04003988509748979,
+        "profit_factor": 1.3349773355108234,
+        "total_return": 0.020944083668392066,
+        "cagr": 0.29830907667725914,
+        "buy_hold_return": 0.027404359974254146,
+        "avg_win": 0.03105693418616283,
+        "avg_loss": -0.017448012052361375,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "KCHOL.IS",
+      "window": "1mo",
+      "days": 30,
+      "strategy": "macd_flip",
+      "cost_label": "gross 0bp",
+      "fee_bps": 0.0,
+      "slippage_bps": 0.0,
+      "stats": {
+        "n_trades": 7,
+        "win_rate": 0.42857142857142855,
+        "sharpe": 2.243162308796697,
+        "sortino": 3.4885534754899528,
+        "max_drawdown": -0.03019802610743838,
+        "profit_factor": 2.173498835230031,
+        "total_return": 0.05716477603965542,
+        "cagr": 1.0140625147061701,
+        "buy_hold_return": 0.027404359974254146,
+        "avg_win": 0.03606795670056857,
+        "avg_loss": -0.01244581643521493,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "KCHOL.IS",
+      "window": "1mo",
+      "days": 30,
+      "strategy": "macd_flip_long",
+      "cost_label": "pine 5bp",
+      "fee_bps": 5.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 4,
+        "win_rate": 0.5,
+        "sharpe": 2.061613355819168,
+        "sortino": 3.726749293137374,
+        "max_drawdown": -0.016644549715885137,
+        "profit_factor": 2.7291740084181177,
+        "total_return": 0.041440320931494856,
+        "cagr": 0.6676391293821147,
+        "buy_hold_return": 0.027404359974254146,
+        "avg_win": 0.03342125052696454,
+        "avg_loss": -0.012245921448715594,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "KCHOL.IS",
+      "window": "1mo",
+      "days": 30,
+      "strategy": "macd_flip_long",
+      "cost_label": "real 20bp",
+      "fee_bps": 20.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 4,
+        "win_rate": 0.5,
+        "sharpe": 1.5183234627309266,
+        "sortino": 2.6707800717762415,
+        "max_drawdown": -0.01964454971588514,
+        "profit_factor": 1.9953697537597777,
+        "total_return": 0.02911963572259335,
+        "cagr": 0.43550733589878377,
+        "buy_hold_return": 0.027404359974254146,
+        "avg_win": 0.030421250526964545,
+        "avg_loss": -0.015245921448715593,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "KCHOL.IS",
+      "window": "1mo",
+      "days": 30,
+      "strategy": "macd_flip_long",
+      "cost_label": "gross 0bp",
+      "fee_bps": 0.0,
+      "slippage_bps": 0.0,
+      "stats": {
+        "n_trades": 4,
+        "win_rate": 0.5,
+        "sharpe": 2.397450633362383,
+        "sortino": 4.430552867128027,
+        "max_drawdown": -0.014659701841663986,
+        "profit_factor": 3.4568899803618676,
+        "total_return": 0.049762351121095394,
+        "cagr": 0.8434757183523383,
+        "buy_hold_return": 0.027404359974254146,
+        "avg_win": 0.035456189246851316,
+        "avg_loss": -0.010256672745812916,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "KCHOL.IS",
+      "window": "3mo",
+      "days": 91,
+      "strategy": "macd_flip",
+      "cost_label": "pine 5bp",
+      "fee_bps": 5.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 22,
+        "win_rate": 0.3181818181818182,
+        "sharpe": 0.5546192763611618,
+        "sortino": 0.917812951750817,
+        "max_drawdown": -0.09548641640905531,
+        "profit_factor": 1.2105275861105111,
+        "total_return": 0.03242707665022038,
+        "cagr": 0.13827188193022222,
+        "buy_hold_return": -0.03683958308817324,
+        "avg_win": 0.031533026995128895,
+        "avg_loss": -0.012156197650156998,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "KCHOL.IS",
+      "window": "3mo",
+      "days": 91,
+      "strategy": "macd_flip",
+      "cost_label": "real 20bp",
+      "fee_bps": 20.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 22,
+        "win_rate": 0.3181818181818182,
+        "sharpe": -0.39706053001923064,
+        "sortino": -0.6551345521070371,
+        "max_drawdown": -0.13820422025765278,
+        "profit_factor": 0.8785457213662616,
+        "total_return": -0.033534655872994645,
+        "cagr": -0.12927501025012633,
+        "buy_hold_return": -0.03683958308817324,
+        "avg_win": 0.028533026995128892,
+        "avg_loss": -0.015156197650157,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "KCHOL.IS",
+      "window": "3mo",
+      "days": 91,
+      "strategy": "macd_flip",
+      "cost_label": "gross 0bp",
+      "fee_bps": 0.0,
+      "slippage_bps": 0.0,
+      "stats": {
+        "n_trades": 22,
+        "win_rate": 0.36363636363636365,
+        "sharpe": 1.1831192288509587,
+        "sortino": 1.9623837531386752,
+        "max_drawdown": -0.06595047071055682,
+        "profit_factor": 1.5347952767340227,
+        "total_return": 0.07870599462498173,
+        "cagr": 0.35997747689409,
+        "buy_hold_return": -0.03683958308817324,
+        "avg_win": 0.02953484823003326,
+        "avg_loss": -0.010996291418984044,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "KCHOL.IS",
+      "window": "3mo",
+      "days": 91,
+      "strategy": "macd_flip_long",
+      "cost_label": "pine 5bp",
+      "fee_bps": 5.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 11,
+        "win_rate": 0.2727272727272727,
+        "sharpe": -0.2154952146503582,
+        "sortino": -0.21284894481277747,
+        "max_drawdown": -0.06728959983987148,
+        "profit_factor": 0.9037078009324151,
+        "total_return": -0.012196232605150459,
+        "cagr": -0.04858096594696715,
+        "buy_hold_return": -0.03683958308817324,
+        "avg_win": 0.02997852346846697,
+        "avg_loss": -0.012439802211595444,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "KCHOL.IS",
+      "window": "3mo",
+      "days": 91,
+      "strategy": "macd_flip_long",
+      "cost_label": "real 20bp",
+      "fee_bps": 20.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 11,
+        "win_rate": 0.2727272727272727,
+        "sharpe": -0.9457952304379251,
+        "sortino": -0.9458268341802543,
+        "max_drawdown": -0.08963484790181142,
+        "profit_factor": 0.6552510299048511,
+        "total_return": -0.04435207308704481,
+        "cagr": -0.16815501975443647,
+        "buy_hold_return": -0.03683958308817324,
+        "avg_win": 0.026978523468466967,
+        "avg_loss": -0.015439802211595445,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "KCHOL.IS",
+      "window": "3mo",
+      "days": 91,
+      "strategy": "macd_flip_long",
+      "cost_label": "gross 0bp",
+      "fee_bps": 0.0,
+      "slippage_bps": 0.0,
+      "stats": {
+        "n_trades": 11,
+        "win_rate": 0.36363636363636365,
+        "sharpe": 0.2789818593534927,
+        "sortino": 0.3227392009045065,
+        "max_drawdown": -0.05218300727726022,
+        "profit_factor": 1.1458296093557314,
+        "total_return": 0.009785752772758283,
+        "cagr": 0.04031212693013653,
+        "buy_hold_return": -0.03683958308817324,
+        "avg_win": 0.024404973633674512,
+        "avg_loss": -0.012170831601291801,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "KCHOL.IS",
+      "window": "6mo",
+      "days": 182,
+      "strategy": "macd_flip",
+      "cost_label": "pine 5bp",
+      "fee_bps": 5.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 53,
+        "win_rate": 0.3018867924528302,
+        "sharpe": -1.0720211193713032,
+        "sortino": -1.095089600570551,
+        "max_drawdown": -0.300640436140896,
+        "profit_factor": 0.7183865900413055,
+        "total_return": -0.18205655572559332,
+        "cagr": -0.33337832827822445,
+        "buy_hold_return": -0.051551327216027745,
+        "avg_win": 0.030217641937618403,
+        "avg_loss": -0.018189493772016653,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "KCHOL.IS",
+      "window": "6mo",
+      "days": 182,
+      "strategy": "macd_flip",
+      "cost_label": "real 20bp",
+      "fee_bps": 20.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 53,
+        "win_rate": 0.2830188679245283,
+        "sharpe": -1.9614528742501076,
+        "sortino": -2.030120903805896,
+        "max_drawdown": -0.3511600693683261,
+        "profit_factor": 0.5563106034100405,
+        "total_return": -0.30083127195632786,
+        "cagr": -0.5142941484590542,
+        "buy_hold_return": -0.051551327216027745,
+        "avg_win": 0.029133049529167326,
+        "avg_loss": -0.020671703723690305,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "KCHOL.IS",
+      "window": "6mo",
+      "days": 182,
+      "strategy": "macd_flip",
+      "cost_label": "gross 0bp",
+      "fee_bps": 0.0,
+      "slippage_bps": 0.0,
+      "stats": {
+        "n_trades": 53,
+        "win_rate": 0.32075471698113206,
+        "sharpe": -0.459809225472969,
+        "sortino": -0.4635144516828056,
+        "max_drawdown": -0.27300126926131363,
+        "profit_factor": 0.860873983217987,
+        "total_return": -0.092126995753264,
+        "cagr": -0.17719577697898925,
+        "buy_hold_return": -0.051551327216027745,
+        "avg_win": 0.030415394231980305,
+        "avg_loss": -0.01668400408652355,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "KCHOL.IS",
+      "window": "6mo",
+      "days": 182,
+      "strategy": "macd_flip_long",
+      "cost_label": "pine 5bp",
+      "fee_bps": 5.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 27,
+        "win_rate": 0.2962962962962963,
+        "sharpe": -0.8320560949442475,
+        "sortino": -0.649170690605178,
+        "max_drawdown": -0.1902033152443211,
+        "profit_factor": 0.6781294971305801,
+        "total_return": -0.10741903772543737,
+        "cagr": -0.20492320629685046,
+        "buy_hold_return": -0.051551327216027745,
+        "avg_win": 0.02955113479719578,
+        "avg_loss": -0.018348387918756988,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "KCHOL.IS",
+      "window": "6mo",
+      "days": 182,
+      "strategy": "macd_flip_long",
+      "cost_label": "real 20bp",
+      "fee_bps": 20.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 27,
+        "win_rate": 0.25925925925925924,
+        "sharpe": -1.4372955427544678,
+        "sortino": -1.1093979276447328,
+        "max_drawdown": -0.24021734485455004,
+        "profit_factor": 0.5254367322870295,
+        "total_return": -0.17479956436207333,
+        "cagr": -0.32138937485390795,
+        "buy_hold_return": -0.051551327216027745,
+        "avg_win": 0.03056036433045453,
+        "avg_loss": -0.02035664211959991,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "KCHOL.IS",
+      "window": "6mo",
+      "days": 182,
+      "strategy": "macd_flip_long",
+      "cost_label": "gross 0bp",
+      "fee_bps": 0.0,
+      "slippage_bps": 0.0,
+      "stats": {
+        "n_trades": 27,
+        "win_rate": 0.3333333333333333,
+        "sharpe": -0.4149300146768593,
+        "sortino": -0.330708277577535,
+        "max_drawdown": -0.1617795223536257,
+        "profit_factor": 0.8135150765947928,
+        "total_return": -0.05967246627218048,
+        "cagr": -0.11676044243882477,
+        "buy_hold_return": -0.051551327216027745,
+        "avg_win": 0.028249717004455752,
+        "avg_loss": -0.017362749515782344,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "KCHOL.IS",
+      "window": "1yr",
+      "days": 365,
+      "strategy": "macd_flip",
+      "cost_label": "pine 5bp",
+      "fee_bps": 5.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 101,
+        "win_rate": 0.3069306930693069,
+        "sharpe": -0.5132626593926227,
+        "sortino": -0.6286689318203957,
+        "max_drawdown": -0.41697157191965006,
+        "profit_factor": 0.8519253343763168,
+        "total_return": -0.22017104729626902,
+        "cagr": -0.22083672589402703,
+        "buy_hold_return": 0.09779003838807838,
+        "avg_win": 0.03672103149181696,
+        "avg_loss": -0.019088728123267455,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "KCHOL.IS",
+      "window": "1yr",
+      "days": 365,
+      "strategy": "macd_flip",
+      "cost_label": "real 20bp",
+      "fee_bps": 20.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 101,
+        "win_rate": 0.297029702970297,
+        "sharpe": -1.2823337577632288,
+        "sortino": -1.5652201537623471,
+        "max_drawdown": -0.5153113468023306,
+        "profit_factor": 0.676390073545798,
+        "total_return": -0.4247986740996611,
+        "cagr": -0.42589003634287503,
+        "buy_hold_return": 0.09779003838807838,
+        "avg_win": 0.03489551493939804,
+        "avg_loss": -0.0217989357825963,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "KCHOL.IS",
+      "window": "1yr",
+      "days": 365,
+      "strategy": "macd_flip",
+      "cost_label": "gross 0bp",
+      "fee_bps": 0.0,
+      "slippage_bps": 0.0,
+      "stats": {
+        "n_trades": 101,
+        "win_rate": 0.31683168316831684,
+        "sharpe": 0.009796951974017667,
+        "sortino": 0.011961826340694454,
+        "max_drawdown": -0.34445999700815844,
+        "profit_factor": 1.0035587561799808,
+        "total_return": -0.045125489167276656,
+        "cagr": -0.0452768908450597,
+        "buy_hold_return": 0.09779003838807838,
+        "avg_win": 0.03756397142632788,
+        "avg_loss": -0.017359195112801117,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "KCHOL.IS",
+      "window": "1yr",
+      "days": 365,
+      "strategy": "macd_flip_long",
+      "cost_label": "pine 5bp",
+      "fee_bps": 5.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 51,
+        "win_rate": 0.3137254901960784,
+        "sharpe": -0.1342540271360341,
+        "sortino": -0.13338560294953983,
+        "max_drawdown": -0.19020331524432088,
+        "profit_factor": 0.9410872029878983,
+        "total_return": -0.06468911702892621,
+        "cagr": -0.0649038936716485,
+        "buy_hold_return": 0.09779003838807838,
+        "avg_win": 0.038797737582020056,
+        "avg_loss": -0.018846402918467408,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "KCHOL.IS",
+      "window": "1yr",
+      "days": 365,
+      "strategy": "macd_flip_long",
+      "cost_label": "real 20bp",
+      "fee_bps": 20.0,
+      "slippage_bps": 5.0,
+      "stats": {
+        "n_trades": 51,
+        "win_rate": 0.29411764705882354,
+        "sharpe": -0.6595868772112129,
+        "sortino": -0.6432812922723238,
+        "max_drawdown": -0.2672738421417402,
+        "profit_factor": 0.7495746099335551,
+        "total_return": -0.1977942191112958,
+        "cagr": -0.19840112618965633,
+        "buy_hold_return": 0.09779003838807838,
+        "avg_win": 0.03828515154986242,
+        "avg_loss": -0.021281599280054853,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    },
+    {
+      "symbol": "KCHOL.IS",
+      "window": "1yr",
+      "days": 365,
+      "strategy": "macd_flip_long",
+      "cost_label": "gross 0bp",
+      "fee_bps": 0.0,
+      "slippage_bps": 0.0,
+      "stats": {
+        "n_trades": 51,
+        "win_rate": 0.3333333333333333,
+        "sharpe": 0.21874383740100947,
+        "sortino": 0.22178352511753127,
+        "max_drawdown": -0.16177952235362592,
+        "profit_factor": 1.106750720336029,
+        "total_return": 0.035818921734267484,
+        "cagr": 0.03594411094155081,
+        "buy_hold_return": 0.09779003838807838,
+        "avg_win": 0.03852933699848764,
+        "avg_loss": -0.01740651091999717,
+        "exit_reasons": {
+          "TP": 0,
+          "SL": 0,
+          "TIME": 0
+        }
+      }
+    }
+  ]
+}

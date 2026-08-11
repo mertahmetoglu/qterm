@@ -36,6 +36,7 @@ import pandas as pd
 
 from fx_data import fetch_fx_candles
 from market_data import fetch_klines_range
+from yahoo_data import fetch_yahoo_candles
 from metrics import daily_buy_hold_series, summarize
 from report import plot_drawdown, plot_equity_curve
 from signal_engine import LEVERAGE, STOP_PCT, TP_PCT
@@ -66,6 +67,8 @@ def load_candles(symbol, interval, start_ms, end_ms, source="binance"):
         candles = asyncio.run(fetch_klines_range(symbol, interval, start_ms, end_ms))
     elif source == "dukascopy":
         candles = fetch_fx_candles(symbol, interval, start_ms, end_ms)
+    elif source == "yahoo":
+        candles = fetch_yahoo_candles(symbol, interval, start_ms, end_ms)
     else:
         raise ValueError(f"unknown source {source!r}")
     if candles:
@@ -80,6 +83,65 @@ def apply_slippage(price, direction, is_entry, slippage_bps):
     return price * (1 - slip) if direction == "LONG" else price * (1 + slip)
 
 
+def _simulate_always_in(candles, entries, strategy, fee_bps, slippage_bps):
+    """Execution for strategies with no stop and no target, held until the
+    opposite signal reverses them.
+
+    Fills use the next bar's open, same no-lookahead rule as the stop/target
+    path -- which also matches how TradingView fills a market order by default,
+    so the numbers are comparable to what the Pine strategy tester reports.
+    """
+    n = len(candles)
+    closes = [c["close"] for c in candles]
+    fee_rate = fee_bps / 10_000
+
+    # A repeat signal in the direction already held is not a new trade.
+    seq, last_dir = [], None
+    for e in entries:
+        if e.direction == last_dir or e.signal_idx + 1 >= n:
+            continue
+        seq.append(e)
+        last_dir = e.direction
+
+    trades = []
+    for k, e in enumerate(seq):
+        if strategy.long_only and e.direction == "SHORT":
+            continue  # flat rather than short; the signal still ends the prior long
+
+        entry_idx = e.signal_idx + 1
+        if k + 1 < len(seq):
+            exit_idx = seq[k + 1].signal_idx + 1
+            raw_exit, reason = candles[exit_idx]["open"], "FLIP"
+        else:
+            exit_idx = n - 1
+            raw_exit, reason = candles[exit_idx]["close"], "END"
+        if exit_idx <= entry_idx:
+            continue
+
+        entry_price = apply_slippage(candles[entry_idx]["open"], e.direction, True, slippage_bps)
+        exit_price = apply_slippage(raw_exit, e.direction, False, slippage_bps)
+        gross_ret = ((exit_price - entry_price) / entry_price if e.direction == "LONG"
+                     else (entry_price - exit_price) / entry_price)
+        net_ret = gross_ret - 2 * fee_rate
+
+        trades.append({
+            "entry_time": candles[entry_idx]["open_time"],
+            "exit_time": candles[exit_idx]["close_time"],
+            "direction": e.direction,
+            "entry": entry_price,
+            "exit": exit_price,
+            "sl": None,
+            "tp": None,
+            "reason": reason,
+            "gross_return": gross_ret,
+            "net_return": net_ret,
+            "leveraged_return": net_ret * LEVERAGE,
+            **e.meta,
+        })
+
+    return trades, closes
+
+
 def simulate(candles, strategy, fee_bps=DEFAULT_FEE_BPS, slippage_bps=DEFAULT_SLIPPAGE_BPS,
              max_hold_bars=DEFAULT_MAX_HOLD_BARS):
     """Execute a strategy's entry intents under fixed, strategy-agnostic rules.
@@ -88,6 +150,10 @@ def simulate(candles, strategy, fee_bps=DEFAULT_FEE_BPS, slippage_bps=DEFAULT_SL
     execution assumption below is applied identically no matter which strategy
     produced the signal, so two strategies' results are actually comparable.
     """
+    entries = strategy.generate(candles)
+    if strategy.always_in_market:
+        return _simulate_always_in(candles, entries, strategy, fee_bps, slippage_bps)
+
     closes = [c["close"] for c in candles]
     n = len(candles)
     fee_rate = fee_bps / 10_000
@@ -95,7 +161,7 @@ def simulate(candles, strategy, fee_bps=DEFAULT_FEE_BPS, slippage_bps=DEFAULT_SL
     trades = []
     busy_until = -1
 
-    for entry in strategy.generate(candles):
+    for entry in entries:
         # Single position at a time: a signal that fires while a trade is still
         # open is dropped, not queued.
         if entry.signal_idx <= busy_until:
@@ -154,8 +220,9 @@ def main():
     ap.add_argument("--strategy", default="confluence", choices=sorted(STRATEGIES),
                     help="which strategy to run (default: confluence)")
     ap.add_argument("--symbol", default="BTCUSDT")
-    ap.add_argument("--source", default="binance", choices=("binance", "dukascopy"),
-                    help="binance = crypto klines, dukascopy = FX majors (e.g. --symbol EURUSD)")
+    ap.add_argument("--source", default="binance", choices=("binance", "dukascopy", "yahoo"),
+                    help="binance = crypto klines, dukascopy = FX majors and US index CFDs, "
+                         "yahoo = equities incl. Borsa Istanbul (e.g. --symbol XU100.IS)")
     ap.add_argument("--interval", default=None, help="default: the strategy's own timeframe")
     ap.add_argument("--start", default=None, help="YYYY-MM-DD (UTC), default 2 years before --end")
     ap.add_argument("--end", default=None, help="YYYY-MM-DD (UTC), default today")
