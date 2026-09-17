@@ -1,4 +1,4 @@
-"""Reproduce every backtest this project reports, in one command.
+"""Run the confluence strategy across markets, in one command.
 
     python run_matrix.py
 
@@ -6,6 +6,12 @@ Writes reports/matrix.json and prints the same table the README publishes.
 The point is that no number in this repo is a screenshot someone has to trust:
 the full set of runs is declared below, and one command regenerates all of it
 from cached market data.
+
+The strategy was built for BTCUSDT 15m. Running the identical rules elsewhere
+asks whether whatever it does on BTC is a property of the signal or of one
+market. ATR-scaled exits are what make that comparison meaningful at all: a
+fixed 0.5% stop is several days of range on EURUSD 15m and a few minutes on
+SOLUSDT, whereas 1.5x ATR means the same thing on every instrument.
 
 Every run is executed twice -- once with realistic costs for that venue, once
 at zero cost. The pair matters more than either number alone: it separates "the
@@ -18,7 +24,8 @@ Cost assumptions per venue, and why:
                                              side per $100k) over a ~0.1 pip
                                              raw EURUSD spread
   index   0.1bp + 0.3bp                      NQ/ES futures are extremely cheap
-                                             per unit of notional
+                                             per unit of notional (the CFDs
+                                             stand in for them as price data)
 """
 import json
 import sys
@@ -43,30 +50,20 @@ COSTS = {
 
 # (group, strategy, source, symbol, market, interval-or-None-for-strategy-default)
 MATRIX = [
-    # The strategy as published, on the instruments it is written for.
-    ("Powell 10:00, target market", "powell_open", "dukascopy", "USATECHIDXUSD", "index", None),
-    ("Powell 10:00, target market", "powell_open_cont", "dukascopy", "USATECHIDXUSD", "index", None),
-    ("Powell 10:00, target market", "powell_open", "dukascopy", "USA500IDXUSD", "index", None),
-    ("Powell 10:00, target market", "powell_open_cont", "dukascopy", "USA500IDXUSD", "index", None),
+    # The market the strategy was built for, and the one the dashboard trades.
+    ("BTCUSDT, the live market", "confluence", "binance", "BTCUSDT", "crypto", None),
 
-    # Same strategy, markets it was not written for -- does anything transfer?
-    ("Powell 10:00, other markets", "powell_open", "binance", "BTCUSDT", "crypto", None),
-    ("Powell 10:00, other markets", "powell_open", "dukascopy", "EURUSD", "fx", None),
+    # Other crypto majors: same venue, same costs, highly correlated with BTC.
+    ("Other crypto majors", "confluence", "binance", "ETHUSDT", "crypto", None),
+    ("Other crypto majors", "confluence", "binance", "SOLUSDT", "crypto", None),
+    ("Other crypto majors", "confluence", "binance", "XRPUSDT", "crypto", None),
 
-    # The earlier reconstruction built from a second-hand summary. Kept because
-    # the contrast with the faithful version is the most instructive result in
-    # the project, not because its numbers mean anything on their own.
-    ("Mislabelled reconstruction", "powell_1000", "binance", "BTCUSDT", "crypto", None),
-    ("Mislabelled reconstruction", "powell_1000", "binance", "ETHUSDT", "crypto", None),
-    ("Mislabelled reconstruction", "powell_1000", "binance", "SOLUSDT", "crypto", None),
-    ("Mislabelled reconstruction", "powell_1000", "binance", "XRPUSDT", "crypto", None),
-    ("Mislabelled reconstruction", "powell_1000", "dukascopy", "EURUSD", "fx", None),
-    ("Mislabelled reconstruction", "powell_1000", "dukascopy", "GBPUSD", "fx", None),
-    ("Mislabelled reconstruction", "powell_1000", "dukascopy", "USDJPY", "fx", None),
-    ("Mislabelled reconstruction", "powell_or", "binance", "BTCUSDT", "crypto", None),
-
-    # The original TA-confluence strategy the project started from.
-    ("TA confluence baseline", "confluence", "binance", "BTCUSDT", "crypto", None),
+    # Different asset classes with an order of magnitude lower costs.
+    ("FX majors", "confluence", "dukascopy", "EURUSD", "fx", None),
+    ("FX majors", "confluence", "dukascopy", "GBPUSD", "fx", None),
+    ("FX majors", "confluence", "dukascopy", "USDJPY", "fx", None),
+    ("US equity indices", "confluence", "dukascopy", "USATECHIDXUSD", "index", None),
+    ("US equity indices", "confluence", "dukascopy", "USA500IDXUSD", "index", None),
 ]
 
 

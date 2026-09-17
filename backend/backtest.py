@@ -9,8 +9,8 @@ Rules (documented, not hidden -- see README Limitations section too):
     position state -- this simulation does, which is the realistic
     convention for a strategy backtest.
   - A new position only opens when the signal *changes* to an actionable
-    state (matches the live entry logic in App.jsx exactly, not just the
-    indicator math).
+    state (matches the live entry logic in src/hooks/usePaperTrades.js
+    exactly, not just the indicator math).
   - TP/SL are resolved by scanning forward through subsequent candles'
     high/low. If both would be touched within the same candle, SL is
     assumed to have hit first -- conservative, since 15m/5m/1h OHLC candles
@@ -39,7 +39,7 @@ from market_data import fetch_klines_range
 from yahoo_data import fetch_yahoo_candles
 from metrics import daily_buy_hold_series, summarize
 from report import plot_drawdown, plot_equity_curve
-from signal_engine import LEVERAGE, STOP_PCT, TP_PCT
+from signal_engine import LEVERAGE
 from strategies import STRATEGIES, get_strategy
 
 HERE = Path(__file__).resolve().parent
@@ -271,7 +271,7 @@ def main():
         "strategy": strategy.describe(),
         "symbol": args.symbol, "interval": interval, "source": args.source,
         "start": str(start.date()), "end": str(end.date()),
-        "leverage": LEVERAGE, "stop_pct": STOP_PCT, "tp_pct": TP_PCT,
+        "leverage": LEVERAGE,
         "fee_bps": args.fee_bps, "slippage_bps": args.slippage_bps, "max_hold_bars": max_hold_bars,
         "stats": stats,
         # Frontend renders these directly (BacktestView.jsx) -- same series the

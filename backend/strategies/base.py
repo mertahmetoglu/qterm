@@ -23,8 +23,9 @@ class EntrySignal:
     Stop and target can be expressed three ways, because different strategies
     naturally think in different units:
       - `sl` / `tp`      absolute prices (structure-based: "stop below the
-                         10:00 candle's low")
-      - `sl_pct`/`tp_pct` fractions of the fill price ("0.5% stop")
+                         previous swing low")
+      - `sl_pct`/`tp_pct` fractions of the fill price ("0.5% stop", or an
+                         ATR distance converted to a fraction on the signal bar)
       - `tp_r`           target as a multiple of the *actual* risk taken,
                          which can only be resolved once the fill is known
     """

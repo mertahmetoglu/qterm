@@ -1,11 +1,12 @@
 """FX market data from Dukascopy's public datafeed.
 
-Why a second data source at all: the BTC backtest's binding constraint turned
-out to be transaction costs (~16bp round trip) swamping a ~5bp gross edge.
-Testing the same strategy on FX majors attacks exactly that constraint --
-EURUSD round-trip cost on a retail ECN account is roughly 2-4bp, an order of
-magnitude cheaper -- rather than just searching for an asset where the same
-strategy happens to look better.
+Why a second data source at all: on BTCUSDT a round trip costs ~16bp, which is
+a large fraction of what an intraday signal can hope to earn per trade.
+Running the same strategy on FX majors and index CFDs -- EURUSD round-trip cost
+on a retail ECN account is roughly 2-4bp, an order of magnitude cheaper --
+separates "the signal is weak" from "the signal is fine but crypto execution
+costs eat it", rather than just searching for an asset where the same strategy
+happens to look better.
 
 Format (verified empirically against known 2025-01-06 EURUSD prices before
 being trusted, see git history for the probe script):
@@ -20,10 +21,9 @@ being trusted, see git history for the probe script):
   Empty minutes (market closed) come through as all-zero price fields and
   are dropped.
 
-Only weekdays are fetched. FX is closed Friday 22:00 UTC to Sunday 22:00 UTC,
-and the strategies here anchor to a New York session time that never falls in
-the ~2h of Sunday-evening trading, so skipping Sat/Sun costs nothing and saves
-~200 requests per symbol-year.
+Only weekdays are fetched. FX is closed Friday 22:00 UTC to Sunday 22:00 UTC;
+skipping Sat/Sun drops the ~2h of Sunday-evening trading, which is thin and
+gappy anyway, and saves ~200 requests per symbol-year.
 """
 import asyncio
 import logging
@@ -50,8 +50,7 @@ RAW_CACHE = Path(__file__).resolve().parent / "data_cache" / "dukascopy"
 # Dukascopy symbols are the plain 6-letter pair, e.g. EURUSD, USDJPY.
 FX_SYMBOLS = ("EURUSD", "GBPUSD", "USDJPY", "AUDUSD", "USDCHF", "USDCAD", "NZDUSD")
 
-# US index CFDs -- the closest freely available proxies for the ES/NQ futures
-# the Powell strategy is actually written for.
+# US index CFDs -- the closest freely available proxies for ES/NQ futures.
 INDEX_SYMBOLS = {
     "USA500IDXUSD": "S&P 500",
     "USATECHIDXUSD": "Nasdaq 100",
@@ -201,8 +200,7 @@ def aggregate(minute_candles, interval):
     """Roll 1-minute candles up to `interval` (e.g. '5m').
 
     Bars are aligned to the UTC epoch, the same convention Binance uses, so a
-    5m bar always starts at :00/:05/:10... and the New York anchor candle lines
-    up with a real bar boundary.
+    15m bar always starts at :00/:15/:30/:45 on every venue.
     """
     if not minute_candles:
         return []

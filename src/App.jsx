@@ -1,44 +1,33 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useMemo, useState } from 'react'
 import {
-  LineChart, Line, BarChart, Bar,
+  LineChart, Line, BarChart, Bar, Cell,
   XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine
 } from 'recharts'
 import { C, fmt, cc, pct, Panel, ChartTip, Pill } from './ui'
 import BacktestView from './BacktestView'
 import MatrixView from './MatrixView'
+import useTradeCandles from './hooks/useTradeCandles'
+import useSignalStream from './hooks/useSignalStream'
+import usePaperTrades from './hooks/usePaperTrades'
+import useHealth from './hooks/useHealth'
+import useClock from './hooks/useClock'
 
-// Leverage / SL / TP / interval are no longer hardcoded here -- they come
-// from the backend's /ws/signals config payload. backend/signal_engine.py is
-// the single source of truth so the dashboard can't drift from the strategy
-// that's actually running server-side and getting backtested.
+// Two live streams, two owners:
+//   - useTradeCandles: Binance's raw trade stream, aggregated into candles in
+//     the browser. Drives the price chart, volume and last price.
+//   - useSignalStream: the backend's signal engine (backend/signal_engine.py,
+//     the same code the backtester runs). Drives every indicator, the signal
+//     and its ATR stop/target.
+// The two are joined per candle by open time.
 
-function TradeRow({ trade, currentPrice, config }) {
-  // Check if TP or SL hit
-  let status = trade.status
-  let pnlPct = null
+const SYMBOL = 'BTCUSDT'
+const INTERVAL = '15m'
+const WINDOW = 100
 
-  if (status === 'OPEN' && currentPrice) {
-    if (trade.direction === 'LONG') {
-      if (currentPrice >= trade.tp)       status = 'TP ✓'
-      else if (currentPrice <= trade.sl)  status = 'SL ✗'
-    } else {
-      if (currentPrice <= trade.tp)       status = 'TP ✓'
-      else if (currentPrice >= trade.sl)  status = 'SL ✗'
-    }
-  }
+const STATUS_LABEL = { OPEN: 'OPEN', TP: 'TP ✓', SL: 'SL ✗' }
 
-  if (status === 'TP ✓') pnlPct = config.tpPct * config.leverage * 100
-  else if (status === 'SL ✗') pnlPct = -config.stopPct * config.leverage * 100
-  else if (currentPrice) {
-    // unrealized
-    const raw = trade.direction === 'LONG'
-      ? (currentPrice - trade.entry) / trade.entry
-      : (trade.entry - currentPrice) / trade.entry
-    pnlPct = raw * config.leverage * 100
-  }
-
-  const statusColor = status === 'TP ✓' ? C.green : status === 'SL ✗' ? C.red : C.yellow
-
+function TradeRow({ trade, leverage }) {
+  const statusColor = trade.status === 'TP' ? C.green : trade.status === 'SL' ? C.red : C.yellow
   return (
     <div style={{
       marginBottom: 8, padding: '8px 10px',
@@ -50,17 +39,17 @@ function TradeRow({ trade, currentPrice, config }) {
         <span style={{ color: trade.direction === 'LONG' ? C.green : C.red, fontWeight: 700 }}>
           {trade.direction} · {trade.signal}
         </span>
-        <span style={{ color: statusColor, fontWeight: 700 }}>{status}</span>
+        <span style={{ color: statusColor, fontWeight: 700 }}>{STATUS_LABEL[trade.status]}</span>
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2px 10px', color: C.dim }}>
         <span>Giriş: <span style={{ color: C.text }}>${fmt(trade.entry)}</span></span>
-        <span>Güç: <span style={{ color: C.text }}>{trade.strength}%</span></span>
+        <span>ATR: <span style={{ color: C.text }}>${fmt(trade.atr)}</span></span>
         <span style={{ color: C.red }}>SL: ${fmt(trade.sl)}</span>
         <span style={{ color: C.green }}>TP: ${fmt(trade.tp)}</span>
         <span>Zaman: <span style={{ color: C.text }}>{trade.time}</span></span>
-        {pnlPct !== null && (
-          <span>P&L: <span style={{ color: pnlPct >= 0 ? C.green : C.red, fontWeight: 700 }}>
-            {pct(pnlPct)} ({config.leverage}x)
+        {trade.pnlPct !== null && (
+          <span>P&L: <span style={{ color: trade.pnlPct >= 0 ? C.green : C.red, fontWeight: 700 }}>
+            {pct(trade.pnlPct)} ({leverage}x)
           </span></span>
         )}
       </div>
@@ -68,145 +57,44 @@ function TradeRow({ trade, currentPrice, config }) {
   )
 }
 
-export default function App() {
-  const [closes, setCloses]       = useState([])
-  const [ticker, setTicker]       = useState(null)
-  const [connected, setConnected] = useState(false)
-  const [signal, setSignal]       = useState(null)
-  const [config, setConfig]       = useState(null)
-  const [trades, setTrades]       = useState([])
-  const [booting, setBooting]     = useState(true)
-  const [time, setTime]           = useState(new Date())
-  const [view, setView]           = useState('live')
-  const [health, setHealth]       = useState(null)
-  const prevSig                   = useRef(null)
-  const wsBackend                 = useRef(null)
-
-  // ── WebSocket: backend signal stream ────────────────────────────────────────
-  // Market data ingestion, indicator math and signal scoring all run
-  // server-side now (backend/market_data.py + backend/signal_engine.py). The
-  // frontend just renders whatever comes down this socket.
-  const connectBackend = useCallback(() => {
-    if (wsBackend.current) {
-      // Detach onclose before an intentional close -- otherwise closing the
-      // old socket to make way for this new one fires its onclose handler,
-      // which schedules *another* reconnect on top of the one we're making
-      // right now, and the app never settles into a stable connection.
-      wsBackend.current.onclose = null
-      wsBackend.current.close()
-    }
-    const proto = location.protocol === 'https:' ? 'wss' : 'ws'
-    const ws = new WebSocket(`${proto}://${location.host}/ws/signals`)
-    wsBackend.current = ws
-    ws.onclose = () => { setConnected(false); setTimeout(connectBackend, 3000) }
-    ws.onerror = () => ws.close()
-    ws.onmessage = e => {
-      try {
-        const msg = JSON.parse(e.data)
-        setConnected(!!msg.connected)
-        if (msg.type === 'snapshot') {
-          setConfig(msg.config)
-          setTicker(msg.ticker)
-          setSignal(msg.signal)
-          setCloses(msg.closes ?? [])
-          setBooting(false)
-        } else if (msg.type === 'ticker') {
-          setTicker(msg.ticker)
-        } else if (msg.type === 'signal') {
-          setSignal(msg.signal)
-          setCloses(msg.closes ?? [])
-        }
-      } catch {}
-    }
-  }, [])
-
-  useEffect(() => {
-    connectBackend()
-    return () => {
-      if (wsBackend.current) {
-        wsBackend.current.onclose = null
-        wsBackend.current.close()
-      }
-    }
-  }, [connectBackend])
-
-  useEffect(() => {
-    const iv = setInterval(() => setTime(new Date()), 1000)
-    return () => clearInterval(iv)
-  }, [])
-
-  // ── Backend health/latency poll ─────────────────────────────────────────────
-  // Separate from the signal WebSocket on purpose -- this changes slowly and
-  // doesn't belong in the hot stream. Surfaces the reconnect/backfill/latency
-  // work from backend/market_data.py, which is otherwise invisible in the UI.
-  useEffect(() => {
-    const poll = () => fetch('/health').then(r => r.json()).then(setHealth).catch(() => setHealth(null))
-    poll()
-    const iv = setInterval(poll, 7000)
-    return () => clearInterval(iv)
-  }, [])
-
-  // ── Live paper-trade log ────────────────────────────────────────────────────
-  // This is a forward-only simulation for the dashboard, NOT a backtest --
-  // see README for the real, cost-adjusted historical backtest results.
-  useEffect(() => {
-    if (!signal || !config) return
-
-    if (prevSig.current !== signal.signal && signal.actionable) {
-      const entry = signal.price
-      const direction = (signal.signal === 'BUY' || signal.signal === 'STRONG BUY') ? 'LONG' : 'SHORT'
-      const sl = direction === 'LONG' ? entry * (1 - config.stopPct) : entry * (1 + config.stopPct)
-      const tp = direction === 'LONG' ? entry * (1 + config.tpPct)   : entry * (1 - config.tpPct)
-
-      setTrades(prev => [{
-        id: Date.now(),
-        signal: signal.signal,
-        direction,
-        entry,
-        sl,
-        tp,
-        strength: signal.strength,
-        time: new Date().toLocaleTimeString(),
-        status: 'OPEN',
-      }, ...prev].slice(0, 20))
-    }
-    prevSig.current = signal.signal
-  }, [signal, config])
-
-  // ── Chart data ─────────────────────────────────────────────────────────────
-  const WINDOW = 100
-  const start  = Math.max(0, closes.length - WINDOW)
-  const chartData = closes.slice(start).map((v, i) => {
-    const idx = start + i
+function useChartRows(candles, times, signal) {
+  const indexByTime = useMemo(() => new Map(times.map((t, i) => [t, i])), [times])
+  return useMemo(() => candles.slice(-WINDOW).map(c => {
+    const k = indexByTime.get(c.openTime)
+    const at = arr => (k == null || !arr ? null : arr[k] ?? null)
+    const bb = k == null ? null : signal?.bb?.[k]
     return {
-      i, v,
-      e9:  signal?.ema9?.[idx]  ?? null,
-      e21: signal?.ema21?.[idx] ?? null,
-      bbU: signal?.bb?.[idx]?.upper  ?? null,
-      bbL: signal?.bb?.[idx]?.lower  ?? null,
-      bbM: signal?.bb?.[idx]?.middle ?? null,
+      t: c.openTime,
+      v: c.close,
+      vol: c.volume,
+      up: c.close >= c.open,
+      e9: at(signal?.ema9),
+      e21: at(signal?.ema21),
+      bbU: bb?.upper ?? null,
+      bbL: bb?.lower ?? null,
+      bbM: bb?.middle ?? null,
+      rsi: at(signal?.rsiArr),
+      macd: at(signal?.macdLine),
+      sig: at(signal?.signalLine),
+      hist: at(signal?.histogram),
     }
-  })
-  const rsiData  = (signal?.rsiArr ?? []).slice(start).map((v, i) => ({ i, v }))
-  const macdData = closes.slice(start).map((_, i) => {
-    const idx = start + i
-    return { i, macd: signal?.macdLine?.[idx] ?? null, sig: signal?.signalLine?.[idx] ?? null, hist: signal?.histogram?.[idx] ?? null }
-  })
+  }), [candles, indexByTime, signal])
+}
 
-  const price  = ticker?.price ?? closes[closes.length - 1]
+export default function App() {
+  const [view, setView] = useState('live')
+  const now = useClock()
+  const health = useHealth()
+  const market = useTradeCandles({ symbol: SYMBOL, interval: INTERVAL })
+  const { booting, config, ticker, signal, times, connected } = useSignalStream()
+
+  const price = market.lastPrice ?? ticker?.price ?? null
   const change = ticker?.change ?? 0
+  const leverage = config?.leverage ?? 1
+  const { trades, stats } = usePaperTrades(signal, price, leverage)
 
-  // Stats from trades
-  const closedTrades = trades.filter(t => {
-    if (!price) return false
-    if (t.direction === 'LONG') return price >= t.tp || price <= t.sl
-    return price <= t.tp || price >= t.sl
-  })
-  const wins   = trades.filter(t => { if (!price) return false; return t.direction === 'LONG' ? price >= t.tp : price <= t.tp }).length
-  const losses = trades.filter(t => { if (!price) return false; return t.direction === 'LONG' ? price <= t.sl : price >= t.sl }).length
-  const totalPnl = config
-    ? wins * config.tpPct * config.leverage * 100 - losses * config.stopPct * config.leverage * 100
-    : 0
+  const rows = useChartRows(market.candles, times, signal)
+  const current = market.candles[market.candles.length - 1]
 
   return (
     <div style={{ background: C.bg, minHeight: '100vh', fontFamily: "'JetBrains Mono','Fira Code',monospace", color: C.text, padding: 16, boxSizing: 'border-box' }}>
@@ -224,10 +112,13 @@ export default function App() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <span style={{ fontFamily: "'Syne',sans-serif", fontSize: 20, fontWeight: 800, color: C.green, letterSpacing: -1 }}>QTERM</span>
           <span style={{ color: C.muted, fontSize: 10, letterSpacing: 2 }}>
-            BTC/USD{config ? ` · ${config.interval.toUpperCase()} · ${config.leverage}x` : ''}
+            BTC/USDT · {INTERVAL.toUpperCase()} · {leverage}x
           </span>
           <Pill color={connected ? C.green : C.red} blink={connected}>
-            {connected ? '● LIVE' : '○ BAĞLANIYOR...'}
+            {connected ? '● SİNYAL' : '○ SİNYAL...'}
+          </Pill>
+          <Pill color={market.status === 'open' ? C.green : C.red} blink={market.status === 'open'}>
+            {market.status === 'open' ? '● TRADES' : '○ TRADES...'}
           </Pill>
           {(() => {
             const avg = health?.latency_ms?.avg_ms
@@ -253,7 +144,7 @@ export default function App() {
             <span style={{ fontSize: 22, fontWeight: 700 }}>{price ? '$' + fmt(price) : '—'}</span>
             {ticker && <span style={{ marginLeft: 10, fontSize: 13, fontWeight: 700, color: cc(change) }}>{change >= 0 ? '▲' : '▼'} {Math.abs(change).toFixed(2)}%</span>}
           </div>
-          <span style={{ color: C.dim, fontSize: 11 }}>{time.toLocaleTimeString()}</span>
+          <span style={{ color: C.dim, fontSize: 11 }}>{now.toLocaleTimeString()}</span>
         </div>
       </div>
 
@@ -269,68 +160,84 @@ export default function App() {
           {/* LEFT */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
 
-            <Panel title={`BTC/USD — ${config.interval} · EMA(9,21) · Bollinger(20,2)`}>
-              {closes.length < 50 ? (
-                <div style={{ height: 220, display: 'flex', alignItems: 'center', justifyContent: 'center', color: C.dim, fontSize: 12 }}>
-                  Sinyal hesaplanıyor... ({closes.length}/50)
+            <Panel title={`BTC/USDT — ${INTERVAL} · trade stream → mum · EMA(9,21) · Bollinger(20,2)`}>
+              {rows.length === 0 ? (
+                <div style={{ height: 260, display: 'flex', alignItems: 'center', justifyContent: 'center', color: C.dim, fontSize: 12 }}>
+                  {market.error ? `Mum geçmişi alınamadı (${market.error})` : 'Trade stream\'e bağlanılıyor...'}
                 </div>
               ) : (
-                <ResponsiveContainer width="100%" height={220}>
-                  <LineChart data={chartData}>
-                    <XAxis dataKey="i" hide />
-                    <YAxis domain={['auto','auto']} width={85} tick={{ fill: C.dim, fontSize: 10 }}
-                      tickFormatter={v => '$' + v.toLocaleString(undefined, { maximumFractionDigits: 0 })} />
-                    <Tooltip content={<ChartTip />} />
-                    <Line type="monotone" dataKey="bbU" stroke={C.muted}   dot={false} strokeWidth={1} strokeDasharray="3 3" />
-                    <Line type="monotone" dataKey="bbL" stroke={C.muted}   dot={false} strokeWidth={1} strokeDasharray="3 3" />
-                    <Line type="monotone" dataKey="bbM" stroke="#1a3050"   dot={false} strokeWidth={1} />
-                    <Line type="monotone" dataKey="e9"  stroke={C.blue}    dot={false} strokeWidth={1.5} />
-                    <Line type="monotone" dataKey="e21" stroke={C.orange}  dot={false} strokeWidth={1.5} />
-                    <Line type="monotone" dataKey="v"   stroke={signal ? signal.color : C.text} dot={false} strokeWidth={2} />
-                  </LineChart>
-                </ResponsiveContainer>
+                <>
+                  <ResponsiveContainer width="100%" height={220}>
+                    <LineChart data={rows} syncId="live">
+                      <XAxis dataKey="t" hide />
+                      <YAxis domain={['auto', 'auto']} width={85} tick={{ fill: C.dim, fontSize: 10 }}
+                        tickFormatter={v => '$' + v.toLocaleString(undefined, { maximumFractionDigits: 0 })} />
+                      <Tooltip content={<ChartTip />} />
+                      <Line type="monotone" dataKey="bbU" stroke={C.muted}  dot={false} strokeWidth={1} strokeDasharray="3 3" isAnimationActive={false} />
+                      <Line type="monotone" dataKey="bbL" stroke={C.muted}  dot={false} strokeWidth={1} strokeDasharray="3 3" isAnimationActive={false} />
+                      <Line type="monotone" dataKey="bbM" stroke="#1a3050"  dot={false} strokeWidth={1} isAnimationActive={false} />
+                      <Line type="monotone" dataKey="e9"  stroke={C.blue}   dot={false} strokeWidth={1.5} isAnimationActive={false} />
+                      <Line type="monotone" dataKey="e21" stroke={C.orange} dot={false} strokeWidth={1.5} isAnimationActive={false} />
+                      <Line type="monotone" dataKey="v"   stroke={signal ? signal.color : C.text} dot={false} strokeWidth={2} isAnimationActive={false} />
+                    </LineChart>
+                  </ResponsiveContainer>
+                  <ResponsiveContainer width="100%" height={40}>
+                    <BarChart data={rows} syncId="live">
+                      <XAxis dataKey="t" hide />
+                      <YAxis width={85} tick={false} axisLine={false} />
+                      <Bar dataKey="vol" isAnimationActive={false}>
+                        {rows.map(r => <Cell key={r.t} fill={r.up ? C.green : C.red} fillOpacity={0.45} />)}
+                      </Bar>
+                    </BarChart>
+                  </ResponsiveContainer>
+                </>
               )}
-              <div style={{ display: 'flex', gap: 16, marginTop: 6, fontSize: 10 }}>
-                {[['─ Fiyat', signal?.color ?? C.text], ['─ EMA9', C.blue], ['─ EMA21', C.orange], ['- - BB', C.muted]].map(([l, col]) => (
+              <div style={{ display: 'flex', gap: 16, marginTop: 6, fontSize: 10, flexWrap: 'wrap' }}>
+                {[['─ Fiyat', signal?.color ?? C.text], ['─ EMA9', C.blue], ['─ EMA21', C.orange], ['- - BB', C.muted], ['▮ Hacim', C.dim]].map(([l, col]) => (
                   <span key={l} style={{ color: col }}>{l}</span>
                 ))}
+                {current && (
+                  <span style={{ color: C.dim, marginLeft: 'auto' }}>
+                    Açık mum: <span style={{ color: C.text }}>{current.trades.toLocaleString()}</span> işlem ·{' '}
+                    <span style={{ color: C.text }}>{current.volume.toFixed(2)}</span> BTC
+                    {current.partial && ' · REST snapshot + canlı'}
+                  </span>
+                )}
               </div>
             </Panel>
 
             <Panel title={`RSI (14)${signal ? ' · ' + signal.rsi.toFixed(1) : ''}`}>
               <ResponsiveContainer width="100%" height={75}>
-                <LineChart data={rsiData}>
-                  <XAxis dataKey="i" hide />
+                <LineChart data={rows} syncId="live">
+                  <XAxis dataKey="t" hide />
                   <YAxis domain={[0, 100]} width={28} tick={{ fill: C.dim, fontSize: 9 }} />
                   <Tooltip content={<ChartTip />} />
                   <ReferenceLine y={70} stroke={C.red}   strokeDasharray="3 3" />
                   <ReferenceLine y={30} stroke={C.green} strokeDasharray="3 3" />
                   <ReferenceLine y={50} stroke={C.muted} strokeDasharray="1 3" />
-                  <Line type="monotone" dataKey="v" stroke={C.purple} dot={false} strokeWidth={1.5} />
+                  <Line type="monotone" dataKey="rsi" stroke={C.purple} dot={false} strokeWidth={1.5} isAnimationActive={false} />
                 </LineChart>
               </ResponsiveContainer>
             </Panel>
 
             <Panel title="MACD (12, 26, 9)">
               <ResponsiveContainer width="100%" height={65}>
-                <BarChart data={macdData}>
-                  <XAxis dataKey="i" hide />
+                <BarChart data={rows} syncId="live">
+                  <XAxis dataKey="t" hide />
                   <YAxis width={40} tick={{ fill: C.dim, fontSize: 9 }} tickFormatter={v => v.toFixed(0)} />
                   <ReferenceLine y={0} stroke={C.border} />
-                  <Bar dataKey="hist" isAnimationActive={false}
-                    shape={(props) => {
-                      const v = props.hist ?? 0
-                      return <rect x={props.x} y={props.y} width={props.width} height={props.height} fill={v >= 0 ? C.green : C.red} opacity={0.7} />
-                    }} />
+                  <Bar dataKey="hist" isAnimationActive={false}>
+                    {rows.map(r => <Cell key={r.t} fill={(r.hist ?? 0) >= 0 ? C.green : C.red} fillOpacity={0.7} />)}
+                  </Bar>
                 </BarChart>
               </ResponsiveContainer>
               <ResponsiveContainer width="100%" height={50}>
-                <LineChart data={macdData}>
-                  <XAxis dataKey="i" hide />
+                <LineChart data={rows} syncId="live">
+                  <XAxis dataKey="t" hide />
                   <YAxis width={40} tick={{ fill: C.dim, fontSize: 9 }} tickFormatter={v => v.toFixed(1)} />
                   <ReferenceLine y={0} stroke={C.border} />
-                  <Line type="monotone" dataKey="macd" stroke={C.blue}   dot={false} strokeWidth={1.5} />
-                  <Line type="monotone" dataKey="sig"  stroke={C.orange} dot={false} strokeWidth={1} strokeDasharray="4 2" />
+                  <Line type="monotone" dataKey="macd" stroke={C.blue}   dot={false} strokeWidth={1.5} isAnimationActive={false} />
+                  <Line type="monotone" dataKey="sig"  stroke={C.orange} dot={false} strokeWidth={1} strokeDasharray="4 2" isAnimationActive={false} />
                 </LineChart>
               </ResponsiveContainer>
               <div style={{ display: 'flex', gap: 16, fontSize: 10 }}>
@@ -351,13 +258,24 @@ export default function App() {
                 borderRadius: 8, padding: '14px', textAlign: 'center',
                 animation: 'pulse 2s infinite',
               }}>
-                <div style={{ color: C.dim, fontSize: 10, letterSpacing: 2, marginBottom: 6 }}>ALGO SİNYALİ · 15M</div>
+                <div style={{ color: C.dim, fontSize: 10, letterSpacing: 2, marginBottom: 6 }}>ALGO SİNYALİ · {INTERVAL.toUpperCase()}</div>
                 <div style={{ fontSize: 28, fontWeight: 800, color: signal.color }}>{signal.signal}</div>
-                <div style={{ margin: '10px 0 4px', color: C.dim, fontSize: 10 }}>Confluence Gücü</div>
+                <div style={{ margin: '10px 0 4px', color: C.dim, fontSize: 10 }}>Confluence Skoru {signal.total > 0 ? '+' : ''}{signal.total} / ±8</div>
                 <div style={{ background: C.muted, borderRadius: 3, height: 6, marginBottom: 4 }}>
                   <div style={{ width: signal.strength + '%', height: '100%', borderRadius: 3, background: signal.color, transition: 'width 0.5s' }} />
                 </div>
                 <div style={{ color: signal.color, fontWeight: 700, fontSize: 14 }}>{signal.strength}%</div>
+                {signal.atr != null && (
+                  <div style={{ marginTop: 8, fontSize: 10, color: C.dim }}>
+                    ATR({config.atrPeriod}): <span style={{ color: C.text }}>${fmt(signal.atr)}</span>
+                    {signal.exits && (
+                      <>
+                        {' · '}<span style={{ color: C.red }}>SL ${fmt(signal.exits.sl)}</span>
+                        {' · '}<span style={{ color: C.green }}>TP ${fmt(signal.exits.tp)}</span>
+                      </>
+                    )}
+                  </div>
+                )}
                 <div style={{ marginTop: 6, color: C.dim, fontSize: 10 }}>
                   {signal.actionable
                     ? '⚡ İŞLEM KOŞULU SAĞLANDI'
@@ -366,18 +284,18 @@ export default function App() {
               </div>
             ) : (
               <div style={{ background: C.panel, border: `1px solid ${C.border}`, borderRadius: 8, padding: 20, textAlign: 'center' }}>
-                <div style={{ color: C.dim, fontSize: 12 }}>Hesaplanıyor... {closes.length}/50</div>
+                <div style={{ color: C.dim, fontSize: 12 }}>Hesaplanıyor... {times.length}/50</div>
               </div>
             )}
 
             {/* Indicator breakdown */}
             {signal && (
-              <Panel title="İndikatör Skoru">
+              <Panel title="İndikatör Skoru (her biri -2 … +2)">
                 {[
                   { name: 'EMA (9/21)', score: signal.scores.ema, val: `${fmt(signal.e9)} / ${fmt(signal.e21)}` },
                   { name: 'RSI (14)',   score: signal.scores.rsi, val: signal.rsi.toFixed(1) },
                   { name: 'MACD',       score: signal.scores.macd, val: signal.macdHist.toFixed(2) },
-                  { name: 'Bollinger',  score: signal.scores.bb, val: `$${fmt(price)}` },
+                  { name: 'Bollinger',  score: signal.scores.bb, val: `$${fmt(signal.price)}` },
                 ].map(ind => {
                   const col = ind.score > 0 ? C.green : ind.score < 0 ? C.red : C.yellow
                   const lbl = ind.score >= 2 ? '▲▲' : ind.score === 1 ? '▲' : ind.score <= -2 ? '▼▼' : ind.score === -1 ? '▼' : '◆'
@@ -394,13 +312,13 @@ export default function App() {
             )}
 
             {/* Trade stats */}
-            <Panel title={`Canlı Paper-Trade · ${config.leverage}x (backtest değil)`}>
+            <Panel title={`Canlı Paper-Trade · ${leverage}x (backtest değil)`}>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 8 }}>
                 {[
-                  { label: 'Toplam', value: trades.length, color: C.text },
-                  { label: 'Win', value: wins, color: C.green },
-                  { label: 'Loss', value: losses, color: C.red },
-                  { label: 'Toplam P&L', value: pct(totalPnl), color: totalPnl >= 0 ? C.green : C.red },
+                  { label: 'Toplam', value: stats.total, color: C.text },
+                  { label: 'Win', value: stats.wins, color: C.green },
+                  { label: 'Loss', value: stats.losses, color: C.red },
+                  { label: 'Gerçekleşen P&L', value: pct(stats.realizedPct), color: stats.realizedPct >= 0 ? C.green : C.red },
                 ].map(m => (
                   <div key={m.label} style={{ background: '#0a1520', borderRadius: 4, padding: '6px 8px' }}>
                     <div style={{ color: C.dim, fontSize: 9 }}>{m.label}</div>
@@ -409,10 +327,10 @@ export default function App() {
                 ))}
               </div>
               <div style={{ fontSize: 9, color: C.muted, padding: '4px 0' }}>
-                SL: -{(config.stopPct * config.leverage * 100).toFixed(1)}% · TP: +{(config.tpPct * config.leverage * 100).toFixed(1)}% · R/R 1:3
+                SL: {config.atrStopMult}×ATR({config.atrPeriod}) · TP: {config.rewardRisk}×risk · R/R 1:{config.rewardRisk}
               </div>
               <div style={{ fontSize: 9, color: C.dim, padding: '2px 0 0' }}>
-                Canlı simülasyon, sayfa açıldığından beri. Geçmiş performans için README'deki backtest sonuçlarına bakın.
+                Canlı simülasyon, sayfa açıldığından beri. Geçmiş performans için Backtest sekmesine bakın.
               </div>
             </Panel>
 
@@ -424,7 +342,7 @@ export default function App() {
                     STRONG BUY/SELL sinyali bekleniyor...
                   </div>
                 ) : trades.map(t => (
-                  <TradeRow key={t.id} trade={t} currentPrice={price} config={config} />
+                  <TradeRow key={t.id} trade={t} leverage={leverage} />
                 ))}
               </div>
             </Panel>

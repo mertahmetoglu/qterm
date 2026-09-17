@@ -97,6 +97,12 @@ export default function BacktestView() {
           <span>{data.leverage}x kaldıraç</span>
           <span>{data.fee_bps}bp fee + {data.slippage_bps}bp slippage / işlem</span>
           <span style={{ color: C.dim }}>max hold: {data.max_hold_bars} mum</span>
+          {data.strategy?.params?.atr_stop_mult != null && (
+            <span>
+              SL {data.strategy.params.atr_stop_mult}×ATR({data.strategy.params.atr_period}) ·
+              TP {data.strategy.params.reward_risk}R
+            </span>
+          )}
         </div>
       </Panel>
 
@@ -113,7 +119,7 @@ export default function BacktestView() {
         </ResponsiveContainer>
         <div style={{ display: 'flex', gap: 16, marginTop: 6, fontSize: 10 }}>
           <span style={{ color: C.green }}>─ Strateji ({data.leverage}x, net)</span>
-          <span style={{ color: C.dim }}>- - Buy &amp; Hold BTC</span>
+          <span style={{ color: C.dim }}>- - Buy &amp; Hold {data.symbol}</span>
         </div>
       </Panel>
 
@@ -150,24 +156,6 @@ export default function BacktestView() {
             4 indikatörün skorlama tasarımıyla pratikte ulaşılabilen maksimum 50'ydi. Backtest 2 yılda 0 işlem
             üretince fark edildi. Eşik, gerçekten ulaşılabilir olana (<code>STRONG BUY/SELL</code>, strength ≥ 50)
             hizalanarak düzeltildi -- hem canlı hem backtest artık aynı, paylaşılan eşiği kullanıyor.
-          </div>
-        </Panel>
-      )}
-
-      {data.strategy?.name === 'powell_1000' && (
-        <Panel title="Backtest'in Yakaladığı Şey">
-          <div style={{ fontSize: 11, color: C.text, lineHeight: 1.5 }}>
-            Strateji 1R riske karşı 2R hedefliyor, yani maliyetsiz başabaş için %33.3 win rate gerekiyor --
-            ve sonuçlanan işlemlerde %34.7 tutturuyor (85 TP / 160 SL). Yani <strong>brütte edge var</strong>:
-            maliyetsiz kontrol koşusunda Sharpe +0.58, Profit Factor 1.15, getiri +%15.1.
-            Ama işlem başına brüt edge ~<strong>5.2bp</strong>, gidiş-dönüş maliyet ~<strong>16bp</strong> --
-            maliyet edge'in üç katı, ve net sonuç bu yüzden negatif.
-            <br /><br />
-            <span style={{ color: C.dim }}>
-              Dürüst okuma: brüt edge de istatistiksel olarak anlamlı değil (2 yılda Sharpe 0.58 → t ≈ 0.83).
-              "Çalışıyor ama ucuz execution lazım" değil; "bu pencerede brütte sıfırdan ayırt edilemiyor,
-              nette kesin negatif."
-            </span>
           </div>
         </Panel>
       )}

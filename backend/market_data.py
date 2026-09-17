@@ -86,13 +86,23 @@ async def fetch_klines_range(symbol, interval, start_time_ms, end_time_ms, clien
 
 
 class MarketDataFeed:
-    """Owns the live closes buffer + latest signal/ticker, streams Binance
+    """Owns the live candle buffer + latest signal/ticker, streams Binance
     ticker+kline over one combined WebSocket, and fans updates out to
-    subscriber queues (one per connected frontend client)."""
+    subscriber queues (one per connected frontend client).
+
+    Signals are computed from Binance's own klines -- the same candles the
+    backtest downloads over REST -- so a live signal and a backtested one are
+    built from identical bars. The dashboard's price chart is built separately,
+    in the browser, from the raw trade stream (src/hooks/useTradeCandles.js),
+    and joins these indicator series onto its candles by open time.
+    """
 
     def __init__(self, symbol="BTCUSDT", interval="15m"):
         self.symbol = symbol
         self.interval = interval
+        self.times = deque(maxlen=BUFFER_SIZE)
+        self.highs = deque(maxlen=BUFFER_SIZE)
+        self.lows = deque(maxlen=BUFFER_SIZE)
         self.closes = deque(maxlen=BUFFER_SIZE)
         self.last_open_time = None
         self.ticker = None
@@ -122,15 +132,37 @@ class MarketDataFeed:
         async with httpx.AsyncClient(timeout=20.0) as client:
             klines = await fetch_klines(client, self.symbol, self.interval, limit=BUFFER_SIZE)
         for k in klines:
-            self.closes.append(k["close"])
-        if klines:
-            self.last_open_time = klines[-1]["open_time"]
+            self._upsert_candle(k["open_time"], k["high"], k["low"], k["close"])
         self._recompute_signal()
         logger.info("bootstrapped %d candles (%s %s)", len(self.closes), self.symbol, self.interval)
 
+    def _upsert_candle(self, open_time, high, low, close):
+        """Update the candle in place if it's the one already at the end of the
+        buffer, append it if it's newer, ignore it if it's older.
+
+        Keyed by open time rather than by the kline's closed flag: REST
+        bootstrap already includes the still-forming candle, so appending on
+        `x == true` would leave that candle in the buffer twice until the next
+        update overwrote the wrong slot.
+        """
+        if self.last_open_time is not None and open_time < self.last_open_time:
+            return False
+        if open_time == self.last_open_time:
+            self.highs[-1], self.lows[-1], self.closes[-1] = high, low, close
+            return False
+        self.times.append(open_time)
+        self.highs.append(high)
+        self.lows.append(low)
+        self.closes.append(close)
+        self.last_open_time = open_time
+        return True
+
     def _recompute_signal(self):
         if len(self.closes) >= 50:
-            self.signal = compute_signal(list(self.closes))
+            self.signal = compute_signal(list(self.closes), list(self.highs), list(self.lows))
+
+    def series(self):
+        return {"times": list(self.times), "closes": list(self.closes)}
 
     async def _backfill_gap(self):
         """After a (re)connect, check whether real time has moved further
@@ -149,9 +181,7 @@ class MarketDataFeed:
                                          start_time=expected_open, end_time=now_ms)
         recovered = 0
         for k in missed:
-            if k["open_time"] > self.last_open_time:
-                self.closes.append(k["close"])
-                self.last_open_time = k["open_time"]
+            if self._upsert_candle(k["open_time"], k["high"], k["low"], k["close"]):
                 recovered += 1
         if recovered:
             logger.warning("reconnect gap backfilled: %d missed candle(s) recovered via REST", recovered)
@@ -207,19 +237,14 @@ class MarketDataFeed:
             k = data.get("k")
             if not k:
                 return
-            close = float(k["c"])
-            if k["x"]:
-                self.closes.append(close)
-                self.last_open_time = k["t"]
-            elif self.closes:
-                self.closes[-1] = close
-            else:
-                self.closes.append(close)
+            self._upsert_candle(k["t"], float(k["h"]), float(k["l"]), float(k["c"]))
             self._recompute_signal()
             now = time.monotonic()
-            if now - self._last_signal_broadcast >= BROADCAST_MIN_INTERVAL_S:
+            # A candle close is always published, whatever the throttle says:
+            # it's the update the next bar's signal is built on.
+            if k["x"] or now - self._last_signal_broadcast >= BROADCAST_MIN_INTERVAL_S:
                 self._last_signal_broadcast = now
-                self._publish({"type": "signal", "signal": self.signal, "closes": list(self.closes)})
+                self._publish({"type": "signal", "signal": self.signal, **self.series()})
 
     def latency_stats(self):
         if not self.latencies_ms:

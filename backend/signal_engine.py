@@ -17,8 +17,17 @@ LEVERAGE = 1       # was 10 -- at 10x, a negative-edge strategy's compounding
                    # losses become "wipe the account" instead of "slowly bleed";
                    # leverage doesn't change whether the edge is positive or
                    # negative, only how violently that edge compounds. See README.
-STOP_PCT = 0.005   # 0.5% price move = 0.5% capital loss at 1x
-TP_PCT = 0.015     # 1.5% price move = 1.5% capital gain at 1x (1:3 R/R)
+
+# Exits are sized off realised volatility, not a fixed price offset: the stop
+# sits ATR_STOP_MULT x ATR(ATR_PERIOD) from entry and the target REWARD_RISK
+# times that distance on the other side. The multiplier was fixed before any
+# backtest ran, by matching the old fixed 0.5% stop on average: BTCUSDT 15m
+# ATR(14) averaged 0.32% of price over 2024-07 -> 2026-07, so 1.5x ATR puts the
+# mean stop at ~0.48%. The comparison with the old rule is therefore fixed vs
+# volatility-scaled, not tighter vs wider.
+ATR_PERIOD = 14
+ATR_STOP_MULT = 1.5
+REWARD_RISK = 3
 
 # A trade is "actionable" only on STRONG BUY/STRONG SELL (|total| >= 4, i.e.
 # strength >= 50). This used to be gated at strength >= 60, which is
@@ -118,6 +127,54 @@ def calc_bollinger(prices, period=20, mult=2):
     return result
 
 
+def calc_atr(highs, lows, closes, period=ATR_PERIOD):
+    """Wilder's Average True Range.
+
+    True range on bar i is the largest of high-low, |high - prev close| and
+    |low - prev close|, so an overnight/weekend gap counts as range. The first
+    bar has no previous close and uses high-low. ATR is seeded with the simple
+    mean of the first `period` true ranges, then smoothed with Wilder's
+    recursion (alpha = 1/period) -- the same seeding convention as calc_rsi.
+    """
+    n = len(closes)
+    result = [None] * n
+    if n < period:
+        return result
+    tr = [highs[0] - lows[0]]
+    for i in range(1, n):
+        pc = closes[i - 1]
+        tr.append(max(highs[i] - lows[i], abs(highs[i] - pc), abs(lows[i] - pc)))
+    a = sum(tr[:period]) / period
+    result[period - 1] = a
+    for i in range(period, n):
+        a = (a * (period - 1) + tr[i]) / period
+        result[i] = a
+    return result
+
+
+def signal_direction(signal):
+    if signal in ("BUY", "STRONG BUY"):
+        return "LONG"
+    if signal in ("SELL", "STRONG SELL"):
+        return "SHORT"
+    return None
+
+
+def exit_levels(direction, entry, atr):
+    """Stop and target for a trade entered at `entry`, generated with the
+    signal. Risk is ATR_STOP_MULT x ATR; reward is REWARD_RISK x risk."""
+    risk = ATR_STOP_MULT * atr
+    sign = 1 if direction == "LONG" else -1
+    return {
+        "direction": direction,
+        "entry": entry,
+        "atr": atr,
+        "risk": risk,
+        "sl": entry - sign * risk,
+        "tp": entry + sign * REWARD_RISK * risk,
+    }
+
+
 def _score(e9, e9p, e21, e21p, r, m, mp, sig, sigp, h, price, bbu, bbl, bbm):
     """The confluence-scoring rules, factored out so compute_signal (live,
     single point) and compute_signal_series (backtest, every point) can
@@ -182,8 +239,13 @@ def _score(e9, e9p, e21, e21p, r, m, mp, sig, sigp, h, price, bbu, bbl, bbm):
     return scores, total, strength, signal, color
 
 
-def compute_signal(closes):
-    """Live use: the signal for the *last* point in `closes`."""
+def compute_signal(closes, highs=None, lows=None):
+    """Live use: the signal for the *last* point in `closes`.
+
+    With highs/lows the result also carries ATR and, for a directional signal,
+    the stop/target it would trade with. Without them (the parity check, which
+    predates ATR) the confluence fields are unchanged and `exits` is None.
+    """
     if len(closes) < 50:
         return None
 
@@ -208,6 +270,14 @@ def compute_signal(closes):
 
     scores, total, strength, signal, color = _score(e9, e9p, e21, e21p, r, m, mp, sig, sigp, h, price, bbu, bbl, bbm)
 
+    atr = None
+    exits = None
+    if highs is not None and lows is not None:
+        atr = calc_atr(highs, lows, closes)[n]
+        direction = signal_direction(signal)
+        if atr is not None and direction is not None:
+            exits = exit_levels(direction, price, atr)
+
     return {
         "signal": signal,
         "color": color,
@@ -216,6 +286,8 @@ def compute_signal(closes):
         "actionable": is_actionable(signal, strength),
         "scores": scores,
         "price": price,
+        "atr": atr,
+        "exits": exits,
         "e9": e9,
         "e21": e21,
         "rsi": r,
@@ -233,7 +305,7 @@ def compute_signal(closes):
     }
 
 
-def compute_signal_series(closes):
+def compute_signal_series(closes, highs=None, lows=None):
     """Backtest use: the same scoring for *every* point in `closes`, computed
     in O(n) (indicator arrays built once) instead of O(n^2) (recomputing
     compute_signal from scratch at every bar). Returns a list the same
@@ -244,6 +316,7 @@ def compute_signal_series(closes):
     rsi_arr = calc_rsi(closes, 14)
     macd_line, signal_line, histogram = calc_macd(closes)
     bb = calc_bollinger(closes, 20)
+    atr_arr = calc_atr(highs, lows, closes) if highs is not None and lows is not None else [None] * n
 
     out = [None] * n
     for i in range(1, n):
@@ -262,6 +335,6 @@ def compute_signal_series(closes):
         out[i] = {
             "signal": signal, "strength": strength, "total": total,
             "actionable": is_actionable(signal, strength),
-            "scores": scores, "price": closes[i],
+            "scores": scores, "price": closes[i], "atr": atr_arr[i],
         }
     return out

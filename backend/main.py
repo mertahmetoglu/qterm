@@ -1,7 +1,8 @@
-"""FastAPI app: owns live market data + the signal engine, streams processed
-signals to the React dashboard over WebSocket. The frontend no longer talks
-to Binance directly or computes indicators itself -- it just renders whatever
-this service sends.
+"""FastAPI app: owns the signal engine, streams processed signals to the React
+dashboard over WebSocket. The frontend never computes an indicator or a
+signal -- those come from here, so the dashboard shows exactly the strategy
+the backtester runs. What the frontend does own is the price display: it
+builds its own candles from Binance's raw trade stream.
 """
 import asyncio
 import json
@@ -13,7 +14,7 @@ from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 
 from market_data import MarketDataFeed
-from signal_engine import LEVERAGE, STOP_PCT, TP_PCT
+from signal_engine import ATR_PERIOD, ATR_STOP_MULT, LEVERAGE, REWARD_RISK
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)s %(levelname)s %(message)s")
 
@@ -27,7 +28,10 @@ feed = MarketDataFeed(symbol=SYMBOL, interval=INTERVAL)
 
 
 def _config():
-    return {"symbol": SYMBOL, "interval": INTERVAL, "leverage": LEVERAGE, "stopPct": STOP_PCT, "tpPct": TP_PCT}
+    return {
+        "symbol": SYMBOL, "interval": INTERVAL, "leverage": LEVERAGE,
+        "atrPeriod": ATR_PERIOD, "atrStopMult": ATR_STOP_MULT, "rewardRisk": REWARD_RISK,
+    }
 
 
 @asynccontextmanager
@@ -65,8 +69,8 @@ def config():
 
 @app.get("/api/matrix")
 def matrix_result():
-    """Every strategy/market combination this project has run, as produced by
-    run_matrix.py. Served as-is; the dashboard renders it read-only."""
+    """The confluence strategy across every market run_matrix.py covers.
+    Served as-is; the dashboard renders it read-only."""
     if not MATRIX_PATH.exists():
         raise HTTPException(status_code=404, detail="No matrix yet -- run backend/run_matrix.py first.")
     return json.loads(MATRIX_PATH.read_text())
@@ -91,7 +95,7 @@ async def ws_signals(websocket: WebSocket):
             "connected": feed.connected,
             "ticker": feed.ticker,
             "signal": feed.signal,
-            "closes": list(feed.closes),
+            **feed.series(),
             "config": _config(),
         })
         while True:

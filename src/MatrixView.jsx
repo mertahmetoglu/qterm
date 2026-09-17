@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react'
 import { C, Panel } from './ui'
 
-// Read-only render of reports/matrix.json (produced by backend/run_matrix.py).
-// The point of this view is that the project's claim is "these strategies were
-// tested and here is everything that came back", so the whole result set has to
-// be visible in the app -- not just whichever run happened to be last.
+// Read-only render of reports/matrix.json (produced by backend/run_matrix.py):
+// the confluence strategy, unchanged, on every market it was run on. The whole
+// result set is shown -- not just the market that happened to look best.
 
 const SYMBOL_LABELS = {
   USATECHIDXUSD: 'Nasdaq 100',
@@ -72,15 +71,17 @@ export default function MatrixView() {
 
   const netNegative = data.rows.filter(r => r.net.total_return < 0).length
   const grossPositive = data.rows.filter(r => r.gross.profit_factor > 1).length
+  const beatBuyHold = data.rows.filter(r => r.net.total_return > r.net.buy_hold_return).length
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-      <Panel title={`Test Matrisi · ${data.window.start} → ${data.window.end}`}>
+      <Panel title={`Test Matrisi · confluence · ${data.window.start} → ${data.window.end}`}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 8, marginBottom: 10 }}>
           {[
             { label: 'Toplam koşu', value: data.rows.length, color: C.text },
             { label: 'Net negatif', value: `${netNegative} / ${data.rows.length}`, color: C.red },
             { label: 'Brüt PF > 1', value: `${grossPositive} / ${data.rows.length}`, color: C.yellow },
+            { label: 'Buy & Hold\'u geçen', value: `${beatBuyHold} / ${data.rows.length}`, color: C.yellow },
             { label: 'Kaldıraç', value: `${data.leverage}x`, color: C.text },
           ].map(m => (
             <div key={m.label} style={{ background: '#0a1520', borderRadius: 4, padding: '8px 10px' }}>
@@ -90,8 +91,9 @@ export default function MatrixView() {
           ))}
         </div>
         <div style={{ fontSize: 10, color: C.dim, lineHeight: 1.6 }}>
-          Her koşu iki kez: bir kez o borsanın gerçekçi maliyetiyle, bir kez sıfır maliyetle. İkisinin farkı,
-          "sinyalde bir şey yok" ile "bir şey var ama maliyet yiyor" ayrımını verir — sonuçları çok farklı iki durum.
+          Aynı kurallar, her piyasada: 15m, STRONG BUY/SELL girişi, 1.5×ATR(14) stop, 3R hedef. ATR'ye göre
+          ölçeklenen çıkışlar bu karşılaştırmayı anlamlı kılıyor — sabit %0.5 stop EURUSD'de günlerce, SOL'da
+          dakikalar demek. Her koşu iki kez: bir kez o borsanın gerçekçi maliyetiyle, bir kez sıfır maliyetle.
           Gidiş-dönüş maliyet varsayımı borsaya göre değişiyor (kripto 16bp, FX 1.7bp, endeks 0.8bp).
         </div>
       </Panel>
@@ -99,10 +101,9 @@ export default function MatrixView() {
       {groups.map(g => (
         <Panel key={g.name} title={g.name}>
           <div style={{ overflowX: 'auto' }}>
-            <table style={{ borderCollapse: 'collapse', width: '100%', minWidth: 820 }}>
+            <table style={{ borderCollapse: 'collapse', width: '100%', minWidth: 760 }}>
               <thead>
                 <tr>
-                  <Th align="left">Strateji</Th>
                   <Th align="left">Sembol</Th>
                   <Th>TF</Th>
                   <Th>Maliyet</Th>
@@ -119,8 +120,7 @@ export default function MatrixView() {
               <tbody>
                 {g.rows.map((r, i) => (
                   <tr key={i} style={{ background: i % 2 ? '#0a151f55' : 'transparent' }}>
-                    <Td align="left" color={C.text} bold>{r.strategy}</Td>
-                    <Td align="left" color={C.dim}>{SYMBOL_LABELS[r.symbol] ?? r.symbol}</Td>
+                    <Td align="left" color={C.text} bold>{SYMBOL_LABELS[r.symbol] ?? r.symbol}</Td>
                     <Td color={C.dim}>{r.interval}</Td>
                     <Td color={C.dim}>{num(r.costs.roundtrip_bps, 1)}bp</Td>
                     <Td>{r.net.n_trades}</Td>
@@ -141,14 +141,18 @@ export default function MatrixView() {
 
       <Panel title="Okuma">
         <div style={{ fontSize: 11, color: C.text, lineHeight: 1.6 }}>
-          <strong>15'te 15 net negatif.</strong> Hiçbir konfigürasyon, hiçbir piyasada, hiçbir maliyet
-          varsayımında pozitif net sonuç vermedi.
+          <strong>9 piyasanın 7'sinde net negatif</strong>, stratejinin yazıldığı BTCUSDT dahil. BTC'de sıfır
+          maliyetle bile Sharpe +0.22 / PF 1.05 — yani maliyetin yediği bir edge değil, baştan neredeyse yok.
           <br /><br />
-          Asıl örüntü brüt sütununda ve stratejinin lehine değil: stratejinin tasarlanmadığı her piyasada
-          brüt PF pozitif (1.11–1.34), tasarlandığı piyasada (NQ/ES) ~1.00 veya altı. 10:00 New York
-          açılışı gerçekten bilgi taşısaydı bu sıralamanın tersi olurdu. En ekonomik açıklama: kripto ve FX'teki
-          brüt sayılar, edge'i olmayan bir stratejinin örneklem gürültüsü; endeks sayıları ise edge yokluğunun
-          gerçek görüntüsü.
+          Pozitif çıkan iki satır Nasdaq 100 ve S&amp;P 500 CFD'leri (net Sharpe ~+0.55, PF 1.18). Bunu edge
+          olarak okumamak için üç sebep: iki endeksin günlük getirileri 0.96 korelasyonlu, yani iki değil bir
+          gözlem; 2 yılda Sharpe 0.57 → t ≈ 0.8, anlamlılığın çok altında; ve 9 piyasa denenince en iyisinin bu
+          seviyeye çıkması şansla beklenen şey. Üstelik ikisi de aynı pencerede buy &amp; hold'un 28–37 puan gerisinde.
+          <br /><br />
+          <span style={{ color: C.dim }}>
+            Doğru sonraki adım bu endeks sonucunu ayar yapmadan out-of-sample bir pencerede tekrar etmek —
+            ve bu matris o pencere olarak kullanılamaz, çünkü sonuca artık bakıldı.
+          </span>
         </div>
       </Panel>
     </div>

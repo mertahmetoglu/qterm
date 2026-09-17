@@ -1,18 +1,23 @@
-// Parity check, JS side. Snapshots the frontend's real indicators.js (so we're
-// always testing the actual file, not a stale copy), feeds it several
+// Parity check, JS side. Snapshots the frontend's original indicators.js (so
+// we're always testing the real file, not a hand-kept copy), feeds it several
 // deterministic synthetic price series (random walk, trends, chop) so the
 // BUY/SELL/STRONG branches and score-rounding edge cases actually get
 // exercised, and dumps input+output for the Python side to compare against
 // signal_engine.py's compute_signal.
-import { readFileSync, writeFileSync, unlinkSync } from 'node:fs'
+//
+// indicators.js was deleted once the Python port passed this check, so the
+// snapshot is read from the last commit that still had it.
+import { writeFileSync, unlinkSync } from 'node:fs'
+import { execSync } from 'node:child_process'
 import path from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const srcPath = path.resolve(__dirname, '../../src/indicators.js')
 const tmpPath = path.resolve(__dirname, '_indicators_snapshot.mjs')
 
-writeFileSync(tmpPath, readFileSync(srcPath, 'utf8'))
+const git = cmd => execSync(`git ${cmd}`, { cwd: __dirname, encoding: 'utf8' })
+const deletedIn = git('log -n 1 --format=%H --diff-filter=D -- ../../src/indicators.js').trim()
+writeFileSync(tmpPath, git(`show ${deletedIn}~1:src/indicators.js`))
 let computeSignal
 try {
   ;({ computeSignal } = await import(pathToFileURL(tmpPath).href))
