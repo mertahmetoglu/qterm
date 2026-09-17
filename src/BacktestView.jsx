@@ -1,22 +1,21 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import {
-  LineChart, Line, AreaChart, Area,
-  XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine
+  Area, AreaChart, Line, LineChart, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from 'recharts'
-import { C, pct, Panel, ChartTip } from './ui'
+import {
+  Card, EmptyState, IconAlert, Legend, Skeleton, Stat, T,
+  fmtNum, fmtPct, fmtSigned, fmtSignedPct, toneOf,
+} from './ui'
 
-// Merge two {date, value}[] series (equity curve + buy&hold) into one
-// Recharts-friendly array by date. They're both daily-resampled over the
-// same backtest window so this is mostly a 1:1 zip, but merging by date
-// (not index) is robust to either series having a stray extra/missing day.
+// Renders whatever backend/backtest.py last wrote, served by GET /api/backtest.
+// The backtest itself stays an offline CLI process; this view only reports it.
+
+// Merge the equity curve and the buy & hold curve by date (not by index, so a
+// stray missing day in either series can't shift one against the other).
 function mergeSeries(equityCurve, buyHoldCurve) {
   const byDate = new Map()
-  for (const { date, value } of equityCurve ?? []) {
-    byDate.set(date, { date, strategy: value })
-  }
-  for (const { date, value } of buyHoldCurve ?? []) {
-    byDate.set(date, { ...(byDate.get(date) ?? { date }), buyHold: value })
-  }
+  for (const { date, value } of equityCurve ?? []) byDate.set(date, { date, strategy: value })
+  for (const { date, value } of buyHoldCurve ?? []) byDate.set(date, { ...(byDate.get(date) ?? { date }), buyHold: value })
   return [...byDate.values()].sort((a, b) => a.date.localeCompare(b.date))
 }
 
@@ -28,19 +27,20 @@ function drawdownSeries(equityCurve) {
   })
 }
 
-const statFmt = {
-  pct: v => pct(v * 100),        // signed -- for returns (total return, CAGR, drawdown, buy&hold)
-  rate: v => (v * 100).toFixed(1) + '%',  // unsigned -- for plain rates (win rate)
-  num: v => v.toLocaleString(undefined, { maximumFractionDigits: 2 }),
-  int: v => v,
-}
+const axis = { stroke: T.border, tick: { fill: T.subtle, fontSize: 11 }, tickLine: false }
+const fmtDate = d => new Date(d).toLocaleDateString(undefined, { month: 'short', year: '2-digit' })
 
-function StatTile({ label, value, format = 'num', judge }) {
-  const color = judge ? (judge(value) ? C.green : C.red) : C.text
+const CurveTooltip = ({ active, payload, label, suffix = '' }) => {
+  if (!active || !payload?.length) return null
   return (
-    <div style={{ background: '#0a1520', borderRadius: 4, padding: '8px 10px' }}>
-      <div style={{ color: C.dim, fontSize: 9, textTransform: 'uppercase', letterSpacing: 1 }}>{label}</div>
-      <div style={{ color, fontSize: 15, fontWeight: 700 }}>{statFmt[format](value)}</div>
+    <div className="tooltip">
+      <div className="tooltip__time">{new Date(label).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })}</div>
+      {payload.map(p => (
+        <div className="tooltip__row" key={p.dataKey}>
+          <span className="muted">{p.name}</span>
+          <span style={{ color: p.stroke }}>{fmtNum(p.value)}{suffix}</span>
+        </div>
+      ))}
     </div>
   )
 }
@@ -49,7 +49,8 @@ export default function BacktestView() {
   const [data, setData] = useState(null)
   const [error, setError] = useState(null)
 
-  useEffect(() => {
+  const load = useCallback(() => {
+    setError(null)
     fetch('/api/backtest')
       .then(r => {
         if (!r.ok) throw new Error(r.status === 404 ? 'not_found' : `HTTP ${r.status}`)
@@ -59,114 +60,113 @@ export default function BacktestView() {
       .catch(e => setError(e.message))
   }, [])
 
+  useEffect(load, [load])
+
   if (error) {
     return (
-      <Panel title="Backtest">
-        <div style={{ color: C.dim, fontSize: 12, textAlign: 'center', padding: '30px 0' }}>
-          {error === 'not_found'
-            ? <>Henüz backtest çalıştırılmamış. <code style={{ color: C.text }}>backend/backtest.py</code> çalıştır, sonuç burada görünecek.</>
-            : <>Backtest sonucu yüklenemedi ({error}).</>}
+      <Card title="Backtest">
+        <EmptyState
+          icon={<IconAlert size={20} />}
+          title={error === 'not_found' ? 'No backtest has been run yet' : `Could not load the backtest (${error})`}
+          hint={error === 'not_found'
+            ? 'Run backend/backtest.py, then reload — the result is served straight from reports/backtest_result.json.'
+            : 'Check that the backend is running on port 8123.'}
+        />
+        <div style={{ textAlign: 'center' }}>
+          <button className="tab" onClick={load}>Retry</button>
         </div>
-      </Panel>
+      </Card>
     )
   }
   if (!data) {
-    return (
-      <Panel title="Backtest">
-        <div style={{ color: C.dim, fontSize: 12, textAlign: 'center', padding: '30px 0' }}>Yükleniyor...</div>
-      </Panel>
-    )
+    return <Card title="Backtest"><Skeleton height={320} /></Card>
   }
 
-  const { stats, equity_curve: equityCurve, buy_hold_curve: buyHoldCurve } = data
-  const chartData = mergeSeries(equityCurve, buyHoldCurve)
+  const { stats, strategy, equity_curve: equityCurve, buy_hold_curve: buyHoldCurve } = data
+  const curve = mergeSeries(equityCurve, buyHoldCurve)
   const ddData = drawdownSeries(equityCurve)
+  const params = strategy?.params ?? {}
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-
-      <Panel title={`Strateji · ${data.strategy?.name ?? 'bilinmiyor'}`}>
-        {data.strategy?.description && (
-          <div style={{ fontSize: 11, color: C.text, lineHeight: 1.5, marginBottom: 8 }}>
-            {data.strategy.description}
-          </div>
-        )}
-        <div style={{ fontSize: 11, color: C.text, display: 'flex', flexWrap: 'wrap', gap: '4px 20px' }}>
-          <span>{data.symbol} · {data.interval}</span>
-          <span style={{ color: C.dim }}>{data.start} → {data.end}</span>
-          <span>{data.leverage}x kaldıraç</span>
-          <span>{data.fee_bps}bp fee + {data.slippage_bps}bp slippage / işlem</span>
-          <span style={{ color: C.dim }}>max hold: {data.max_hold_bars} mum</span>
-          {data.strategy?.params?.atr_stop_mult != null && (
-            <span>
-              SL {data.strategy.params.atr_stop_mult}×ATR({data.strategy.params.atr_period}) ·
-              TP {data.strategy.params.reward_risk}R
-            </span>
-          )}
+    <div className="layout__col">
+      <Card
+        title={`Strategy · ${strategy?.name ?? 'unknown'}`}
+        meta={
+          <>
+            <span>{data.symbol} · {data.interval}</span>
+            <span>{data.start} → {data.end}</span>
+            <span>{data.leverage}x</span>
+            <span>{data.fee_bps}bp fee + {data.slippage_bps}bp slippage per fill</span>
+            <span>max hold {data.max_hold_bars} bars</span>
+            {params.atr_stop_mult != null && <span>stop {params.atr_stop_mult}× ATR({params.atr_period}) · target {params.reward_risk}R</span>}
+          </>
+        }
+      >
+        {strategy?.description && <p className="note">{strategy.description}</p>}
+        <div className="stats" style={{ marginTop: 16 }}>
+          <Stat label="Trades" value={stats.n_trades} />
+          <Stat label="Win rate" value={fmtPct(stats.win_rate * 100)} />
+          <Stat label="Sharpe" value={fmtSigned(stats.sharpe)} tone={toneOf(stats.sharpe)} />
+          <Stat label="Sortino" value={fmtSigned(stats.sortino)} tone={toneOf(stats.sortino)} />
+          <Stat label="Max drawdown" value={fmtSignedPct(stats.max_drawdown * 100, 1)} tone="down" />
+          <Stat label="Profit factor" value={fmtNum(stats.profit_factor)} tone={stats.profit_factor >= 1 ? 'up' : 'down'} />
+          <Stat label="Total return" value={fmtSignedPct(stats.total_return * 100, 1)} tone={toneOf(stats.total_return)} />
+          <Stat label="CAGR" value={fmtSignedPct(stats.cagr * 100, 1)} tone={toneOf(stats.cagr)} />
+          <Stat label="Buy & hold" value={fmtSignedPct(stats.buy_hold_return * 100, 1)} tone={toneOf(stats.buy_hold_return)}
+            hint="same window" />
         </div>
-      </Panel>
+      </Card>
 
-      <Panel title="Equity Curve — Strateji vs Buy & Hold">
-        <ResponsiveContainer width="100%" height={260}>
-          <LineChart data={chartData}>
-            <XAxis dataKey="date" hide />
-            <YAxis width={50} tick={{ fill: C.dim, fontSize: 10 }} tickFormatter={v => v.toFixed(2)} />
-            <ReferenceLine y={1} stroke={C.border} />
-            <Tooltip content={<ChartTip />} />
-            <Line type="monotone" dataKey="strategy" name="Strateji" stroke={C.green} dot={false} strokeWidth={1.8} />
-            <Line type="monotone" dataKey="buyHold" name="Buy & Hold" stroke={C.muted} dot={false} strokeWidth={1.4} strokeDasharray="4 3" />
+      <Card title="Equity curve" meta={<span>strategy vs buy &amp; hold, normalised to 1.00</span>} flush>
+        <ResponsiveContainer width="100%" height={300}>
+          <LineChart data={curve} margin={{ top: 12, right: 8, bottom: 0, left: 0 }}>
+            <XAxis dataKey="date" {...axis} minTickGap={64} tickFormatter={fmtDate} />
+            <YAxis orientation="right" width={64} {...axis} tickFormatter={v => fmtNum(v)} />
+            <ReferenceLine y={1} stroke={T.border} />
+            <Tooltip content={<CurveTooltip />} cursor={{ stroke: T.border }} />
+            <Line type="monotone" dataKey="strategy" name="Strategy" stroke={T.accent} dot={false} strokeWidth={2} isAnimationActive={false} />
+            <Line type="monotone" dataKey="buyHold" name="Buy & hold" stroke={T.muted} dot={false} strokeWidth={1.4} strokeDasharray="5 4" isAnimationActive={false} />
           </LineChart>
         </ResponsiveContainer>
-        <div style={{ display: 'flex', gap: 16, marginTop: 6, fontSize: 10 }}>
-          <span style={{ color: C.green }}>─ Strateji ({data.leverage}x, net)</span>
-          <span style={{ color: C.dim }}>- - Buy &amp; Hold {data.symbol}</span>
-        </div>
-      </Panel>
+        <Legend items={[
+          { label: `Strategy (${data.leverage}x, net of costs)`, color: T.accent },
+          { label: `Buy & hold ${data.symbol}`, color: T.muted, variant: 'dashed' },
+        ]} />
+      </Card>
 
-      <Panel title="Drawdown">
-        <ResponsiveContainer width="100%" height={130}>
-          <AreaChart data={ddData}>
-            <XAxis dataKey="date" hide />
-            <YAxis width={50} tick={{ fill: C.dim, fontSize: 10 }} tickFormatter={v => v.toFixed(0) + '%'} />
-            <ReferenceLine y={0} stroke={C.border} />
-            <Tooltip content={<ChartTip />} />
-            <Area type="monotone" dataKey="dd" name="Drawdown" stroke={C.red} fill={C.red} fillOpacity={0.25} strokeWidth={1.2} />
+      <Card title="Drawdown" meta={<span>peak to trough, %</span>} flush>
+        <ResponsiveContainer width="100%" height={160}>
+          <AreaChart data={ddData} margin={{ top: 12, right: 8, bottom: 0, left: 0 }}>
+            <XAxis dataKey="date" {...axis} minTickGap={64} tickFormatter={fmtDate} />
+            <YAxis orientation="right" width={64} {...axis} tickFormatter={v => `${fmtNum(v, 0)}%`} />
+            <ReferenceLine y={0} stroke={T.border} />
+            <Tooltip content={<CurveTooltip suffix="%" />} cursor={{ stroke: T.border }} />
+            <Area type="monotone" dataKey="dd" name="Drawdown" stroke={T.down} fill={T.down} fillOpacity={0.18} strokeWidth={1.4} isAnimationActive={false} />
           </AreaChart>
         </ResponsiveContainer>
-      </Panel>
+      </Card>
 
-      <Panel title="Backtest Metrikleri">
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))', gap: 8 }}>
-          <StatTile label="İşlem Sayısı" value={stats.n_trades} format="int" />
-          <StatTile label="Win Rate" value={stats.win_rate} format="rate" />
-          <StatTile label="Sharpe" value={stats.sharpe} format="num" judge={v => v > 0} />
-          <StatTile label="Sortino" value={stats.sortino} format="num" judge={v => v > 0} />
-          <StatTile label="Max Drawdown" value={stats.max_drawdown} format="pct" judge={() => false} />
-          <StatTile label="Profit Factor" value={stats.profit_factor} format="num" judge={v => v >= 1} />
-          <StatTile label="Toplam Getiri" value={stats.total_return} format="pct" judge={v => v > 0} />
-          <StatTile label="CAGR" value={stats.cagr} format="pct" judge={v => v > 0} />
-          <StatTile label="Buy & Hold" value={stats.buy_hold_return} format="pct" judge={v => v > 0} />
-        </div>
-      </Panel>
-
-      {data.strategy?.name === 'confluence' && (
-        <Panel title="Backtest'in Yakaladığı Şey">
-          <div style={{ fontSize: 11, color: C.text, lineHeight: 1.5 }}>
-            Orijinal uygulamadaki işlem eşiği (<code>strength ≥ 60</code>) matematiksel olarak ulaşılamazdı --
-            4 indikatörün skorlama tasarımıyla pratikte ulaşılabilen maksimum 50'ydi. Backtest 2 yılda 0 işlem
-            üretince fark edildi. Eşik, gerçekten ulaşılabilir olana (<code>STRONG BUY/SELL</code>, strength ≥ 50)
-            hizalanarak düzeltildi -- hem canlı hem backtest artık aynı, paylaşılan eşiği kullanıyor.
-          </div>
-        </Panel>
+      {strategy?.name === 'confluence' && (
+        <Card title="What the backtest caught">
+          <p className="note">
+            The original app required <code>strength ≥ 60</code> to trade. With four indicators scored in
+            [−2, +2], the EMA component only reaches ±2 on the exact crossover bar and the others essentially
+            never hit their extreme on that same bar — so strength tops out at 50 in real BTCUSDT data.
+            The threshold was unreachable: <strong>one trade in two years</strong>. A 60-day dry run returning
+            zero trades is what surfaced it. The live dashboard and the backtest now share the corrected,
+            reachable threshold.
+          </p>
+        </Card>
       )}
 
-      <Panel title="Ne Modellenmedi">
-        <div style={{ fontSize: 10, color: C.dim, lineHeight: 1.6 }}>
-          Perpetual funding rate · parametre optimizasyonu / walk-forward validasyon · kısmi fill'ler ·
-          SL öncesi likidasyon mekaniği. Ücret ve slippage varsayımları sabit ({data.fee_bps}bp + {data.slippage_bps}bp)
-          — gerçek borsa koşullarında değişebilir. Detaylar için README.
-        </div>
-      </Panel>
+      <Card title="Not modelled">
+        <p className="note">
+          Perpetual funding · parameter optimisation and walk-forward validation · partial fills ·
+          liquidation ahead of the stop. Fees and slippage are fixed assumptions
+          ({data.fee_bps}bp + {data.slippage_bps}bp per fill) and real venue conditions vary.
+          Full method and caveats are in the README.
+        </p>
+      </Card>
     </div>
   )
 }

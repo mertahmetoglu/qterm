@@ -1,43 +1,24 @@
-import { useEffect, useState } from 'react'
-import { C, Panel } from './ui'
+import { useCallback, useEffect, useState } from 'react'
+import {
+  Card, EmptyState, IconAlert, Skeleton, Stat,
+  fmtNum, fmtPct, fmtSigned, fmtSignedPct, toneOf,
+} from './ui'
 
 // Read-only render of reports/matrix.json (produced by backend/run_matrix.py):
 // the confluence strategy, unchanged, on every market it was run on. The whole
 // result set is shown -- not just the market that happened to look best.
 
 const SYMBOL_LABELS = {
-  USATECHIDXUSD: 'Nasdaq 100',
-  USA500IDXUSD: 'S&P 500',
-}
-
-const num = (v, d = 2) => (v == null || Number.isNaN(v) ? '—' : v.toFixed(d))
-const signed = (v, d = 2) => (v == null ? '—' : (v >= 0 ? '+' : '') + v.toFixed(d))
-const pctOf = (v, d = 1) => (v == null ? '—' : (v >= 0 ? '+' : '') + (v * 100).toFixed(d) + '%')
-
-function Th({ children, align = 'right' }) {
-  return (
-    <th style={{
-      textAlign: align, padding: '6px 8px', color: C.dim, fontSize: 9,
-      textTransform: 'uppercase', letterSpacing: 1, fontWeight: 700,
-      borderBottom: `1px solid ${C.border}`, whiteSpace: 'nowrap',
-    }}>{children}</th>
-  )
-}
-
-function Td({ children, align = 'right', color = C.text, bold }) {
-  return (
-    <td style={{
-      textAlign: align, padding: '5px 8px', color, fontSize: 11,
-      fontWeight: bold ? 700 : 400, whiteSpace: 'nowrap',
-    }}>{children}</td>
-  )
+  USATECHIDXUSD: 'Nasdaq 100 CFD',
+  USA500IDXUSD: 'S&P 500 CFD',
 }
 
 export default function MatrixView() {
   const [data, setData] = useState(null)
   const [error, setError] = useState(null)
 
-  useEffect(() => {
+  const load = useCallback(() => {
+    setError(null)
     fetch('/api/matrix')
       .then(r => {
         if (!r.ok) throw new Error(r.status === 404 ? 'not_found' : `HTTP ${r.status}`)
@@ -47,20 +28,25 @@ export default function MatrixView() {
       .catch(e => setError(e.message))
   }, [])
 
+  useEffect(load, [load])
+
   if (error) {
     return (
-      <Panel title="Test Matrisi">
-        <div style={{ color: C.dim, fontSize: 12, textAlign: 'center', padding: '30px 0' }}>
-          {error === 'not_found'
-            ? <>Matris henüz üretilmemiş. <code style={{ color: C.text }}>backend/run_matrix.py</code> çalıştır.</>
-            : <>Yüklenemedi ({error}).</>}
+      <Card title="Research">
+        <EmptyState
+          icon={<IconAlert size={20} />}
+          title={error === 'not_found' ? 'The matrix has not been generated yet' : `Could not load the matrix (${error})`}
+          hint={error === 'not_found'
+            ? 'Run backend/run_matrix.py to regenerate every run from cached market data.'
+            : 'Check that the backend is running on port 8123.'}
+        />
+        <div style={{ textAlign: 'center' }}>
+          <button className="tab" onClick={load}>Retry</button>
         </div>
-      </Panel>
+      </Card>
     )
   }
-  if (!data) {
-    return <Panel title="Test Matrisi"><div style={{ color: C.dim, fontSize: 12, padding: '30px 0', textAlign: 'center' }}>Yükleniyor...</div></Panel>
-  }
+  if (!data) return <Card title="Research"><Skeleton height={320} /></Card>
 
   const groups = []
   for (const row of data.rows) {
@@ -69,92 +55,94 @@ export default function MatrixView() {
     else groups.push({ name: row.group, rows: [row] })
   }
 
+  const total = data.rows.length
   const netNegative = data.rows.filter(r => r.net.total_return < 0).length
   const grossPositive = data.rows.filter(r => r.gross.profit_factor > 1).length
   const beatBuyHold = data.rows.filter(r => r.net.total_return > r.net.buy_hold_return).length
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-      <Panel title={`Test Matrisi · confluence · ${data.window.start} → ${data.window.end}`}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 8, marginBottom: 10 }}>
-          {[
-            { label: 'Toplam koşu', value: data.rows.length, color: C.text },
-            { label: 'Net negatif', value: `${netNegative} / ${data.rows.length}`, color: C.red },
-            { label: 'Brüt PF > 1', value: `${grossPositive} / ${data.rows.length}`, color: C.yellow },
-            { label: 'Buy & Hold\'u geçen', value: `${beatBuyHold} / ${data.rows.length}`, color: C.yellow },
-            { label: 'Kaldıraç', value: `${data.leverage}x`, color: C.text },
-          ].map(m => (
-            <div key={m.label} style={{ background: '#0a1520', borderRadius: 4, padding: '8px 10px' }}>
-              <div style={{ color: C.dim, fontSize: 9, textTransform: 'uppercase', letterSpacing: 1 }}>{m.label}</div>
-              <div style={{ color: m.color, fontSize: 15, fontWeight: 700 }}>{m.value}</div>
-            </div>
-          ))}
+    <div className="layout__col">
+      <Card
+        title="Cross-market test"
+        meta={<><span>confluence, identical rules</span><span>{data.window.start} → {data.window.end}</span><span>{data.leverage}x</span></>}
+      >
+        <div className="stats">
+          <Stat label="Runs" value={total} hint="each run twice: net and gross" />
+          <Stat label="Net negative" value={`${netNegative} / ${total}`} tone={netNegative ? 'down' : undefined} />
+          <Stat label="Gross PF > 1" value={`${grossPositive} / ${total}`} tone="flat" />
+          <Stat label="Beat buy & hold" value={`${beatBuyHold} / ${total}`} tone={beatBuyHold ? 'flat' : 'down'} />
         </div>
-        <div style={{ fontSize: 10, color: C.dim, lineHeight: 1.6 }}>
-          Aynı kurallar, her piyasada: 15m, STRONG BUY/SELL girişi, 1.5×ATR(14) stop, 3R hedef. ATR'ye göre
-          ölçeklenen çıkışlar bu karşılaştırmayı anlamlı kılıyor — sabit %0.5 stop EURUSD'de günlerce, SOL'da
-          dakikalar demek. Her koşu iki kez: bir kez o borsanın gerçekçi maliyetiyle, bir kez sıfır maliyetle.
-          Gidiş-dönüş maliyet varsayımı borsaya göre değişiyor (kripto 16bp, FX 1.7bp, endeks 0.8bp).
-        </div>
-      </Panel>
+        <p className="note" style={{ marginTop: 16 }}>
+          Same rules on every market: 15m candles, entry on STRONG BUY / STRONG SELL, stop at 1.5× ATR(14),
+          target 3R. Volatility-scaled exits are what make the comparison meaningful — a fixed 0.5% stop is
+          days of range on EURUSD and minutes on SOLUSDT. Each run is executed twice, once at realistic cost
+          for that venue and once at zero cost, because <strong>"the signal has nothing"</strong> and
+          <strong> "the signal is eaten by costs"</strong> are different failures. Round-trip cost:
+          crypto 16bp, FX 1.7bp, index 0.8bp.
+        </p>
+      </Card>
 
-      {groups.map(g => (
-        <Panel key={g.name} title={g.name}>
-          <div style={{ overflowX: 'auto' }}>
-            <table style={{ borderCollapse: 'collapse', width: '100%', minWidth: 760 }}>
+      {groups.map(group => (
+        <Card key={group.name} title={group.name} flush>
+          <div className="table-wrap">
+            <table className="data">
+              <caption className="sr-only">{group.name}: net and gross results per market</caption>
               <thead>
                 <tr>
-                  <Th align="left">Sembol</Th>
-                  <Th>TF</Th>
-                  <Th>Maliyet</Th>
-                  <Th>İşlem</Th>
-                  <Th>Win</Th>
-                  <Th>Net Sharpe</Th>
-                  <Th>Net PF</Th>
-                  <Th>Net Getiri</Th>
-                  <Th>Brüt Sharpe</Th>
-                  <Th>Brüt PF</Th>
-                  <Th>B&amp;H</Th>
+                  <th scope="col">Market</th>
+                  <th scope="col">TF</th>
+                  <th scope="col">RT cost</th>
+                  <th scope="col">Trades</th>
+                  <th scope="col">Win</th>
+                  <th scope="col">Net Sharpe</th>
+                  <th scope="col">Net PF</th>
+                  <th scope="col">Net return</th>
+                  <th scope="col">Gross Sharpe</th>
+                  <th scope="col">Gross PF</th>
+                  <th scope="col">Buy &amp; hold</th>
                 </tr>
               </thead>
               <tbody>
-                {g.rows.map((r, i) => (
-                  <tr key={i} style={{ background: i % 2 ? '#0a151f55' : 'transparent' }}>
-                    <Td align="left" color={C.text} bold>{SYMBOL_LABELS[r.symbol] ?? r.symbol}</Td>
-                    <Td color={C.dim}>{r.interval}</Td>
-                    <Td color={C.dim}>{num(r.costs.roundtrip_bps, 1)}bp</Td>
-                    <Td>{r.net.n_trades}</Td>
-                    <Td>{(r.net.win_rate * 100).toFixed(1)}%</Td>
-                    <Td color={r.net.sharpe >= 0 ? C.green : C.red} bold>{signed(r.net.sharpe)}</Td>
-                    <Td color={r.net.profit_factor >= 1 ? C.green : C.red}>{num(r.net.profit_factor)}</Td>
-                    <Td color={r.net.total_return >= 0 ? C.green : C.red}>{pctOf(r.net.total_return)}</Td>
-                    <Td color={r.gross.sharpe >= 0 ? C.green : C.red} bold>{signed(r.gross.sharpe)}</Td>
-                    <Td color={r.gross.profit_factor >= 1 ? C.green : C.red}>{num(r.gross.profit_factor)}</Td>
-                    <Td color={C.dim}>{pctOf(r.net.buy_hold_return)}</Td>
+                {group.rows.map(r => (
+                  <tr key={r.symbol}>
+                    <td>{SYMBOL_LABELS[r.symbol] ?? r.symbol}</td>
+                    <td className="subtle">{r.interval}</td>
+                    <td className="subtle">{fmtNum(r.costs.roundtrip_bps, 1)}bp</td>
+                    <td>{r.net.n_trades}</td>
+                    <td>{fmtPct(r.net.win_rate * 100)}</td>
+                    <td className={`value-${toneOf(r.net.sharpe)}`}>{fmtSigned(r.net.sharpe)}</td>
+                    <td className={r.net.profit_factor >= 1 ? 'value-up' : 'value-down'}>{fmtNum(r.net.profit_factor)}</td>
+                    <td className={`value-${toneOf(r.net.total_return)}`}>{fmtSignedPct(r.net.total_return * 100, 1)}</td>
+                    <td className={`value-${toneOf(r.gross.sharpe)}`}>{fmtSigned(r.gross.sharpe)}</td>
+                    <td className={r.gross.profit_factor >= 1 ? 'value-up' : 'value-down'}>{fmtNum(r.gross.profit_factor)}</td>
+                    <td className="subtle">{fmtSignedPct(r.net.buy_hold_return * 100, 1)}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-        </Panel>
+        </Card>
       ))}
 
-      <Panel title="Okuma">
-        <div style={{ fontSize: 11, color: C.text, lineHeight: 1.6 }}>
-          <strong>9 piyasanın 7'sinde net negatif</strong>, stratejinin yazıldığı BTCUSDT dahil. BTC'de sıfır
-          maliyetle bile Sharpe +0.22 / PF 1.05 — yani maliyetin yediği bir edge değil, baştan neredeyse yok.
-          <br /><br />
-          Pozitif çıkan iki satır Nasdaq 100 ve S&amp;P 500 CFD'leri (net Sharpe ~+0.55, PF 1.18). Bunu edge
-          olarak okumamak için üç sebep: iki endeksin günlük getirileri 0.96 korelasyonlu, yani iki değil bir
-          gözlem; 2 yılda Sharpe 0.57 → t ≈ 0.8, anlamlılığın çok altında; ve 9 piyasa denenince en iyisinin bu
-          seviyeye çıkması şansla beklenen şey. Üstelik ikisi de aynı pencerede buy &amp; hold'un 28–37 puan gerisinde.
-          <br /><br />
-          <span style={{ color: C.dim }}>
-            Doğru sonraki adım bu endeks sonucunu ayar yapmadan out-of-sample bir pencerede tekrar etmek —
-            ve bu matris o pencere olarak kullanılamaz, çünkü sonuca artık bakıldı.
-          </span>
-        </div>
-      </Panel>
+      <Card title="Reading the table">
+        <p className="note">
+          <strong>Seven of nine markets are net-negative</strong>, including BTCUSDT, the market the strategy
+          was built for and the one the live dashboard trades. At zero cost BTCUSDT still only reaches
+          Sharpe +0.22 and profit factor 1.05 — this is not an edge that costs are eating, there is barely
+          an edge to eat.
+        </p>
+        <p className="note">
+          The two positive rows are the US index CFDs (net Sharpe ≈ +0.55, PF 1.18). Three reasons not to
+          read that as an edge: the two indices' daily returns correlate at 0.96, so they are one observation
+          rather than two; a Sharpe of 0.57 over two years is t ≈ 0.8, far below significance; and with nine
+          markets tried, the best one landing there is what chance alone predicts. Both also trail buy &amp;
+          hold on the same instrument by 28–37 points.
+        </p>
+        <p className="note subtle">
+          The honest next step would be to rerun the index result, unchanged, on a window nobody has looked
+          at yet. This matrix cannot be that window, because its result is already known.
+        </p>
+      </Card>
     </div>
   )
 }

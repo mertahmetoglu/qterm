@@ -31,7 +31,17 @@ Two candle sources is deliberate, and each has one job:
 
 ## Live Dashboard
 
-React + Vite + Recharts. `src/App.jsx` is layout only; all state and I/O lives in custom hooks:
+React + Vite + Recharts, dark by design because it is a market screen people leave open. The aggregated
+candles are drawn as real candlesticks (a custom Recharts shape over a `[low, high]` range bar), with
+volume, EMA(9/21) and Bollinger bands on the same time axis and RSI/MACD panels synchronised to it, so
+hovering one candle highlights the same bar everywhere.
+
+Colour, type and spacing are tokens in `src/styles.css` — components never hardcode a hex — and up/down
+state is always carried by an icon or a word as well as by colour. Body text sits at 4.5:1 or better on
+its surface, chart strokes at 3:1 or better, the three views are addressable (`#live`, `#backtest`,
+`#research`), and everything animated is behind `prefers-reduced-motion`.
+
+`src/App.jsx` is layout only; all state and I/O lives in custom hooks:
 
 | Hook | Responsibility |
 |---|---|
@@ -39,7 +49,7 @@ React + Vite + Recharts. `src/App.jsx` is layout only; all state and I/O lives i
 | `useTradeCandles` | Subscribes to `btcusdt@trade` and aggregates every trade into 15m candles via `src/lib/candles.js`. Seeds history from REST, holds back trades that arrive while that request is in flight, dedupes by Binance trade id after reconnects, backfills missed candles on reconnect, and replaces a REST-snapshot candle with the exchange's final kline once it closes. Aggregation runs per trade; React state is committed at most every 250ms. |
 | `useSignalStream` | The backend's `/ws/signals` stream (signal, indicator series, 24h ticker) folded through a reducer. |
 | `usePaperTrades` | Forward-only paper trades on actionable signals, using the ATR stop/target the backend generated with the signal. Exits are checked on every trade-stream price and latched once hit. |
-| `useHealth`, `useClock` | Backend latency poll (`GET /health`) and the header clock. |
+| `useHealth`, `useClock`, `useHashTab` | Backend latency poll (`GET /health`), the header clock, and hash-based view routing. |
 
 **The paper-trade log is explicitly labeled "not a backtest"** — it's a forward simulation since the tab was opened. The real numbers are in the **Backtest** and **Matrix** tabs, served live from `GET /api/backtest` and `GET /api/matrix`.
 
@@ -269,17 +279,21 @@ qterm/
 │   └── reports/            # generated results + charts
 ├── src/
 │   ├── App.jsx             # live view layout
+│   ├── styles.css          # design tokens (colour, type, spacing) + component styles
+│   ├── ui.jsx              # primitives: Card, Stat, Pill, icons, formatters, chart palette
+│   ├── components/
+│   │   └── charts.jsx      # candlestick/volume/RSI/MACD charts, one synchronised time axis
 │   ├── hooks/
 │   │   ├── useWebSocket.js     # socket lifecycle: backoff, watchdog, teardown
 │   │   ├── useTradeCandles.js  # @trade stream -> 15m candles, REST seed/backfill/reconcile
 │   │   ├── useSignalStream.js  # backend signal stream reducer
 │   │   ├── usePaperTrades.js   # forward paper-trade log with ATR exits
 │   │   ├── useHealth.js
-│   │   └── useClock.js
+│   │   ├── useClock.js
+│   │   └── useHashTab.js
 │   ├── lib/candles.js      # pure trade -> candle aggregator (shared with the check script)
 │   ├── BacktestView.jsx    # equity/drawdown charts, metrics grid
 │   ├── MatrixView.jsx      # cross-market results, net vs gross
-│   ├── ui.jsx              # shared palette + Panel/ChartTip/Pill
 │   └── main.jsx
 ├── package.json
 └── vite.config.js

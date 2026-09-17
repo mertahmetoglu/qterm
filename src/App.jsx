@@ -1,9 +1,10 @@
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import {
-  LineChart, Line, BarChart, Bar, Cell,
-  XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine
-} from 'recharts'
-import { C, fmt, cc, pct, Panel, ChartTip, Pill } from './ui'
+  Card, EmptyState, IconActivity, IconAlert, IconCheck, IconClock, IconDown, IconFlat, IconUp, IconX,
+  Legend, Pill, Skeleton, Stat, StatusPill, T,
+  fmtNum, fmtPrice, fmtSignedPct, fmtUsd, toneOf,
+} from './ui'
+import { MacdChart, PriceChart, RsiChart, VolumeChart } from './components/charts'
 import BacktestView from './BacktestView'
 import MatrixView from './MatrixView'
 import useTradeCandles from './hooks/useTradeCandles'
@@ -11,10 +12,11 @@ import useSignalStream from './hooks/useSignalStream'
 import usePaperTrades from './hooks/usePaperTrades'
 import useHealth from './hooks/useHealth'
 import useClock from './hooks/useClock'
+import useHashTab from './hooks/useHashTab'
 
 // Two live streams, two owners:
 //   - useTradeCandles: Binance's raw trade stream, aggregated into candles in
-//     the browser. Drives the price chart, volume and last price.
+//     the browser. Drives the price/volume charts and the last price.
 //   - useSignalStream: the backend's signal engine (backend/signal_engine.py,
 //     the same code the backtester runs). Drives every indicator, the signal
 //     and its ATR stop/target.
@@ -22,39 +24,11 @@ import useClock from './hooks/useClock'
 
 const SYMBOL = 'BTCUSDT'
 const INTERVAL = '15m'
-const WINDOW = 100
+const WINDOW = 120
+const TABS = [['live', 'Live'], ['backtest', 'Backtest'], ['research', 'Research']]
 
-const STATUS_LABEL = { OPEN: 'OPEN', TP: 'TP ✓', SL: 'SL ✗' }
-
-function TradeRow({ trade, leverage }) {
-  const statusColor = trade.status === 'TP' ? C.green : trade.status === 'SL' ? C.red : C.yellow
-  return (
-    <div style={{
-      marginBottom: 8, padding: '8px 10px',
-      background: statusColor + '0d', borderRadius: 4,
-      borderLeft: `3px solid ${statusColor}`,
-      fontSize: 10,
-    }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
-        <span style={{ color: trade.direction === 'LONG' ? C.green : C.red, fontWeight: 700 }}>
-          {trade.direction} · {trade.signal}
-        </span>
-        <span style={{ color: statusColor, fontWeight: 700 }}>{STATUS_LABEL[trade.status]}</span>
-      </div>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2px 10px', color: C.dim }}>
-        <span>Giriş: <span style={{ color: C.text }}>${fmt(trade.entry)}</span></span>
-        <span>ATR: <span style={{ color: C.text }}>${fmt(trade.atr)}</span></span>
-        <span style={{ color: C.red }}>SL: ${fmt(trade.sl)}</span>
-        <span style={{ color: C.green }}>TP: ${fmt(trade.tp)}</span>
-        <span>Zaman: <span style={{ color: C.text }}>{trade.time}</span></span>
-        {trade.pnlPct !== null && (
-          <span>P&L: <span style={{ color: trade.pnlPct >= 0 ? C.green : C.red, fontWeight: 700 }}>
-            {pct(trade.pnlPct)} ({leverage}x)
-          </span></span>
-        )}
-      </div>
-    </div>
-  )
+const SIGNAL_TONE = {
+  'STRONG BUY': 'up', BUY: 'up', HOLD: 'flat', SELL: 'down', 'STRONG SELL': 'down',
 }
 
 function useChartRows(candles, times, signal) {
@@ -65,8 +39,10 @@ function useChartRows(candles, times, signal) {
     const bb = k == null ? null : signal?.bb?.[k]
     return {
       t: c.openTime,
-      v: c.close,
-      vol: c.volume,
+      open: c.open, high: c.high, low: c.low, close: c.close,
+      wick: [c.low, c.high],
+      volume: c.volume,
+      trades: c.trades,
       up: c.close >= c.open,
       e9: at(signal?.ema9),
       e21: at(signal?.ema21),
@@ -81,274 +57,259 @@ function useChartRows(candles, times, signal) {
   }), [candles, indexByTime, signal])
 }
 
-export default function App() {
-  const [view, setView] = useState('live')
-  const now = useClock()
-  const health = useHealth()
-  const market = useTradeCandles({ symbol: SYMBOL, interval: INTERVAL })
-  const { booting, config, ticker, signal, times, connected } = useSignalStream()
-
-  const price = market.lastPrice ?? ticker?.price ?? null
-  const change = ticker?.change ?? 0
-  const leverage = config?.leverage ?? 1
-  const { trades, stats } = usePaperTrades(signal, price, leverage)
-
-  const rows = useChartRows(market.candles, times, signal)
-  const current = market.candles[market.candles.length - 1]
-
+function TradeRow({ trade }) {
+  const closed = trade.status !== 'OPEN'
+  const tone = trade.status === 'TP' ? 'up' : trade.status === 'SL' ? 'down' : 'open'
+  const StatusIcon = trade.status === 'TP' ? IconCheck : trade.status === 'SL' ? IconX : IconClock
   return (
-    <div style={{ background: C.bg, minHeight: '100vh', fontFamily: "'JetBrains Mono','Fira Code',monospace", color: C.text, padding: 16, boxSizing: 'border-box' }}>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@700;800&display=swap');
-        * { box-sizing: border-box; }
-        ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-thumb { background: ${C.muted}; border-radius: 2px; }
-        @keyframes blink  { 0%,100%{opacity:1} 50%{opacity:0.3} }
-        @keyframes pulse  { 0%,100%{transform:scale(1)} 50%{transform:scale(1.03)} }
-        @keyframes fadeIn { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:translateY(0)} }
-      `}</style>
-
-      {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12, paddingBottom: 10, borderBottom: `1px solid ${C.border}` }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <span style={{ fontFamily: "'Syne',sans-serif", fontSize: 20, fontWeight: 800, color: C.green, letterSpacing: -1 }}>QTERM</span>
-          <span style={{ color: C.muted, fontSize: 10, letterSpacing: 2 }}>
-            BTC/USDT · {INTERVAL.toUpperCase()} · {leverage}x
+    <article className={`trade trade--${tone}`}>
+      <div className="trade__head">
+        <span className={`trade__dir ${trade.direction === 'LONG' ? 'value-up' : 'value-down'}`}>
+          {trade.direction === 'LONG' ? <IconUp size={14} /> : <IconDown size={14} />} {trade.direction} · {trade.signal}
+        </span>
+        <Pill tone={trade.status === 'TP' ? 'up' : trade.status === 'SL' ? 'down' : 'flat'}>
+          <StatusIcon size={13} /> {closed ? `${trade.status} hit` : 'Open'}
+        </Pill>
+      </div>
+      <div className="trade__grid">
+        <span>Entry <b>{fmtUsd(trade.entry)}</b></span>
+        <span>ATR <b>{fmtUsd(trade.atr)}</b></span>
+        <span className="value-down">Stop <b>{fmtUsd(trade.sl)}</b></span>
+        <span className="value-up">Target <b>{fmtUsd(trade.tp)}</b></span>
+        <span>Opened <b>{trade.time}</b></span>
+        {trade.pnlPct != null && (
+          <span>
+            {closed ? 'P&L' : 'Unrealised'} <b className={trade.pnlPct >= 0 ? 'value-up' : 'value-down'}>{fmtSignedPct(trade.pnlPct)}</b>
           </span>
-          <Pill color={connected ? C.green : C.red} blink={connected}>
-            {connected ? '● SİNYAL' : '○ SİNYAL...'}
-          </Pill>
-          <Pill color={market.status === 'open' ? C.green : C.red} blink={market.status === 'open'}>
-            {market.status === 'open' ? '● TRADES' : '○ TRADES...'}
-          </Pill>
-          {(() => {
-            const avg = health?.latency_ms?.avg_ms
-            const latColor = avg == null ? C.red : avg < 300 ? C.green : avg < 800 ? C.yellow : C.red
-            return <Pill color={latColor}>⟳ {avg != null ? `${avg}ms` : '--'}</Pill>
-          })()}
+        )}
+      </div>
+    </article>
+  )
+}
+
+function SignalCard({ signal, config }) {
+  if (!signal) {
+    return (
+      <Card title="Signal">
+        <EmptyState title="Warming up" hint="The engine needs 50 closed candles before it scores a signal." />
+      </Card>
+    )
+  }
+  const tone = SIGNAL_TONE[signal.signal] ?? 'flat'
+  const width = (Math.abs(signal.total) / 8) * 50
+  const left = signal.total >= 0 ? 50 : 50 - width
+  return (
+    <Card title="Signal" meta={<span>{SYMBOL} · {INTERVAL}</span>}>
+      <div className="signal">
+        <div className="signal__label">Confluence</div>
+        <div className={`signal__value value-${tone}`} aria-live="polite">{signal.signal}</div>
+        <div className="score">
+          <div className="score__track" role="img"
+            aria-label={`Composite score ${signal.total} out of 8, strength ${signal.strength} percent`}>
+            <span className="score__fill" style={{ left: `${left}%`, width: `${width}%`, background: `var(--${tone}-mark)` }} />
+            <span className="score__zero" />
+          </div>
+          <div className="score__scale"><span>−8</span><span>0</span><span>+8</span></div>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
-          <div style={{ display: 'flex', gap: 4 }}>
-            {[['live', 'CANLI'], ['backtest', 'BACKTEST'], ['matrix', 'MATRİS']].map(([v, label]) => (
-              <button key={v} onClick={() => setView(v)} style={{
-                background: view === v ? C.green : 'transparent',
-                color: view === v ? C.bg : C.dim,
-                border: `1px solid ${view === v ? C.green : C.border}`,
-                fontFamily: 'inherit', fontSize: 9, fontWeight: 700, letterSpacing: 1,
-                padding: '4px 10px', borderRadius: 2, cursor: 'pointer',
-              }}>
-                {label}
-              </button>
-            ))}
-          </div>
-          <div>
-            <span style={{ fontSize: 22, fontWeight: 700 }}>{price ? '$' + fmt(price) : '—'}</span>
-            {ticker && <span style={{ marginLeft: 10, fontSize: 13, fontWeight: 700, color: cc(change) }}>{change >= 0 ? '▲' : '▼'} {Math.abs(change).toFixed(2)}%</span>}
-          </div>
-          <span style={{ color: C.dim, fontSize: 11 }}>{now.toLocaleTimeString()}</span>
+        <div className="signal__note">
+          Score <strong className="mono">{signal.total > 0 ? '+' : ''}{signal.total}</strong> · strength {signal.strength}%
+        </div>
+        <div className="signal__note" style={{ marginTop: 8 }}>
+          {signal.actionable
+            ? <Pill tone={tone}><IconAlert size={13} /> Entry condition met</Pill>
+            : <>Only STRONG BUY / STRONG SELL opens a trade</>}
         </div>
       </div>
-
-      {view === 'matrix' ? (
-        <MatrixView />
-      ) : view === 'backtest' ? (
-        <BacktestView />
-      ) : booting ? (
-        <div style={{ textAlign: 'center', color: C.dim, marginTop: 80, fontSize: 13 }}>Backend'e bağlanılıyor...</div>
-      ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: 12 }}>
-
-          {/* LEFT */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-
-            <Panel title={`BTC/USDT — ${INTERVAL} · trade stream → mum · EMA(9,21) · Bollinger(20,2)`}>
-              {rows.length === 0 ? (
-                <div style={{ height: 260, display: 'flex', alignItems: 'center', justifyContent: 'center', color: C.dim, fontSize: 12 }}>
-                  {market.error ? `Mum geçmişi alınamadı (${market.error})` : 'Trade stream\'e bağlanılıyor...'}
-                </div>
-              ) : (
-                <>
-                  <ResponsiveContainer width="100%" height={220}>
-                    <LineChart data={rows} syncId="live">
-                      <XAxis dataKey="t" hide />
-                      <YAxis domain={['auto', 'auto']} width={85} tick={{ fill: C.dim, fontSize: 10 }}
-                        tickFormatter={v => '$' + v.toLocaleString(undefined, { maximumFractionDigits: 0 })} />
-                      <Tooltip content={<ChartTip />} />
-                      <Line type="monotone" dataKey="bbU" stroke={C.muted}  dot={false} strokeWidth={1} strokeDasharray="3 3" isAnimationActive={false} />
-                      <Line type="monotone" dataKey="bbL" stroke={C.muted}  dot={false} strokeWidth={1} strokeDasharray="3 3" isAnimationActive={false} />
-                      <Line type="monotone" dataKey="bbM" stroke="#1a3050"  dot={false} strokeWidth={1} isAnimationActive={false} />
-                      <Line type="monotone" dataKey="e9"  stroke={C.blue}   dot={false} strokeWidth={1.5} isAnimationActive={false} />
-                      <Line type="monotone" dataKey="e21" stroke={C.orange} dot={false} strokeWidth={1.5} isAnimationActive={false} />
-                      <Line type="monotone" dataKey="v"   stroke={signal ? signal.color : C.text} dot={false} strokeWidth={2} isAnimationActive={false} />
-                    </LineChart>
-                  </ResponsiveContainer>
-                  <ResponsiveContainer width="100%" height={40}>
-                    <BarChart data={rows} syncId="live">
-                      <XAxis dataKey="t" hide />
-                      <YAxis width={85} tick={false} axisLine={false} />
-                      <Bar dataKey="vol" isAnimationActive={false}>
-                        {rows.map(r => <Cell key={r.t} fill={r.up ? C.green : C.red} fillOpacity={0.45} />)}
-                      </Bar>
-                    </BarChart>
-                  </ResponsiveContainer>
-                </>
-              )}
-              <div style={{ display: 'flex', gap: 16, marginTop: 6, fontSize: 10, flexWrap: 'wrap' }}>
-                {[['─ Fiyat', signal?.color ?? C.text], ['─ EMA9', C.blue], ['─ EMA21', C.orange], ['- - BB', C.muted], ['▮ Hacim', C.dim]].map(([l, col]) => (
-                  <span key={l} style={{ color: col }}>{l}</span>
-                ))}
-                {current && (
-                  <span style={{ color: C.dim, marginLeft: 'auto' }}>
-                    Açık mum: <span style={{ color: C.text }}>{current.trades.toLocaleString()}</span> işlem ·{' '}
-                    <span style={{ color: C.text }}>{current.volume.toFixed(2)}</span> BTC
-                    {current.partial && ' · REST snapshot + canlı'}
-                  </span>
-                )}
-              </div>
-            </Panel>
-
-            <Panel title={`RSI (14)${signal ? ' · ' + signal.rsi.toFixed(1) : ''}`}>
-              <ResponsiveContainer width="100%" height={75}>
-                <LineChart data={rows} syncId="live">
-                  <XAxis dataKey="t" hide />
-                  <YAxis domain={[0, 100]} width={28} tick={{ fill: C.dim, fontSize: 9 }} />
-                  <Tooltip content={<ChartTip />} />
-                  <ReferenceLine y={70} stroke={C.red}   strokeDasharray="3 3" />
-                  <ReferenceLine y={30} stroke={C.green} strokeDasharray="3 3" />
-                  <ReferenceLine y={50} stroke={C.muted} strokeDasharray="1 3" />
-                  <Line type="monotone" dataKey="rsi" stroke={C.purple} dot={false} strokeWidth={1.5} isAnimationActive={false} />
-                </LineChart>
-              </ResponsiveContainer>
-            </Panel>
-
-            <Panel title="MACD (12, 26, 9)">
-              <ResponsiveContainer width="100%" height={65}>
-                <BarChart data={rows} syncId="live">
-                  <XAxis dataKey="t" hide />
-                  <YAxis width={40} tick={{ fill: C.dim, fontSize: 9 }} tickFormatter={v => v.toFixed(0)} />
-                  <ReferenceLine y={0} stroke={C.border} />
-                  <Bar dataKey="hist" isAnimationActive={false}>
-                    {rows.map(r => <Cell key={r.t} fill={(r.hist ?? 0) >= 0 ? C.green : C.red} fillOpacity={0.7} />)}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
-              <ResponsiveContainer width="100%" height={50}>
-                <LineChart data={rows} syncId="live">
-                  <XAxis dataKey="t" hide />
-                  <YAxis width={40} tick={{ fill: C.dim, fontSize: 9 }} tickFormatter={v => v.toFixed(1)} />
-                  <ReferenceLine y={0} stroke={C.border} />
-                  <Line type="monotone" dataKey="macd" stroke={C.blue}   dot={false} strokeWidth={1.5} isAnimationActive={false} />
-                  <Line type="monotone" dataKey="sig"  stroke={C.orange} dot={false} strokeWidth={1} strokeDasharray="4 2" isAnimationActive={false} />
-                </LineChart>
-              </ResponsiveContainer>
-              <div style={{ display: 'flex', gap: 16, fontSize: 10 }}>
-                <span style={{ color: C.blue }}>— MACD</span>
-                <span style={{ color: C.orange }}>- - Signal</span>
-                {signal && <span style={{ color: C.yellow, fontWeight: 700 }}>Hist: {signal.macdHist.toFixed(2)}</span>}
-              </div>
-            </Panel>
+      {signal.exits && (
+        <div className="levels">
+          <div className="levels__row">
+            <span className="muted">Entry</span><span className="mono">{fmtUsd(signal.exits.entry)}</span>
           </div>
-
-          {/* RIGHT */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-
-            {/* Signal card */}
-            {signal ? (
-              <div style={{
-                background: signal.color + '14', border: `2px solid ${signal.color}`,
-                borderRadius: 8, padding: '14px', textAlign: 'center',
-                animation: 'pulse 2s infinite',
-              }}>
-                <div style={{ color: C.dim, fontSize: 10, letterSpacing: 2, marginBottom: 6 }}>ALGO SİNYALİ · {INTERVAL.toUpperCase()}</div>
-                <div style={{ fontSize: 28, fontWeight: 800, color: signal.color }}>{signal.signal}</div>
-                <div style={{ margin: '10px 0 4px', color: C.dim, fontSize: 10 }}>Confluence Skoru {signal.total > 0 ? '+' : ''}{signal.total} / ±8</div>
-                <div style={{ background: C.muted, borderRadius: 3, height: 6, marginBottom: 4 }}>
-                  <div style={{ width: signal.strength + '%', height: '100%', borderRadius: 3, background: signal.color, transition: 'width 0.5s' }} />
-                </div>
-                <div style={{ color: signal.color, fontWeight: 700, fontSize: 14 }}>{signal.strength}%</div>
-                {signal.atr != null && (
-                  <div style={{ marginTop: 8, fontSize: 10, color: C.dim }}>
-                    ATR({config.atrPeriod}): <span style={{ color: C.text }}>${fmt(signal.atr)}</span>
-                    {signal.exits && (
-                      <>
-                        {' · '}<span style={{ color: C.red }}>SL ${fmt(signal.exits.sl)}</span>
-                        {' · '}<span style={{ color: C.green }}>TP ${fmt(signal.exits.tp)}</span>
-                      </>
-                    )}
-                  </div>
-                )}
-                <div style={{ marginTop: 6, color: C.dim, fontSize: 10 }}>
-                  {signal.actionable
-                    ? '⚡ İŞLEM KOŞULU SAĞLANDI'
-                    : 'Sadece STRONG BUY/SELL işlem açar — bekle'}
-                </div>
-              </div>
-            ) : (
-              <div style={{ background: C.panel, border: `1px solid ${C.border}`, borderRadius: 8, padding: 20, textAlign: 'center' }}>
-                <div style={{ color: C.dim, fontSize: 12 }}>Hesaplanıyor... {times.length}/50</div>
-              </div>
-            )}
-
-            {/* Indicator breakdown */}
-            {signal && (
-              <Panel title="İndikatör Skoru (her biri -2 … +2)">
-                {[
-                  { name: 'EMA (9/21)', score: signal.scores.ema, val: `${fmt(signal.e9)} / ${fmt(signal.e21)}` },
-                  { name: 'RSI (14)',   score: signal.scores.rsi, val: signal.rsi.toFixed(1) },
-                  { name: 'MACD',       score: signal.scores.macd, val: signal.macdHist.toFixed(2) },
-                  { name: 'Bollinger',  score: signal.scores.bb, val: `$${fmt(signal.price)}` },
-                ].map(ind => {
-                  const col = ind.score > 0 ? C.green : ind.score < 0 ? C.red : C.yellow
-                  const lbl = ind.score >= 2 ? '▲▲' : ind.score === 1 ? '▲' : ind.score <= -2 ? '▼▼' : ind.score === -1 ? '▼' : '◆'
-                  return (
-                    <div key={ind.name} style={{ marginBottom: 7, padding: '6px 8px', background: col + '10', borderRadius: 4, border: `1px solid ${col}30` }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <span style={{ fontSize: 10, fontWeight: 700 }}>{ind.name}</span>
-                        <span style={{ fontSize: 11, color: col, fontWeight: 700 }}>{lbl} {ind.val}</span>
-                      </div>
-                    </div>
-                  )
-                })}
-              </Panel>
-            )}
-
-            {/* Trade stats */}
-            <Panel title={`Canlı Paper-Trade · ${leverage}x (backtest değil)`}>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 8 }}>
-                {[
-                  { label: 'Toplam', value: stats.total, color: C.text },
-                  { label: 'Win', value: stats.wins, color: C.green },
-                  { label: 'Loss', value: stats.losses, color: C.red },
-                  { label: 'Gerçekleşen P&L', value: pct(stats.realizedPct), color: stats.realizedPct >= 0 ? C.green : C.red },
-                ].map(m => (
-                  <div key={m.label} style={{ background: '#0a1520', borderRadius: 4, padding: '6px 8px' }}>
-                    <div style={{ color: C.dim, fontSize: 9 }}>{m.label}</div>
-                    <div style={{ color: m.color, fontSize: 13, fontWeight: 700 }}>{m.value}</div>
-                  </div>
-                ))}
-              </div>
-              <div style={{ fontSize: 9, color: C.muted, padding: '4px 0' }}>
-                SL: {config.atrStopMult}×ATR({config.atrPeriod}) · TP: {config.rewardRisk}×risk · R/R 1:{config.rewardRisk}
-              </div>
-              <div style={{ fontSize: 9, color: C.dim, padding: '2px 0 0' }}>
-                Canlı simülasyon, sayfa açıldığından beri. Geçmiş performans için Backtest sekmesine bakın.
-              </div>
-            </Panel>
-
-            {/* Trade log */}
-            <Panel title="Trade Kaydı" style={{ flex: 1, overflow: 'hidden' }}>
-              <div style={{ maxHeight: 300, overflowY: 'auto' }}>
-                {trades.length === 0 ? (
-                  <div style={{ color: C.dim, fontSize: 11, textAlign: 'center', padding: '10px 0' }}>
-                    STRONG BUY/SELL sinyali bekleniyor...
-                  </div>
-                ) : trades.map(t => (
-                  <TradeRow key={t.id} trade={t} leverage={leverage} />
-                ))}
-              </div>
-            </Panel>
+          <div className="levels__row">
+            <span className="muted">Stop · {config.atrStopMult}× ATR({config.atrPeriod})</span>
+            <span className="mono value-down">{fmtUsd(signal.exits.sl)}</span>
+          </div>
+          <div className="levels__row">
+            <span className="muted">Target · {config.rewardRisk}R</span>
+            <span className="mono value-up">{fmtUsd(signal.exits.tp)}</span>
+          </div>
+          <div className="levels__row">
+            <span className="muted">ATR({config.atrPeriod})</span><span className="mono">{fmtUsd(signal.atr)}</span>
           </div>
         </div>
       )}
+    </Card>
+  )
+}
+
+function Breakdown({ signal }) {
+  if (!signal) return null
+  const rows = [
+    { name: 'EMA 9 / 21', score: signal.scores.ema, value: `${fmtPrice(signal.e9)} / ${fmtPrice(signal.e21)}` },
+    { name: 'RSI 14', score: signal.scores.rsi, value: fmtNum(signal.rsi, 1) },
+    { name: 'MACD 12/26/9', score: signal.scores.macd, value: fmtNum(signal.macdHist) },
+    { name: 'Bollinger 20', score: signal.scores.bb, value: fmtUsd(signal.price) },
+  ]
+  return (
+    <Card title="Indicator score" meta={<span>each −2 … +2</span>}>
+      <div className="breakdown">
+        {rows.map(row => {
+          const tone = toneOf(row.score)
+          const Icon = row.score > 0 ? IconUp : row.score < 0 ? IconDown : IconFlat
+          return (
+            <div className="breakdown__row" key={row.name}>
+              <span className="breakdown__name">{row.name}</span>
+              <span className="breakdown__value">
+                <span className="mono muted">{row.value}</span>
+                <span className={`chip chip--${tone}`}>
+                  <Icon size={11} /> {row.score > 0 ? '+' : ''}{row.score}
+                </span>
+              </span>
+            </div>
+          )
+        })}
+      </div>
+    </Card>
+  )
+}
+
+function LiveView({ market, signal, times, config, paper }) {
+  const rows = useChartRows(market.candles, times, signal)
+  const current = market.candles[market.candles.length - 1]
+  const { trades, stats } = paper
+
+  return (
+    <div className="layout">
+      <div className="layout__col">
+        <Card
+          title={`${SYMBOL} · ${INTERVAL}`}
+          meta={current && (
+            <>
+              <span>Open candle: <span className="mono">{current.trades.toLocaleString()}</span> trades · <span className="mono">{fmtNum(current.volume)}</span> BTC</span>
+              {current.partial && <span className="subtle">seeded from REST snapshot</span>}
+            </>
+          )}
+          flush
+        >
+          {rows.length === 0 ? (
+            market.error
+              ? <EmptyState title="Could not load candle history" hint={market.error} icon={<IconAlert size={20} />} />
+              : <Skeleton height={300} />
+          ) : (
+            <>
+              <PriceChart rows={rows} />
+              <VolumeChart rows={rows} />
+              <Legend items={[
+                { label: 'Candles from trade stream', color: T.price, variant: 'block' },
+                { label: 'EMA 9', color: T.fast },
+                { label: 'EMA 21', color: T.slow },
+                { label: 'Bollinger 20, 2σ', color: T.band, variant: 'dashed' },
+                { label: 'Volume', color: T.muted, variant: 'block' },
+              ]} />
+            </>
+          )}
+        </Card>
+
+        <Card title="RSI 14" meta={signal && <span className="mono">{fmtNum(signal.rsi, 1)}</span>}>
+          {rows.length ? <RsiChart rows={rows} /> : <Skeleton height={104} />}
+        </Card>
+
+        <Card title="MACD 12 / 26 / 9" meta={signal && <span className="mono">histogram {fmtNum(signal.macdHist)}</span>}>
+          {rows.length ? <MacdChart rows={rows} /> : <Skeleton height={128} />}
+          <Legend items={[
+            { label: 'MACD', color: T.fast },
+            { label: 'Signal', color: T.slow, variant: 'dashed' },
+            { label: 'Histogram', color: T.muted, variant: 'block' },
+          ]} />
+        </Card>
+      </div>
+
+      <div className="layout__col">
+        <SignalCard signal={signal} config={config} />
+        <Breakdown signal={signal} />
+
+        <Card title="Paper trades" meta={<span>forward simulation · not a backtest</span>}>
+          <div className="stats">
+            <Stat label="Opened" value={stats.total} />
+            <Stat label="Target hit" value={stats.wins} tone={stats.wins ? 'up' : undefined} />
+            <Stat label="Stopped out" value={stats.losses} tone={stats.losses ? 'down' : undefined} />
+            <Stat label="Realised" value={fmtSignedPct(stats.realizedPct)} tone={toneOf(stats.realizedPct)} />
+          </div>
+          <p className="note" style={{ marginTop: 12 }}>
+            Simulated since this tab was opened, using the stop and target generated with each signal.
+            For cost-adjusted history see the <a href="#backtest">Backtest</a> and <a href="#research">Research</a> tabs.
+          </p>
+        </Card>
+
+        <Card title="Trade log">
+          {trades.length === 0
+            ? <EmptyState title="No trades yet" hint="A trade opens when the score first reaches STRONG BUY or STRONG SELL." icon={<IconClock size={20} />} />
+            : <div className="trades">{trades.map(t => <TradeRow key={t.id} trade={t} />)}</div>}
+        </Card>
+      </div>
+    </div>
+  )
+}
+
+export default function App() {
+  const [tab, setTab] = useHashTab(TABS.map(([id]) => id))
+  const now = useClock()
+  const health = useHealth()
+  const market = useTradeCandles({ symbol: SYMBOL, interval: INTERVAL })
+  const { booting, config, ticker, signal, times, status, connected } = useSignalStream()
+
+  const price = market.lastPrice ?? ticker?.price ?? null
+  const change = ticker?.change ?? null
+  const latency = health?.latency_ms?.avg_ms
+  // Held here, not in LiveView: switching tabs must not wipe the trade log.
+  const paper = usePaperTrades(signal, price, config?.leverage ?? 1)
+
+  return (
+    <div className="app">
+      <header className="topbar">
+        <div className="brand">
+          <span className="brand__mark">QTERM</span>
+          <span className="brand__sub">{SYMBOL} · {INTERVAL} · {config?.leverage ?? 1}x</span>
+        </div>
+
+        <div className="topbar__status">
+          <StatusPill label="Signals" status={connected ? 'open' : status} />
+          <StatusPill label="Trades" status={market.status} />
+          <Pill tone={latency == null ? 'flat' : latency < 400 ? 'up' : 'flat'} title="Binance event time vs local receive time">
+            <IconActivity size={13} /> {latency != null ? `${latency} ms` : '—'}
+          </Pill>
+        </div>
+
+        <div className="topbar__spacer" />
+
+        <div className="topbar__price">
+          <span className="topbar__price-value mono">{price ? fmtUsd(price) : '—'}</span>
+          {change != null && (
+            <span className={change >= 0 ? 'value-up' : 'value-down'}>
+              {change >= 0 ? <IconUp size={14} /> : <IconDown size={14} />} {fmtSignedPct(change)}
+              <span className="subtle"> 24h</span>
+            </span>
+          )}
+        </div>
+
+        <nav className="tabs" role="tablist" aria-label="Views">
+          {TABS.map(([id, label]) => (
+            <button key={id} className="tab" role="tab" aria-selected={tab === id} onClick={() => setTab(id)}>
+              {label}
+            </button>
+          ))}
+        </nav>
+
+        <span className="topbar__clock mono">{now.toLocaleTimeString()}</span>
+      </header>
+
+      <main className="main">
+        {tab === 'backtest' ? <BacktestView />
+          : tab === 'research' ? <MatrixView />
+          : booting
+            ? <Card title="Live"><EmptyState title="Connecting to the signal service" hint="Start the backend with uvicorn on port 8123 if this does not clear." /></Card>
+            : <LiveView market={market} signal={signal} times={times} config={config} paper={paper} />}
+      </main>
     </div>
   )
 }
